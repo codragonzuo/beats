@@ -21,33 +21,36 @@ package docker
 
 import (
 	"net/http"
-	"os"
+	_ "os"
 
-	"github.com/docker/docker/client"
+	_ "github.com/docker/docker/client"
 
-	"github.com/codragonzuo/beats/libbeat/logp"
+	_ "github.com/codragonzuo/beats/libbeat/logp"
 )
 
 // NewClient builds and returns a new Docker client. On the first request the
 // client will negotiate the API version with the server unless
 // DOCKER_API_VERSION is set in the environment.
-func NewClient(host string, httpClient *http.Client, httpHeaders map[string]string) (*client.Client, error) {
-	log := logp.NewLogger("docker")
+func NewClient(host string, httpClient *http.Client, httpHeaders map[string]string) (
+//*client.Client, error
+    ) {
+	//log := logp.NewLogger("docker")
 
-	opts := []client.Opt{
-		client.WithHost(host),
-		client.WithHTTPClient(httpClient),
-		client.WithHTTPHeaders(httpHeaders),
-	}
+	//opts := []client.Opt{
+	//	client.WithHost(host),
+	//	client.WithHTTPClient(httpClient),
+	//	client.WithHTTPHeaders(httpHeaders),
+	//}
 
-	version := os.Getenv("DOCKER_API_VERSION")
-	if version != "" {
-		log.Debugf("Docker client will use API version %v as set by the DOCKER_API_VERSION environment variable.", version)
-		opts = append(opts, client.WithVersion(version))
-	} else {
-		log.Debug("Docker client will negotiate the API version on the first request.")
-		opts = append(opts, client.WithAPIVersionNegotiation())
-	}
+	//version := os.Getenv("DOCKER_API_VERSION")
+	//if version != "" {
+	//	log.Debugf("Docker client will use API version %v as set by the DOCKER_API_VERSION environment variable.", version)
+	//	opts = append(opts, client.WithVersion(version))
+	//} else {
+	//	log.Debug("Docker client will negotiate the API version on the first request.")
+	//	opts = append(opts, client.WithAPIVersionNegotiation())
+	//}
 
-	return client.NewClientWithOpts(opts...)
+	//return client.NewClientWithOpts(opts...)
+        //return nil,nil
 }

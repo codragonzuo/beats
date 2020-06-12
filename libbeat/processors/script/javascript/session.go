@@ -256,13 +256,14 @@ func (s *session) Event() Event {
 func init() {
 	// Register common.MapStr as being a simple map[string]interface{} for
 	// treatment within the JS VM.
-	AddSessionHook("_type_mapstr", func(s Session) {
-		s.Runtime().RegisterSimpleMapType(reflect.TypeOf(common.MapStr(nil)),
-			func(i interface{}) map[string]interface{} {
-				return map[string]interface{}(i.(common.MapStr))
-			},
-		)
-	})
+	
+        //AddSessionHook("_type_mapstr", func(s Session) {
+	//	s.Runtime().RegisterSimpleMapType(reflect.TypeOf(common.MapStr(nil)),
+	//		func(i interface{}) map[string]interface{} {
+	//			return map[string]interface{}(i.(common.MapStr))
+	//		},
+	//	)
+	//})
 }
 
 type sessionPool struct {

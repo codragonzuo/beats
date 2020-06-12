@@ -21,14 +21,14 @@ package docker
 
 import (
 	"fmt"
-	"net/http"
+	_ "net/http"
 	"sync"
 	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/events"
 	"github.com/docker/docker/api/types/filters"
-	"github.com/docker/go-connections/tlsconfig"
+	_ "github.com/docker/go-connections/tlsconfig"
 	"golang.org/x/net/context"
 
 	"github.com/codragonzuo/beats/libbeat/common/bus"
@@ -110,38 +110,39 @@ type WatcherConstructor func(logp *logp.Logger, host string, tls *TLSConfig, sto
 
 // NewWatcher returns a watcher running for the given settings
 func NewWatcher(log *logp.Logger, host string, tls *TLSConfig, storeShortID bool) (Watcher, error) {
-	var httpClient *http.Client
-	if tls != nil {
-		options := tlsconfig.Options{
-			CAFile:   tls.CA,
-			CertFile: tls.Certificate,
-			KeyFile:  tls.Key,
-		}
+	//var httpClient *http.Client
+	//if tls != nil {
+//		options := tlsconfig.Options{
+//			CAFile:   tls.CA,
+//			CertFile: tls.Certificate,
+//			KeyFile:  tls.Key,
+//		}
 
-		tlsc, err := tlsconfig.Client(options)
-		if err != nil {
-			return nil, err
-		}
+//		tlsc, err := tlsconfig.Client(options)
+//		if err != nil {
+//			return nil, err
+//		}
 
-		httpClient = &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: tlsc,
-			},
-		}
-	}
+//		httpClient = &http.Client{
+//			Transport: &http.Transport{
+//				TLSClientConfig: tlsc,
+//			},
+//		}
+//	}
 
-	client, err := NewClient(host, httpClient, nil)
-	if err != nil {
-		return nil, err
-	}
+	//client, err := NewClient(host, httpClient, nil)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	// Extra check to confirm that Docker is available
-	_, err = client.Info(context.Background())
-	if err != nil {
-		return nil, err
-	}
+	//_, err = client.Info(context.Background())
+	//if err != nil {
+	//	return nil, err
+	//}
 
-	return NewWatcherWithClient(log, client, 60*time.Second, storeShortID)
+	return NewWatcherWithClient(log, //client
+                       nil, 60*time.Second, storeShortID)
 }
 
 // NewWatcherWithClient creates a new Watcher from a given Docker client
