@@ -20,29 +20,30 @@ package mqtt
 import (
 	libmqtt "github.com/eclipse/paho.mqtt.golang"
 
-	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
+	_ "github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
 )
 
 func createClientOptions(config mqttInputConfig, onConnectHandler func(client libmqtt.Client)) (*libmqtt.ClientOptions, error) {
-	clientOptions := libmqtt.NewClientOptions().
-		SetClientID(config.ClientID).
-		SetUsername(config.Username).
-		SetPassword(config.Password).
-		SetConnectRetry(true).
-		SetOnConnectHandler(onConnectHandler)
+	//clientOptions := libmqtt.NewClientOptions().
+	//	SetClientID(config.ClientID).
+	//	SetUsername(config.Username).
+	//	SetPassword(config.Password).
+	//	SetConnectRetry(true).
+	//	SetOnConnectHandler(onConnectHandler)
 
-	for _, host := range config.Hosts {
-		clientOptions.AddBroker(host)
-	}
+	//for _, host := range config.Hosts {
+	//	clientOptions.AddBroker(host)
+	//}
 
-	if config.TLS != nil {
-		tlsConfig, err := tlscommon.LoadTLSConfig(config.TLS)
-		if err != nil {
-			return nil, err
-		}
-		clientOptions.SetTLSConfig(tlsConfig.BuildModuleConfig(""))
-	}
-	return clientOptions, nil
+	//if config.TLS != nil {
+	//	tlsConfig, err := tlscommon.LoadTLSConfig(config.TLS)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	clientOptions.SetTLSConfig(tlsConfig.BuildModuleConfig(""))
+	//}
+	//return clientOptions, nil
+        return nil,nil
 }
 
 func createClientSubscriptions(config mqttInputConfig) map[string]byte {
