@@ -22,9 +22,11 @@ import (
 	"path"
 
 	"github.com/elastic/beats/v7/filebeat/channel"
-	"github.com/elastic/beats/v7/filebeat/input"
-	"github.com/elastic/beats/v7/filebeat/input/log"
-	"github.com/elastic/beats/v7/libbeat/common"
+	//"github.com/elastic/beats/v7/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/input"
+        //"github.com/elastic/beats/v7/filebeat/input/log"
+	"github.com/codragonzuo/beats/filebeat/input/log"
+        "github.com/elastic/beats/v7/libbeat/common"
 	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
 	"github.com/elastic/beats/v7/libbeat/logp"
 

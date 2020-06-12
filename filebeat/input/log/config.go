@@ -26,8 +26,9 @@ import (
 
 	cfg "github.com/elastic/beats/v7/filebeat/config"
 	"github.com/elastic/beats/v7/filebeat/harvester"
-	"github.com/elastic/beats/v7/filebeat/input/file"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
+	//"github.com/elastic/beats/v7/filebeat/input/file"
+	"github.com/codragonzuo/beats/filebeat/input/file"
+        "github.com/elastic/beats/v7/libbeat/common/cfgwarn"
 	"github.com/elastic/beats/v7/libbeat/common/match"
 	"github.com/elastic/beats/v7/libbeat/logp"
 	"github.com/elastic/beats/v7/libbeat/reader/multiline"

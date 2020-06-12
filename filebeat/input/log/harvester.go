@@ -47,8 +47,9 @@ import (
 
 	"github.com/elastic/beats/v7/filebeat/channel"
 	"github.com/elastic/beats/v7/filebeat/harvester"
-	"github.com/elastic/beats/v7/filebeat/input/file"
-	"github.com/elastic/beats/v7/libbeat/reader"
+	//"github.com/elastic/beats/v7/filebeat/input/file"
+	"github.com/codragonzuo/beats/filebeat/input/file"
+        "github.com/elastic/beats/v7/libbeat/reader"
 	"github.com/elastic/beats/v7/libbeat/reader/debug"
 	"github.com/elastic/beats/v7/libbeat/reader/multiline"
 	"github.com/elastic/beats/v7/libbeat/reader/readfile"

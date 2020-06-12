@@ -21,8 +21,9 @@ import (
 	"fmt"
 
 	"github.com/elastic/beats/v7/filebeat/channel"
-	"github.com/elastic/beats/v7/filebeat/input/file"
-	"github.com/elastic/beats/v7/libbeat/common"
+	//"github.com/elastic/beats/v7/filebeat/input/file"
+	"github.com/codragonzuo/beats/filebeat/input/file"
+        "github.com/elastic/beats/v7/libbeat/common"
 	"github.com/elastic/beats/v7/libbeat/logp"
 )
 
