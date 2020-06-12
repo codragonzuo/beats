@@ -20,9 +20,9 @@ package consumergroup
 import (
 	"github.com/Shopify/sarama"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/metricbeat/module/kafka"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/metricbeat/module/kafka"
 )
 
 type client interface {

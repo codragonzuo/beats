@@ -12,9 +12,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/paths"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/basecmd"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/cli"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/paths"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/basecmd"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/cli"
 )
 
 const defaultConfig = "elastic-agent.yml"

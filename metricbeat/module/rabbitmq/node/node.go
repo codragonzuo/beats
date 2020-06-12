@@ -22,8 +22,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	"github.com/elastic/beats/v7/metricbeat/module/rabbitmq"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/module/rabbitmq"
 )
 
 func init() {

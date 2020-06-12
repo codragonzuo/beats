@@ -33,9 +33,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/packetbeat/protos"
-	"github.com/elastic/beats/v7/packetbeat/protos/tcp"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/packetbeat/protos"
+	"github.com/codragonzuo/beats/packetbeat/protos/tcp"
 )
 
 // Verify that the interface TCP has been satisfied.

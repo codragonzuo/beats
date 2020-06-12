@@ -28,8 +28,8 @@ import (
 	"github.com/armon/go-socks5"
 	"github.com/stretchr/testify/require"
 
-	"github.com/elastic/beats/v7/heartbeat/hbtest"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/heartbeat/hbtest"
+	"github.com/codragonzuo/beats/libbeat/common"
 	"github.com/elastic/go-lookslike"
 	"github.com/elastic/go-lookslike/isdef"
 	"github.com/elastic/go-lookslike/testslike"

@@ -4,7 +4,7 @@
 
 package noop
 
-import "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
+import "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
 
 // Monitor is a monitoring interface providing information about the way
 // how beat is monitored

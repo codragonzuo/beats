@@ -20,8 +20,8 @@
 package instance
 
 import (
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
 	sysinfo "github.com/elastic/go-sysinfo"
 	"github.com/elastic/go-sysinfo/types"
 )

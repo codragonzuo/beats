@@ -12,18 +12,18 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/filebeat/channel"
-	"github.com/elastic/beats/v7/filebeat/harvester"
-	"github.com/elastic/beats/v7/filebeat/input"
-	"github.com/elastic/beats/v7/filebeat/inputsource"
-	"github.com/elastic/beats/v7/filebeat/inputsource/udp"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/atomic"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder"
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/fields"
+	"github.com/codragonzuo/beats/filebeat/channel"
+	"github.com/codragonzuo/beats/filebeat/harvester"
+	"github.com/codragonzuo/beats/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/inputsource"
+	"github.com/codragonzuo/beats/filebeat/inputsource/udp"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/atomic"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/fields"
 )
 
 const (

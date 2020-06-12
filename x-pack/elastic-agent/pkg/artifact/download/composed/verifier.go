@@ -7,7 +7,7 @@ package composed
 import (
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download"
 )
 
 // Verifier is a verifier with a predefined set of verifiers.

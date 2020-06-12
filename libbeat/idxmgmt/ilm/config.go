@@ -22,9 +22,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/fmtstr"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/fmtstr"
 )
 
 // Config is used for unpacking a common.Config.

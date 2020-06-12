@@ -5,11 +5,11 @@
 package localremote
 
 import (
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download/composed"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download/fs"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download/http"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download/composed"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download/fs"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download/http"
 )
 
 // NewDownloader creates a downloader which first checks local directory

@@ -11,17 +11,17 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/filters"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/info"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/storage"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/fleetapi"
-	reporting "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/reporter"
-	fleetreporter "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/reporter/fleet"
-	logreporter "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/reporter/log"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/filters"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/info"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/storage"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/fleetapi"
+	reporting "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/reporter"
+	fleetreporter "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/reporter/fleet"
+	logreporter "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/reporter/log"
 )
 
 type apiClient interface {

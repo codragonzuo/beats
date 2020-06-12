@@ -30,11 +30,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	"github.com/elastic/beats/v7/metricbeat/mb/parse"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/mb/parse"
 	"github.com/elastic/go-libaudit/v2"
 	"github.com/elastic/go-libaudit/v2/aucoalesce"
 	"github.com/elastic/go-libaudit/v2/auparse"

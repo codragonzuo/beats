@@ -21,15 +21,15 @@ import (
 	"io"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/fmtstr"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/processors"
-	"github.com/elastic/beats/v7/libbeat/processors/add_formatted_index"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/fmtstr"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/processors"
+	"github.com/codragonzuo/beats/libbeat/processors/add_formatted_index"
 
-	"github.com/elastic/beats/v7/winlogbeat/checkpoint"
-	"github.com/elastic/beats/v7/winlogbeat/eventlog"
+	"github.com/codragonzuo/beats/winlogbeat/checkpoint"
+	"github.com/codragonzuo/beats/winlogbeat/eventlog"
 )
 
 type eventLogger struct {

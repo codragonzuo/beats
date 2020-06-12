@@ -20,7 +20,7 @@ package reader
 import (
 	"time"
 
-	"github.com/elastic/beats/v7/journalbeat/config"
+	"github.com/codragonzuo/beats/journalbeat/config"
 )
 
 // Config stores the options of a reder.

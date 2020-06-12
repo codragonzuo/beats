@@ -23,7 +23,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // SeekMode is specifies how a journal is read

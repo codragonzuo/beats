@@ -22,11 +22,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/outputs"
-	"github.com/elastic/beats/v7/libbeat/publisher/queue"
-	"github.com/elastic/beats/v7/libbeat/tests/resources"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/outputs"
+	"github.com/codragonzuo/beats/libbeat/publisher/queue"
+	"github.com/codragonzuo/beats/libbeat/tests/resources"
 )
 
 func TestClient(t *testing.T) {

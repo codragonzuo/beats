@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/elastic/beats/v7/libbeat/autodiscover"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/bus"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/conditions"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/autodiscover"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/bus"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/conditions"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 func init() {

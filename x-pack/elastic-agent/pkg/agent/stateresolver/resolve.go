@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/configrequest"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/program"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/release"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/configrequest"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/program"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/release"
 )
 
 //go:generate stringer -type=stateChange -linecomment=true

@@ -7,11 +7,11 @@ package loadbalancing
 import (
 	"os"
 
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 
 	// Register input module and metricset
-	_ "github.com/elastic/beats/v7/x-pack/metricbeat/module/googlecloud"
-	_ "github.com/elastic/beats/v7/x-pack/metricbeat/module/googlecloud/stackdriver"
+	_ "github.com/codragonzuo/beats/x-pack/metricbeat/module/googlecloud"
+	_ "github.com/codragonzuo/beats/x-pack/metricbeat/module/googlecloud/stackdriver"
 )
 
 func init() {

@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/cli"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/cli"
 )
 
 func newIntrospectCommandWithArgs(flags *globalFlags, s []string, streams *cli.IOStreams) *cobra.Command {

@@ -38,7 +38,7 @@ import (
 	"golang.org/x/crypto/sha3"
 	"golang.org/x/time/rate"
 
-	"github.com/elastic/beats/v7/libbeat/common/file"
+	"github.com/codragonzuo/beats/libbeat/common/file"
 )
 
 // HashType identifies a cryptographic algorithm.

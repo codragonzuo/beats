@@ -7,9 +7,9 @@ package operation
 import (
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/configrequest"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/configrequest"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app"
 )
 
 const (

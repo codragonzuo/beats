@@ -18,10 +18,10 @@
 package monitors
 
 import (
-	"github.com/elastic/beats/v7/heartbeat/scheduler"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/cfgfile"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/heartbeat/scheduler"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/cfgfile"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // RunnerFactory that can be used to create cfg.Runner cast versions of Monitor

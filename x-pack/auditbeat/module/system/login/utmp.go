@@ -20,8 +20,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/auditbeat/datastore"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/auditbeat/datastore"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 const (

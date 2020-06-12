@@ -15,13 +15,13 @@ import (
 	"github.com/awslabs/goformation/v4/cloudformation/iam"
 	"github.com/awslabs/goformation/v4/cloudformation/lambda"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/feature"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/function/core"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/function/provider"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/function/telemetry"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/provider/aws/aws/transformer"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/feature"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/function/core"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/function/provider"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/function/telemetry"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/provider/aws/aws/transformer"
 )
 
 const batchSize = 10

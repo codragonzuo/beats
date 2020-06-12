@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/transpiler"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/boolexp"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/transpiler"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/boolexp"
 )
 
 // Program represents a program that must be started or must run.

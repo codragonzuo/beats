@@ -22,7 +22,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/elastic/beats/v7/filebeat/generator"
+	"github.com/codragonzuo/beats/filebeat/generator"
 )
 
 // Generate creates directories and placeholder files required by a new module.

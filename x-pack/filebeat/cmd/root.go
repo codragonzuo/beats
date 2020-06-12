@@ -5,11 +5,11 @@
 package cmd
 
 import (
-	"github.com/elastic/beats/v7/filebeat/cmd"
-	xpackcmd "github.com/elastic/beats/v7/x-pack/libbeat/cmd"
+	"github.com/codragonzuo/beats/filebeat/cmd"
+	xpackcmd "github.com/codragonzuo/beats/x-pack/libbeat/cmd"
 
 	// Register the includes.
-	_ "github.com/elastic/beats/v7/x-pack/filebeat/include"
+	_ "github.com/codragonzuo/beats/x-pack/filebeat/include"
 )
 
 // RootCmd to handle beats CLI.

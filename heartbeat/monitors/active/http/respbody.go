@@ -26,8 +26,8 @@ import (
 
 	"github.com/docker/go-units"
 
-	"github.com/elastic/beats/v7/heartbeat/reason"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/heartbeat/reason"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // maxBufferBodyBytes sets a hard limit on how much we're willing to buffer for any reason internally.

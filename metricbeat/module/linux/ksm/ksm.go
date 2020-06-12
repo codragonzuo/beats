@@ -20,13 +20,13 @@ package ksm
 import (
 	"path/filepath"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	"github.com/elastic/beats/v7/metricbeat/module/linux"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/module/linux"
 )
 
 // init registers the MetricSet with the central registry as soon as the program

@@ -12,9 +12,9 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/x-pack/auditbeat/module/system/socket/helper"
-	"github.com/elastic/beats/v7/x-pack/auditbeat/tracing"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/x-pack/auditbeat/module/system/socket/helper"
+	"github.com/codragonzuo/beats/x-pack/auditbeat/tracing"
 )
 
 // Guess how to get a struct sock* from an ip_local_out() call.

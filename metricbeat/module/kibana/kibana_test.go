@@ -22,12 +22,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
-	"github.com/elastic/beats/v7/metricbeat/module/kibana"
+	"github.com/codragonzuo/beats/libbeat/common"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/metricbeat/module/kibana"
 
 	// Make sure metricsets are registered in mb.Registry
-	_ "github.com/elastic/beats/v7/metricbeat/module/kibana/stats"
+	_ "github.com/codragonzuo/beats/metricbeat/module/kibana/stats"
 )
 
 func TestIsStatsAPIAvailable(t *testing.T) {

@@ -20,14 +20,14 @@ package fileset
 import (
 	"github.com/gofrs/uuid"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/cfgfile"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/esleg/eslegclient"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
-	"github.com/elastic/beats/v7/libbeat/outputs/elasticsearch"
-	pubpipeline "github.com/elastic/beats/v7/libbeat/publisher/pipeline"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/cfgfile"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/esleg/eslegclient"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/outputs/elasticsearch"
+	pubpipeline "github.com/codragonzuo/beats/libbeat/publisher/pipeline"
 
 	"github.com/mitchellh/hashstructure"
 )

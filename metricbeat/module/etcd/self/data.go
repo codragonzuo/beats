@@ -20,7 +20,7 @@ package self
 import (
 	"encoding/json"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 type LeaderInfo struct {

@@ -24,8 +24,8 @@ import (
 
 	"golang.org/x/text/transform"
 
-	"github.com/elastic/beats/v7/libbeat/common/streambuf"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/common/streambuf"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 // lineReader reads lines from underlying reader, decoding the input stream

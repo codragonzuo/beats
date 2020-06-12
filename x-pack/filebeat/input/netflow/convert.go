@@ -14,10 +14,10 @@ import (
 
 	"github.com/cespare/xxhash/v2"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/flowhash"
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/record"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/flowhash"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/record"
 )
 
 var (

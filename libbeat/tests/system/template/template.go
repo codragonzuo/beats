@@ -21,10 +21,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/asset"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/template"
-	"github.com/elastic/beats/v7/libbeat/version"
+	"github.com/codragonzuo/beats/libbeat/asset"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/template"
+	"github.com/codragonzuo/beats/libbeat/version"
 )
 
 // MaxDefaultFieldLength is the limit on the number of default_field values

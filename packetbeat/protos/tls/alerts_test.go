@@ -25,8 +25,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/common/streambuf"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/common/streambuf"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 func getParser() *parser {

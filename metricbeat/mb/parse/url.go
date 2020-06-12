@@ -24,8 +24,8 @@ import (
 	p "path"
 	"strings"
 
-	"github.com/elastic/beats/v7/metricbeat/helper/dialer"
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/helper/dialer"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 
 	"github.com/pkg/errors"
 )

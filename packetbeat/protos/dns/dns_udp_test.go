@@ -40,8 +40,8 @@ import (
 	mkdns "github.com/miekg/dns"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/packetbeat/protos"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/packetbeat/protos"
 )
 
 // Verify that the interface for UDP has been satisfied.

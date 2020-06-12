@@ -24,8 +24,8 @@ import (
 	"strings"
 	"testing"
 
-	_ "github.com/elastic/beats/v7/metricbeat/include"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	_ "github.com/codragonzuo/beats/metricbeat/include"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 )
 
 func TestAll(t *testing.T) {

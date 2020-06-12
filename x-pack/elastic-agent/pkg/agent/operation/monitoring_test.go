@@ -9,17 +9,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/configrequest"
-	operatorCfg "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/operation/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/stateresolver"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
-	monitoringConfig "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/process"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/retry"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/state"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/configrequest"
+	operatorCfg "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/operation/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/stateresolver"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
+	monitoringConfig "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/process"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/retry"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/state"
 )
 
 func TestGenerateSteps(t *testing.T) {

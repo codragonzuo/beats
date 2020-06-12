@@ -25,8 +25,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/cfgfile"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/cfgfile"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 func TestReadConfig2(t *testing.T) {

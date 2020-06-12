@@ -7,8 +7,8 @@ package application
 import (
 	"fmt"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/program"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/transpiler"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/program"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/transpiler"
 )
 
 const (

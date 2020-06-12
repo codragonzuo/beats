@@ -8,15 +8,15 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/cfgfile"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/config"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/function/beater"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/provider/gcp/gcp"
-	_ "github.com/elastic/beats/v7/x-pack/functionbeat/provider/gcp/include"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/cfgfile"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/config"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/function/beater"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/provider/gcp/gcp"
+	_ "github.com/codragonzuo/beats/x-pack/functionbeat/provider/gcp/include"
 )
 
 func RunCloudStorage(ctx context.Context, e gcp.StorageEvent) error {

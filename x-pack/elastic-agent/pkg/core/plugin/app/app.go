@@ -12,16 +12,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/operation/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/process"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/retry"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/state"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/tokenbucket"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/operation/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/process"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/retry"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/state"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/tokenbucket"
 )
 
 var (

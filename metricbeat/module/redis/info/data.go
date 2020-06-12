@@ -18,10 +18,10 @@
 package info
 
 import (
-	"github.com/elastic/beats/v7/libbeat/common"
-	s "github.com/elastic/beats/v7/libbeat/common/schema"
-	c "github.com/elastic/beats/v7/libbeat/common/schema/mapstrstr"
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/libbeat/common"
+	s "github.com/codragonzuo/beats/libbeat/common/schema"
+	c "github.com/codragonzuo/beats/libbeat/common/schema/mapstrstr"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 )
 
 var (

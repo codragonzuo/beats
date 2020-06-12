@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/release"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/release"
 	"github.com/elastic/go-sysinfo"
 	"github.com/elastic/go-sysinfo/types"
 )

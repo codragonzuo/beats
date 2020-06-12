@@ -7,9 +7,9 @@ package operation
 import (
 	"context"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/state"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/state"
 )
 
 // operation is an operation definition

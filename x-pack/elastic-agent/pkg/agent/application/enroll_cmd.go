@@ -14,13 +14,13 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/elastic/beats/v7/libbeat/common/transport/tlscommon"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/info"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/storage"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/fleetapi"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/kibana"
+	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/info"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/storage"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/fleetapi"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/kibana"
 )
 
 type store interface {

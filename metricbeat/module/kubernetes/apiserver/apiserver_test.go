@@ -22,9 +22,9 @@ package apiserver
 import (
 	"testing"
 
-	"github.com/elastic/beats/v7/metricbeat/helper/prometheus/ptest"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
-	_ "github.com/elastic/beats/v7/metricbeat/module/kubernetes"
+	"github.com/codragonzuo/beats/metricbeat/helper/prometheus/ptest"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
+	_ "github.com/codragonzuo/beats/metricbeat/module/kubernetes"
 )
 
 const testFile = "_meta/test/metrics"

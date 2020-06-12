@@ -12,9 +12,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
-	monitoringConfig "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
+	monitoringConfig "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring/config"
 )
 
 const httpPlusPrefix = "http+"

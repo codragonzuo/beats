@@ -32,8 +32,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	devtools "github.com/elastic/beats/v7/dev-tools/mage"
-	"github.com/elastic/beats/v7/licenses"
+	devtools "github.com/codragonzuo/beats/dev-tools/mage"
+	"github.com/codragonzuo/beats/licenses"
 )
 
 var usageText = `

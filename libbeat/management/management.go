@@ -20,9 +20,9 @@ package management
 import (
 	"github.com/gofrs/uuid"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/reload"
-	"github.com/elastic/beats/v7/libbeat/feature"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/reload"
+	"github.com/codragonzuo/beats/libbeat/feature"
 )
 
 // Namespace is the feature namespace for queue definition.

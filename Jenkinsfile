@@ -1338,7 +1338,7 @@ def getVendorPatterns(beatName){
     output = sh(label: 'Get vendor dependency patterns', returnStdout: true, script: """
       go list -mod=vendor -f '{{ .ImportPath }}{{ "\\n" }}{{ join .Deps "\\n" }}' ./${beatName}\
         |awk '{print \$1"/.*"}'\
-        |sed -e "s#github.com/elastic/beats/v7/##g"
+        |sed -e "s#github.com/codragonzuo/beats/##g"
     """)
   }
   return output?.split('\n').collect{ item -> item as String }

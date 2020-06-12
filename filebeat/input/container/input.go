@@ -18,12 +18,12 @@
 package container
 
 import (
-	"github.com/elastic/beats/v7/filebeat/channel"
-	//"github.com/elastic/beats/v7/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/channel"
+	//"github.com/codragonzuo/beats/filebeat/input"
 	"github.com/codragonzuo/beats/filebeat/input"
-        //"github.com/elastic/beats/v7/filebeat/input/log"
+        //"github.com/codragonzuo/beats/filebeat/input/log"
 	"github.com/codragonzuo/beats/filebeat/input/log"
-        "github.com/elastic/beats/v7/libbeat/common"
+        "github.com/codragonzuo/beats/libbeat/common"
 
 	"github.com/pkg/errors"
 )

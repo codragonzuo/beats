@@ -24,8 +24,8 @@ package memcache
 // init function.
 
 import (
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/streambuf"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/streambuf"
 )
 
 type memcacheMagic uint8

@@ -23,11 +23,11 @@ import (
 	"github.com/spf13/pflag"
 
 	// import protocol modules
-	_ "github.com/elastic/beats/v7/packetbeat/include"
+	_ "github.com/codragonzuo/beats/packetbeat/include"
 
-	cmd "github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/packetbeat/beater"
+	cmd "github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/packetbeat/beater"
 )
 
 // Name of this beat

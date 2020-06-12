@@ -31,16 +31,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	e "github.com/elastic/beats/v7/libbeat/beat/events"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/esleg/eslegclient"
-	"github.com/elastic/beats/v7/libbeat/idxmgmt"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/outputs/outest"
-	"github.com/elastic/beats/v7/libbeat/outputs/outil"
-	"github.com/elastic/beats/v7/libbeat/publisher"
-	"github.com/elastic/beats/v7/libbeat/version"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	e "github.com/codragonzuo/beats/libbeat/beat/events"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/esleg/eslegclient"
+	"github.com/codragonzuo/beats/libbeat/idxmgmt"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/outputs/outest"
+	"github.com/codragonzuo/beats/libbeat/outputs/outil"
+	"github.com/codragonzuo/beats/libbeat/publisher"
+	"github.com/codragonzuo/beats/libbeat/version"
 )
 
 func TestCollectPublishFailsNone(t *testing.T) {

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/kibana"
-	fleetreporter "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/reporter/fleet"
-	logreporter "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/reporter/log"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/kibana"
+	fleetreporter "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/reporter/fleet"
+	logreporter "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/reporter/log"
 )
 
 // Config define the configuration of the Agent.

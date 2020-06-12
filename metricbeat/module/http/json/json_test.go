@@ -22,9 +22,9 @@ package json
 import (
 	"testing"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
-	_ "github.com/elastic/beats/v7/metricbeat/module/http"
+	_ "github.com/codragonzuo/beats/metricbeat/module/http"
 )
 
 func TestData(t *testing.T) {

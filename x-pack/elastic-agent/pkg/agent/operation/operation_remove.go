@@ -7,7 +7,7 @@ package operation
 import (
 	"context"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
 )
 
 // operationRemove uninstall and removes all the bits related to the artifact

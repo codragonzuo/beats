@@ -25,12 +25,12 @@ import (
 
 	"github.com/elastic/go-ucfg"
 
-	"github.com/elastic/beats/v7/libbeat/autodiscover"
-	"github.com/elastic/beats/v7/libbeat/autodiscover/builder"
-	"github.com/elastic/beats/v7/libbeat/autodiscover/template"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/bus"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/autodiscover"
+	"github.com/codragonzuo/beats/libbeat/autodiscover/builder"
+	"github.com/codragonzuo/beats/libbeat/autodiscover/template"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/bus"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 func init() {

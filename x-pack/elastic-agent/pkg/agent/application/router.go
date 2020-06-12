@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/program"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/sorted"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/program"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/sorted"
 )
 
 // defautlRK default routing keys until we implement the routing key / config matrix.

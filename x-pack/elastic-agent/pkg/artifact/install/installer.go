@@ -8,10 +8,10 @@ import (
 	"errors"
 	"runtime"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/install/hooks"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/install/tar"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/install/zip"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/install/hooks"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/install/tar"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/install/zip"
 )
 
 var (

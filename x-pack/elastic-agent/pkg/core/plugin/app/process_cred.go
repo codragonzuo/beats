@@ -11,7 +11,7 @@ import (
 	"os/user"
 	"strconv"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
 )
 
 func getUserGroup(spec ProcessSpec) (int, int, error) {

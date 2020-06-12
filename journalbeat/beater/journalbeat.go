@@ -22,19 +22,19 @@ import (
 	"sync"
 	"time"
 
-	"github.com/elastic/beats/v7/journalbeat/checkpoint"
-	"github.com/elastic/beats/v7/journalbeat/cmd/instance"
-	"github.com/elastic/beats/v7/journalbeat/input"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/journalbeat/checkpoint"
+	"github.com/codragonzuo/beats/journalbeat/cmd/instance"
+	"github.com/codragonzuo/beats/journalbeat/input"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/logp"
 
-	"github.com/elastic/beats/v7/journalbeat/config"
-	_ "github.com/elastic/beats/v7/journalbeat/include"
+	"github.com/codragonzuo/beats/journalbeat/config"
+	_ "github.com/codragonzuo/beats/journalbeat/include"
 
 	// Add dedicated processors
-	_ "github.com/elastic/beats/v7/libbeat/processors/decode_csv_fields"
+	_ "github.com/codragonzuo/beats/libbeat/processors/decode_csv_fields"
 )
 
 // Journalbeat instance

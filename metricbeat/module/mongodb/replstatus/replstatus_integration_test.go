@@ -27,10 +27,10 @@ import (
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/tests/compose"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
-	"github.com/elastic/beats/v7/metricbeat/module/mongodb"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/tests/compose"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/metricbeat/module/mongodb"
 )
 
 func TestFetch(t *testing.T) {

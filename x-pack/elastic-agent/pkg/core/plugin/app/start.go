@@ -14,13 +14,13 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/paths"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/authority"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/process"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/state"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig/grpc"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/paths"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/authority"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/process"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/state"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig/grpc"
 )
 
 const (
@@ -83,7 +83,7 @@ func (a *Application) Start(ctx context.Context, t Taggable, cfg map[string]inte
 	spec.Args = a.monitor.EnrichArgs(a.name, a.pipelineID, spec.Args, isSidecar)
 
 	// specify beat name to avoid data lock conflicts
-	// as for https://github.com/elastic/beats/v7/pull/14030 more than one instance
+	// as for https://github.com/codragonzuo/beats/pull/14030 more than one instance
 	// of the beat with same data path fails to start
 	spec.Args = injectDataPath(spec.Args, a.pipelineID, a.id)
 

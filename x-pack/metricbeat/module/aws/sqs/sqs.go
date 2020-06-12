@@ -16,10 +16,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sqs/sqsiface"
 	"github.com/pkg/errors"
 
-	s "github.com/elastic/beats/v7/libbeat/common/schema"
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	awscommon "github.com/elastic/beats/v7/x-pack/libbeat/common/aws"
-	"github.com/elastic/beats/v7/x-pack/metricbeat/module/aws"
+	s "github.com/codragonzuo/beats/libbeat/common/schema"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	awscommon "github.com/codragonzuo/beats/x-pack/libbeat/common/aws"
+	"github.com/codragonzuo/beats/x-pack/metricbeat/module/aws"
 )
 
 var metricsetName = "sqs"

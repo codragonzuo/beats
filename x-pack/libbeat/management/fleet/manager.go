@@ -13,15 +13,15 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/common/reload"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/management"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/server"
-	"github.com/elastic/beats/v7/x-pack/libbeat/management/api"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/common/reload"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/management"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/server"
+	"github.com/codragonzuo/beats/x-pack/libbeat/management/api"
 
-	xmanagement "github.com/elastic/beats/v7/x-pack/libbeat/management"
+	xmanagement "github.com/codragonzuo/beats/x-pack/libbeat/management"
 )
 
 // ConfigManager provides a functionality to retrieve config channel

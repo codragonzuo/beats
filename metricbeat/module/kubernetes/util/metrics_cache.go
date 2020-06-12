@@ -20,7 +20,7 @@ package util
 import (
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // PerfMetrics stores known metrics from Kubernetes nodes and containers

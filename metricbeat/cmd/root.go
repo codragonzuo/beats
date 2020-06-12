@@ -22,17 +22,17 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/metricbeat/beater"
-	"github.com/elastic/beats/v7/metricbeat/cmd/test"
+	"github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/metricbeat/beater"
+	"github.com/codragonzuo/beats/metricbeat/cmd/test"
 
 	// import modules
-	_ "github.com/elastic/beats/v7/metricbeat/include"
-	_ "github.com/elastic/beats/v7/metricbeat/include/fields"
+	_ "github.com/codragonzuo/beats/metricbeat/include"
+	_ "github.com/codragonzuo/beats/metricbeat/include/fields"
 
 	// Import processors.
-	_ "github.com/elastic/beats/v7/libbeat/processors/script"
+	_ "github.com/codragonzuo/beats/libbeat/processors/script"
 )
 
 // Name of this beat

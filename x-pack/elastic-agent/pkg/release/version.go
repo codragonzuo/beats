@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	libbeatVersion "github.com/elastic/beats/v7/libbeat/version"
+	libbeatVersion "github.com/codragonzuo/beats/libbeat/version"
 )
 
 // snapshot is a flag marking build as a snapshot.

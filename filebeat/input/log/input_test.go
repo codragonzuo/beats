@@ -29,15 +29,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/filebeat/channel"
-	//"github.com/elastic/beats/v7/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/channel"
+	//"github.com/codragonzuo/beats/filebeat/input"
 	"github.com/codragonzuo/beats/filebeat/input"
-        //"github.com/elastic/beats/v7/filebeat/input/file"
+        //"github.com/codragonzuo/beats/filebeat/input/file"
 	"github.com/codragonzuo/beats/filebeat/input/file"
-        "github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/match"
-	"github.com/elastic/beats/v7/libbeat/tests/resources"
+        "github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/match"
+	"github.com/codragonzuo/beats/libbeat/tests/resources"
 )
 
 func TestInputFileExclude(t *testing.T) {

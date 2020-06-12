@@ -9,7 +9,7 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download"
 )
 
 // Downloader is a downloader with a predefined set of downloaders.

@@ -24,14 +24,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/common/transport"
-	"github.com/elastic/beats/v7/libbeat/common/transport/tlscommon"
-	"github.com/elastic/beats/v7/libbeat/outputs"
-	"github.com/elastic/beats/v7/libbeat/outputs/codec"
-	"github.com/elastic/beats/v7/libbeat/outputs/outil"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/common/transport"
+	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
+	"github.com/codragonzuo/beats/libbeat/outputs"
+	"github.com/codragonzuo/beats/libbeat/outputs/codec"
+	"github.com/codragonzuo/beats/libbeat/outputs/outil"
 )
 
 type redisOut struct {

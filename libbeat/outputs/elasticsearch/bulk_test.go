@@ -22,7 +22,7 @@ package elasticsearch
 import (
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/logp"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common/backoff"
+	"github.com/codragonzuo/beats/libbeat/common/backoff"
 )
 
 func TestRetry(t *testing.T) {

@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/v7/metricbeat/helper"
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	"github.com/elastic/beats/v7/metricbeat/mb/parse"
-	"github.com/elastic/beats/v7/metricbeat/module/kibana"
+	"github.com/codragonzuo/beats/metricbeat/helper"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/mb/parse"
+	"github.com/codragonzuo/beats/metricbeat/module/kibana"
 )
 
 // init registers the MetricSet with the central registry.

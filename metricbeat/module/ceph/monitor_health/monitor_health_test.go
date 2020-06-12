@@ -24,12 +24,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/libbeat/common"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
 	"github.com/stretchr/testify/assert"
 
-	_ "github.com/elastic/beats/v7/metricbeat/module/ceph"
+	_ "github.com/codragonzuo/beats/metricbeat/module/ceph"
 )
 
 func TestFetchEventContents(t *testing.T) {

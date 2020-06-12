@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/esleg/eslegclient"
+	"github.com/codragonzuo/beats/libbeat/esleg/eslegclient"
 )
 
 func TestConnectCallbacksManagement(t *testing.T) {

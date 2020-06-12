@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/paths"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/paths"
 )
 
 // Config is a configuration used for verifier and downloader

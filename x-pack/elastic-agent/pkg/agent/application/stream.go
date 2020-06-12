@@ -10,15 +10,15 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/operation"
-	operatorCfg "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/operation/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/stateresolver"
-	downloader "github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/download/localremote"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/artifact/install"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/config"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/operation"
+	operatorCfg "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/operation/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/stateresolver"
+	downloader "github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/download/localremote"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/artifact/install"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/config"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/app/monitoring"
 )
 
 // EventProcessor is an processor of application event

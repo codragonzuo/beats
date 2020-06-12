@@ -5,7 +5,7 @@
 package grpc
 
 import (
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig"
 )
 
 var _ remoteconfig.ConnectionProvider = (*ConnectionProvider)(nil)

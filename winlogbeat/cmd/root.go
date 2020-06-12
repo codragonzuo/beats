@@ -18,18 +18,18 @@
 package cmd
 
 import (
-	"github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/libbeat/publisher/processing"
-	"github.com/elastic/beats/v7/winlogbeat/beater"
+	"github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/libbeat/publisher/processing"
+	"github.com/codragonzuo/beats/winlogbeat/beater"
 
 	// Register fields.
-	_ "github.com/elastic/beats/v7/winlogbeat/include"
+	_ "github.com/codragonzuo/beats/winlogbeat/include"
 
 	// Import processors and supporting modules.
-	_ "github.com/elastic/beats/v7/libbeat/processors/script"
-	_ "github.com/elastic/beats/v7/libbeat/processors/timestamp"
-	_ "github.com/elastic/beats/v7/winlogbeat/processors/script/javascript/module/winlogbeat"
+	_ "github.com/codragonzuo/beats/libbeat/processors/script"
+	_ "github.com/codragonzuo/beats/libbeat/processors/timestamp"
+	_ "github.com/codragonzuo/beats/winlogbeat/processors/script/javascript/module/winlogbeat"
 )
 
 // Name of this beat

@@ -20,10 +20,10 @@ package parse
 import (
 	"testing"
 
-	"github.com/elastic/beats/v7/metricbeat/helper/dialer"
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/helper/dialer"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
 	"github.com/stretchr/testify/assert"
 )

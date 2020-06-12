@@ -25,13 +25,13 @@ import (
 	v1 "k8s.io/api/core/v1"
 	k8s "k8s.io/client-go/kubernetes"
 
-	"github.com/elastic/beats/v7/libbeat/autodiscover/builder"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/bus"
-	"github.com/elastic/beats/v7/libbeat/common/kubernetes"
-	"github.com/elastic/beats/v7/libbeat/common/kubernetes/metadata"
-	"github.com/elastic/beats/v7/libbeat/common/safemapstr"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/autodiscover/builder"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/bus"
+	"github.com/codragonzuo/beats/libbeat/common/kubernetes"
+	"github.com/codragonzuo/beats/libbeat/common/kubernetes/metadata"
+	"github.com/codragonzuo/beats/libbeat/common/safemapstr"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 type node struct {

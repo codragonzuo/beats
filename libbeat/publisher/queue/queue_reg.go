@@ -18,7 +18,7 @@
 package queue
 
 import (
-	"github.com/elastic/beats/v7/libbeat/feature"
+	"github.com/codragonzuo/beats/libbeat/feature"
 )
 
 // Namespace is the feature namespace for queue definition.

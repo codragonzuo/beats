@@ -8,7 +8,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/kibana"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/kibana"
 )
 
 // ErrInvalidAPIKey is returned when authentication fail to fleet.

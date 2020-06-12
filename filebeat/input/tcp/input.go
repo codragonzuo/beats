@@ -22,15 +22,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/elastic/beats/v7/filebeat/channel"
-	"github.com/elastic/beats/v7/filebeat/harvester"
-	"github.com/elastic/beats/v7/filebeat/input"
-	"github.com/elastic/beats/v7/filebeat/inputsource"
-	netcommon "github.com/elastic/beats/v7/filebeat/inputsource/common"
-	"github.com/elastic/beats/v7/filebeat/inputsource/tcp"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/filebeat/channel"
+	"github.com/codragonzuo/beats/filebeat/harvester"
+	"github.com/codragonzuo/beats/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/inputsource"
+	netcommon "github.com/codragonzuo/beats/filebeat/inputsource/common"
+	"github.com/codragonzuo/beats/filebeat/inputsource/tcp"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 func init() {

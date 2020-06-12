@@ -22,8 +22,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/heartbeat/scheduler/schedule"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/heartbeat/scheduler/schedule"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // ErrPluginDisabled is returned when the monitor plugin is marked as disabled.

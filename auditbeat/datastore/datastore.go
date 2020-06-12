@@ -24,7 +24,7 @@ import (
 
 	bolt "github.com/coreos/bbolt"
 
-	"github.com/elastic/beats/v7/libbeat/paths"
+	"github.com/codragonzuo/beats/libbeat/paths"
 )
 
 var (

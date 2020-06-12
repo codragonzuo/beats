@@ -10,15 +10,15 @@ import (
 
 	"github.com/mitchellh/hashstructure"
 
-	"github.com/elastic/beats/v7/x-pack/dockerlogbeat/pipereader"
+	"github.com/codragonzuo/beats/x-pack/dockerlogbeat/pipereader"
 
 	"github.com/pkg/errors"
 
 	"github.com/docker/docker/daemon/logger"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/publisher/pipeline"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/publisher/pipeline"
 )
 
 // containerConfig is the common.Config unpacking type

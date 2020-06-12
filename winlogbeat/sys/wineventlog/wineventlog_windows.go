@@ -27,11 +27,11 @@ import (
 	"runtime"
 	"syscall"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 
 	"golang.org/x/sys/windows"
 
-	"github.com/elastic/beats/v7/winlogbeat/sys"
+	"github.com/codragonzuo/beats/winlogbeat/sys"
 )
 
 // Errors

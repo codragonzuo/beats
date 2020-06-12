@@ -11,7 +11,7 @@ import (
 
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/boolexp/parser"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/boolexp/parser"
 )
 
 // Errors

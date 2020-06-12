@@ -8,10 +8,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/file"
-	"github.com/elastic/beats/v7/libbeat/paths"
-	"github.com/elastic/beats/v7/x-pack/libbeat/management/api"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/file"
+	"github.com/codragonzuo/beats/libbeat/paths"
+	"github.com/codragonzuo/beats/x-pack/libbeat/management/api"
 
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"

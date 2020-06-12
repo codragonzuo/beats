@@ -22,8 +22,8 @@ package connections
 import (
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/tests/compose"
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/libbeat/tests/compose"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 )
 
 func TestData(t *testing.T) {

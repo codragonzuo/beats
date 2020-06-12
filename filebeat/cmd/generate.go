@@ -23,11 +23,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/beats/v7/filebeat/generator/fields"
-	"github.com/elastic/beats/v7/filebeat/generator/fileset"
-	"github.com/elastic/beats/v7/filebeat/generator/module"
-	"github.com/elastic/beats/v7/libbeat/common/cli"
-	"github.com/elastic/beats/v7/libbeat/paths"
+	"github.com/codragonzuo/beats/filebeat/generator/fields"
+	"github.com/codragonzuo/beats/filebeat/generator/fileset"
+	"github.com/codragonzuo/beats/filebeat/generator/module"
+	"github.com/codragonzuo/beats/libbeat/common/cli"
+	"github.com/codragonzuo/beats/libbeat/paths"
 )
 
 var (

@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/cmd"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/cmd"
 )
 
 // Setups and Runs agent.

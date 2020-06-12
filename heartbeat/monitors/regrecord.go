@@ -18,7 +18,7 @@
 package monitors
 
 import (
-	"github.com/elastic/beats/v7/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
 )
 
 type registryRecorder interface {

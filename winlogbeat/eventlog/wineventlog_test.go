@@ -30,9 +30,9 @@ import (
 	"github.com/andrewkroh/sys/windows/svc/eventlog"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/winlogbeat/checkpoint"
-	"github.com/elastic/beats/v7/winlogbeat/sys/wineventlog"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/winlogbeat/checkpoint"
+	"github.com/codragonzuo/beats/winlogbeat/sys/wineventlog"
 )
 
 func TestWindowsEventLogAPI(t *testing.T) {

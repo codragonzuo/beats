@@ -27,7 +27,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 )
 
 func TestEventMappingStatsXPack(t *testing.T) {

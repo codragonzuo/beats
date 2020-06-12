@@ -18,7 +18,7 @@
 package network_summary
 
 import (
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 	sysinfotypes "github.com/elastic/go-sysinfo/types"
 )
 

@@ -27,9 +27,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	_ "github.com/elastic/beats/v7/libbeat/processors/add_id"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	_ "github.com/codragonzuo/beats/libbeat/processors/add_id"
 )
 
 // TestLightModulesAsModuleSource checks that registry correctly lists

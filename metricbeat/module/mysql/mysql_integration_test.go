@@ -24,8 +24,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/tests/compose"
-	_ "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/libbeat/tests/compose"
+	_ "github.com/codragonzuo/beats/metricbeat/mb/testing"
 )
 
 func TestNewDB(t *testing.T) {

@@ -29,7 +29,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/elastic/beats/v7/packetbeat/protos/applayer"
+	"github.com/codragonzuo/beats/packetbeat/protos/applayer"
 )
 
 var machineEndiannes = getMachineEndiannes()

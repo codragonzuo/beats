@@ -20,7 +20,7 @@ package common
 import (
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common/cfgtype"
+	"github.com/codragonzuo/beats/libbeat/common/cfgtype"
 )
 
 // ListenerConfig exposes the shared listener configuration.

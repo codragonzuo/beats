@@ -14,10 +14,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/config"
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/record"
-	template2 "github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/template"
-	"github.com/elastic/beats/v7/x-pack/filebeat/input/netflow/decoder/test"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/config"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/record"
+	template2 "github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/template"
+	"github.com/codragonzuo/beats/x-pack/filebeat/input/netflow/decoder/test"
 )
 
 func TestTemplates(t *testing.T) {

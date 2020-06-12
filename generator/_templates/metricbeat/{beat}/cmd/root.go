@@ -18,11 +18,11 @@
 package cmd
 
 import (
-	cmd "github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/metricbeat/beater"
-	"github.com/elastic/beats/v7/metricbeat/cmd/test"
-	"github.com/elastic/beats/v7/metricbeat/mb/module"
+	cmd "github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/metricbeat/beater"
+	"github.com/codragonzuo/beats/metricbeat/cmd/test"
+	"github.com/codragonzuo/beats/metricbeat/mb/module"
 )
 
 // Name of this beat

@@ -22,9 +22,9 @@ package collector
 import (
 	"testing"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
-	_ "github.com/elastic/beats/v7/metricbeat/module/dropwizard"
+	_ "github.com/codragonzuo/beats/metricbeat/module/dropwizard"
 )
 
 func TestData(t *testing.T) {

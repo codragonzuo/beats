@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/elastic/beats/v7/libbeat/common/transport/tlscommon"
+	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
 )
 
 // Config contains information about httpjson configuration

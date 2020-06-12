@@ -7,7 +7,7 @@ package main
 import (
 	"os"
 
-	"github.com/elastic/beats/v7/x-pack/winlogbeat/cmd"
+	"github.com/codragonzuo/beats/x-pack/winlogbeat/cmd"
 )
 
 func main() {

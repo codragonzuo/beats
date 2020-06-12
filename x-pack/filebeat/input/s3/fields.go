@@ -7,7 +7,7 @@
 package s3
 
 import (
-	"github.com/elastic/beats/v7/libbeat/asset"
+	"github.com/codragonzuo/beats/libbeat/asset"
 )
 
 func init() {

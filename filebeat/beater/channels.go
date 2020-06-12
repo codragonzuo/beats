@@ -20,11 +20,11 @@ package beater
 import (
 	"sync"
 
-	"github.com/elastic/beats/v7/filebeat/input/file"
-	"github.com/elastic/beats/v7/filebeat/registrar"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
-	"github.com/elastic/beats/v7/libbeat/publisher/pipetool"
+	"github.com/codragonzuo/beats/filebeat/input/file"
+	"github.com/codragonzuo/beats/filebeat/registrar"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/publisher/pipetool"
 )
 
 type registrarLogger struct {

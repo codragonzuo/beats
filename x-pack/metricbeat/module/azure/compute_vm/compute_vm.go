@@ -7,8 +7,8 @@ package compute_vm
 import (
 	"fmt"
 
-	"github.com/elastic/beats/v7/metricbeat/mb"
-	"github.com/elastic/beats/v7/x-pack/metricbeat/module/azure"
+	"github.com/codragonzuo/beats/metricbeat/mb"
+	"github.com/codragonzuo/beats/x-pack/metricbeat/module/azure"
 )
 
 const defaultVMNamespace = "Microsoft.Compute/virtualMachines"

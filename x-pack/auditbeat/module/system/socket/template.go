@@ -10,8 +10,8 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/x-pack/auditbeat/tracing"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/x-pack/auditbeat/tracing"
 )
 
 // baseTemplateVars contains the substitution variables useful to write KProbes

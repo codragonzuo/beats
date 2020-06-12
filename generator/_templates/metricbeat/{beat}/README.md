@@ -47,7 +47,7 @@ ES_BEATS=${GOPATH}/src/github.com/elastic/beats
 
 Replace it with:
 ```
-ES_BEATS=./vendor/github.com/elastic/beats/v7
+ES_BEATS=./vendor/github.com/codragonzuo/beats
 ```
 
 

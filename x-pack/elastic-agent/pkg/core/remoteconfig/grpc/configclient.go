@@ -12,8 +12,8 @@ import (
 	grpc "google.golang.org/grpc"
 	rpc "google.golang.org/grpc"
 
-	"github.com/elastic/beats/v7/libbeat/common/backoff"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig"
+	"github.com/codragonzuo/beats/libbeat/common/backoff"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig"
 )
 
 var (

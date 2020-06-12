@@ -31,8 +31,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/elastic/beats/v7/heartbeat/look"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/heartbeat/look"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // Tests for the non-cert fields

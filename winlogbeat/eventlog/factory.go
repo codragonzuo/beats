@@ -24,7 +24,7 @@ import (
 
 	"github.com/joeshaw/multierror"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 var commonConfigKeys = []string{"api", "name", "fields", "fields_under_root",

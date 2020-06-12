@@ -17,7 +17,7 @@
 
 package pipetool
 
-import "github.com/elastic/beats/v7/libbeat/beat"
+import "github.com/codragonzuo/beats/libbeat/beat"
 
 // connectEditPipeline modifies the client configuration using edit before calling
 // edit.

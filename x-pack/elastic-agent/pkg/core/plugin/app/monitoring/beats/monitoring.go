@@ -7,7 +7,7 @@ package beats
 import (
 	"fmt"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/paths"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/paths"
 )
 
 const (

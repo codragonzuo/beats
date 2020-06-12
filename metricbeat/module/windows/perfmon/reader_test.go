@@ -24,7 +24,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/metricbeat/helper/windows/pdh"
+	"github.com/codragonzuo/beats/metricbeat/helper/windows/pdh"
 )
 
 func TestGetCounter(t *testing.T) {

@@ -21,16 +21,16 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/elastic/beats/v7/libbeat/processors/add_formatted_index"
+	"github.com/codragonzuo/beats/libbeat/processors/add_formatted_index"
 
-	"github.com/elastic/beats/v7/libbeat/common/fmtstr"
+	"github.com/codragonzuo/beats/libbeat/common/fmtstr"
 
-	"github.com/elastic/beats/v7/journalbeat/checkpoint"
-	"github.com/elastic/beats/v7/journalbeat/reader"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/processors"
+	"github.com/codragonzuo/beats/journalbeat/checkpoint"
+	"github.com/codragonzuo/beats/journalbeat/reader"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/processors"
 )
 
 // Input manages readers and forwards entries from journals.

@@ -20,7 +20,7 @@ package icmp
 import (
 	"time"
 
-	"github.com/elastic/beats/v7/heartbeat/monitors"
+	"github.com/codragonzuo/beats/heartbeat/monitors"
 )
 
 type Config struct {

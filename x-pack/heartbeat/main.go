@@ -7,9 +7,9 @@ package main
 import (
 	"os"
 
-	"github.com/elastic/beats/v7/x-pack/heartbeat/cmd"
+	"github.com/codragonzuo/beats/x-pack/heartbeat/cmd"
 
-	_ "github.com/elastic/beats/v7/heartbeat/include"
+	_ "github.com/codragonzuo/beats/heartbeat/include"
 )
 
 func main() {

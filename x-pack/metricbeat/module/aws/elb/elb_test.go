@@ -7,11 +7,11 @@ package elb
 import (
 	"os"
 
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 
 	// Register input module and metricset
-	_ "github.com/elastic/beats/v7/x-pack/metricbeat/module/aws"
-	_ "github.com/elastic/beats/v7/x-pack/metricbeat/module/aws/cloudwatch"
+	_ "github.com/codragonzuo/beats/x-pack/metricbeat/module/aws"
+	_ "github.com/codragonzuo/beats/x-pack/metricbeat/module/aws/cloudwatch"
 )
 
 func init() {

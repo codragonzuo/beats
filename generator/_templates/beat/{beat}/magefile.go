@@ -9,12 +9,12 @@ import (
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 
-	devtools "github.com/elastic/beats/v7/dev-tools/mage"
-	"github.com/elastic/beats/v7/dev-tools/mage/target/build"
-	"github.com/elastic/beats/v7/dev-tools/mage/target/common"
-	"github.com/elastic/beats/v7/dev-tools/mage/target/pkg"
-	"github.com/elastic/beats/v7/dev-tools/mage/target/unittest"
-	"github.com/elastic/beats/v7/generator/common/beatgen"
+	devtools "github.com/codragonzuo/beats/dev-tools/mage"
+	"github.com/codragonzuo/beats/dev-tools/mage/target/build"
+	"github.com/codragonzuo/beats/dev-tools/mage/target/common"
+	"github.com/codragonzuo/beats/dev-tools/mage/target/pkg"
+	"github.com/codragonzuo/beats/dev-tools/mage/target/unittest"
+	"github.com/codragonzuo/beats/generator/common/beatgen"
 )
 
 func init() {

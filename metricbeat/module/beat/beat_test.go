@@ -22,12 +22,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
-	"github.com/elastic/beats/v7/metricbeat/module/beat"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/metricbeat/module/beat"
 
 	// Make sure metricsets are registered in mb.Registry
-	_ "github.com/elastic/beats/v7/metricbeat/module/beat/state"
-	_ "github.com/elastic/beats/v7/metricbeat/module/beat/stats"
+	_ "github.com/codragonzuo/beats/metricbeat/module/beat/state"
+	_ "github.com/codragonzuo/beats/metricbeat/module/beat/stats"
 )
 
 func TestXPackEnabledMetricsets(t *testing.T) {

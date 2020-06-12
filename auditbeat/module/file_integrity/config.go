@@ -26,7 +26,7 @@ import (
 	"github.com/joeshaw/multierror"
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/libbeat/common/match"
+	"github.com/codragonzuo/beats/libbeat/common/match"
 )
 
 // HashType identifies a cryptographic algorithm.

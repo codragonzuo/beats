@@ -31,18 +31,18 @@ import (
 	"sync"
 	"time"
 
-	"github.com/elastic/beats/v7/heartbeat/monitors/active/dialchain/tlsmeta"
+	"github.com/codragonzuo/beats/heartbeat/monitors/active/dialchain/tlsmeta"
 
-	"github.com/elastic/beats/v7/heartbeat/eventext"
-	"github.com/elastic/beats/v7/heartbeat/look"
-	"github.com/elastic/beats/v7/heartbeat/monitors"
-	"github.com/elastic/beats/v7/heartbeat/monitors/active/dialchain"
-	"github.com/elastic/beats/v7/heartbeat/monitors/jobs"
-	"github.com/elastic/beats/v7/heartbeat/reason"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/transport/tlscommon"
-	"github.com/elastic/beats/v7/libbeat/common/useragent"
+	"github.com/codragonzuo/beats/heartbeat/eventext"
+	"github.com/codragonzuo/beats/heartbeat/look"
+	"github.com/codragonzuo/beats/heartbeat/monitors"
+	"github.com/codragonzuo/beats/heartbeat/monitors/active/dialchain"
+	"github.com/codragonzuo/beats/heartbeat/monitors/jobs"
+	"github.com/codragonzuo/beats/heartbeat/reason"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
+	"github.com/codragonzuo/beats/libbeat/common/useragent"
 )
 
 var userAgent = useragent.UserAgent("Heartbeat")

@@ -26,12 +26,12 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/autodiscover/template"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/bus"
-	"github.com/elastic/beats/v7/libbeat/keystore"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	dk "github.com/elastic/beats/v7/libbeat/tests/docker"
+	"github.com/codragonzuo/beats/libbeat/autodiscover/template"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/bus"
+	"github.com/codragonzuo/beats/libbeat/keystore"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	dk "github.com/codragonzuo/beats/libbeat/tests/docker"
 )
 
 // Test docker start emits an autodiscover event

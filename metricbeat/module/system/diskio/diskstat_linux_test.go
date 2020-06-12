@@ -28,8 +28,8 @@ import (
 
 	sigar "github.com/elastic/gosigar"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
-	"github.com/elastic/beats/v7/metricbeat/module/system"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
+	"github.com/codragonzuo/beats/metricbeat/module/system"
 )
 
 func Test_Get_CLK_TCK(t *testing.T) {

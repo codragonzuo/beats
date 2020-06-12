@@ -26,8 +26,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/beats/v7/libbeat/beat/events"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/beat/events"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 func TestEventConversionToBeatEvent(t *testing.T) {

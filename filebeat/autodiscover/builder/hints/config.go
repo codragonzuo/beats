@@ -17,7 +17,7 @@
 
 package hints
 
-import "github.com/elastic/beats/v7/libbeat/common"
+import "github.com/codragonzuo/beats/libbeat/common"
 
 type config struct {
 	Key           string         `config:"key"`

@@ -7,8 +7,8 @@ package basecmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/basecmd/version"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/cli"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/basecmd/version"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/cli"
 )
 
 // NewDefaultCommandsWithArgs returns a list of default commands to executes.

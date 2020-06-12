@@ -25,8 +25,8 @@ import (
 	"github.com/coreos/go-systemd/v22/dbus"
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 )
 
 // Properties is a struct representation of the dbus returns from GetAllProperties

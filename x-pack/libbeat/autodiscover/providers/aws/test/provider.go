@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common/bus"
+	"github.com/codragonzuo/beats/libbeat/common/bus"
 )
 
 // TestEventAccumulator defined a list of events for testing

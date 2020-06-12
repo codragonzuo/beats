@@ -26,12 +26,12 @@ import (
 
 	"github.com/joeshaw/multierror"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/winlogbeat/checkpoint"
-	"github.com/elastic/beats/v7/winlogbeat/sys"
-	win "github.com/elastic/beats/v7/winlogbeat/sys/eventlogging"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/winlogbeat/checkpoint"
+	"github.com/codragonzuo/beats/winlogbeat/sys"
+	win "github.com/codragonzuo/beats/winlogbeat/sys/eventlogging"
 )
 
 const (

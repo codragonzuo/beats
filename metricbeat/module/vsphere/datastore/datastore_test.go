@@ -20,7 +20,7 @@ package datastore
 import (
 	"testing"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/vmware/govmomi/simulator"

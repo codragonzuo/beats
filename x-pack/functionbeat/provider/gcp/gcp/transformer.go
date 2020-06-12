@@ -10,8 +10,8 @@ import (
 	"cloud.google.com/go/functions/metadata"
 	"cloud.google.com/go/pubsub"
 
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/common"
 )
 
 // StorageEvent is the event from Google Cloud Storage

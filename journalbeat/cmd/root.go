@@ -18,14 +18,14 @@
 package cmd
 
 import (
-	"github.com/elastic/beats/v7/journalbeat/beater"
+	"github.com/codragonzuo/beats/journalbeat/beater"
 
-	"github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
 
 	// Import processors.
-	_ "github.com/elastic/beats/v7/libbeat/processors/script"
-	_ "github.com/elastic/beats/v7/libbeat/processors/timestamp"
+	_ "github.com/codragonzuo/beats/libbeat/processors/script"
+	_ "github.com/codragonzuo/beats/libbeat/processors/timestamp"
 )
 
 // Name of this beat

@@ -23,11 +23,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
 
-	"github.com/elastic/beats/v7/packetbeat/pb"
-	"github.com/elastic/beats/v7/packetbeat/protos/tcp"
+	"github.com/codragonzuo/beats/packetbeat/pb"
+	"github.com/codragonzuo/beats/packetbeat/protos/tcp"
 )
 
 const nfsProgramNumber = 100003

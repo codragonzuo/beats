@@ -30,7 +30,7 @@ import (
 	"github.com/magefile/mage/mg"
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/dev-tools/mage"
+	"github.com/codragonzuo/beats/dev-tools/mage"
 )
 
 func init() {

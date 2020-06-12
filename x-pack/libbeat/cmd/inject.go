@@ -5,20 +5,20 @@
 package cmd
 
 import (
-	"github.com/elastic/beats/v7/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd"
 
 	// register central management
-	"github.com/elastic/beats/v7/x-pack/libbeat/licenser"
-	_ "github.com/elastic/beats/v7/x-pack/libbeat/management"
+	"github.com/codragonzuo/beats/x-pack/libbeat/licenser"
+	_ "github.com/codragonzuo/beats/x-pack/libbeat/management"
 
 	// Register fleet
-	_ "github.com/elastic/beats/v7/x-pack/libbeat/management/fleet"
+	_ "github.com/codragonzuo/beats/x-pack/libbeat/management/fleet"
 	// register processors
-	_ "github.com/elastic/beats/v7/x-pack/libbeat/processors/add_cloudfoundry_metadata"
+	_ "github.com/codragonzuo/beats/x-pack/libbeat/processors/add_cloudfoundry_metadata"
 
 	// register autodiscover providers
-	_ "github.com/elastic/beats/v7/x-pack/libbeat/autodiscover/providers/aws/ec2"
-	_ "github.com/elastic/beats/v7/x-pack/libbeat/autodiscover/providers/aws/elb"
+	_ "github.com/codragonzuo/beats/x-pack/libbeat/autodiscover/providers/aws/ec2"
+	_ "github.com/codragonzuo/beats/x-pack/libbeat/autodiscover/providers/aws/elb"
 )
 
 // AddXPack extends the given root folder with XPack features

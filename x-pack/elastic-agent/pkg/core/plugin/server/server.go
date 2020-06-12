@@ -17,9 +17,9 @@ import (
 	"google.golang.org/grpc/credentials"
 	"gopkg.in/yaml.v2"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/errors"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/plugin/process"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/remoteconfig/grpc"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/errors"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/plugin/process"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/remoteconfig/grpc"
 )
 
 const (

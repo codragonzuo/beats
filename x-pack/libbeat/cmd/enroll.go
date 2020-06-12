@@ -10,11 +10,11 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cli"
-	"github.com/elastic/beats/v7/x-pack/libbeat/management"
-	"github.com/elastic/beats/v7/x-pack/libbeat/management/api"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cli"
+	"github.com/codragonzuo/beats/x-pack/libbeat/management"
+	"github.com/codragonzuo/beats/x-pack/libbeat/management/api"
 )
 
 func getBeat(name, version string) (*instance.Beat, error) {

@@ -22,12 +22,12 @@ package main
 import (
 	"context"
 
-	devtools "github.com/elastic/beats/v7/dev-tools/mage"
+	devtools "github.com/codragonzuo/beats/dev-tools/mage"
 
 	// mage:import
-	_ "github.com/elastic/beats/v7/dev-tools/mage/target/common"
+	_ "github.com/codragonzuo/beats/dev-tools/mage/target/common"
 	// mage:import
-	"github.com/elastic/beats/v7/dev-tools/mage/target/test"
+	"github.com/codragonzuo/beats/dev-tools/mage/target/test"
 )
 
 func init() {

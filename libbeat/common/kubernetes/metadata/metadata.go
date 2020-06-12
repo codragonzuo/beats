@@ -20,9 +20,9 @@ package metadata
 import (
 	"strings"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/kubernetes"
-	"github.com/elastic/beats/v7/libbeat/common/safemapstr"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/kubernetes"
+	"github.com/codragonzuo/beats/libbeat/common/safemapstr"
 )
 
 // MetaGen allows creation of metadata from either Kubernetes resources or their Resource names.

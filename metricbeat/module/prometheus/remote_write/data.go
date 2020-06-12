@@ -22,8 +22,8 @@ import (
 
 	"github.com/prometheus/common/model"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/metricbeat/mb"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/metricbeat/mb"
 )
 
 func samplesToEvents(metrics model.Samples) map[string]mb.Event {

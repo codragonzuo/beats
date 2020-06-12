@@ -17,10 +17,10 @@ import (
 	"github.com/stretchr/testify/require"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/application/filters"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/internal/yamltest"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/agent/transpiler"
-	"github.com/elastic/beats/v7/x-pack/elastic-agent/pkg/core/logger"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/application/filters"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/internal/yamltest"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/agent/transpiler"
+	"github.com/codragonzuo/beats/x-pack/elastic-agent/pkg/core/logger"
 )
 
 func TestGroupBy(t *testing.T) {

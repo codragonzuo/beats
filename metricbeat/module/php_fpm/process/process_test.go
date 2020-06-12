@@ -22,9 +22,9 @@ package process
 import (
 	"testing"
 
-	mbtest "github.com/elastic/beats/v7/metricbeat/mb/testing"
+	mbtest "github.com/codragonzuo/beats/metricbeat/mb/testing"
 
-	_ "github.com/elastic/beats/v7/metricbeat/module/php_fpm"
+	_ "github.com/codragonzuo/beats/metricbeat/module/php_fpm"
 )
 
 func TestData(t *testing.T) {

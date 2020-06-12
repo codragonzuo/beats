@@ -20,16 +20,16 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/elastic/beats/v7/heartbeat/beater"
+	"github.com/codragonzuo/beats/heartbeat/beater"
 
 	// include all heartbeat specific autodiscovery builders
-	_ "github.com/elastic/beats/v7/heartbeat/autodiscover/builder/hints"
+	_ "github.com/codragonzuo/beats/heartbeat/autodiscover/builder/hints"
 
 	// register default heartbeat monitors
-	_ "github.com/elastic/beats/v7/heartbeat/monitors/defaults"
-	cmd "github.com/elastic/beats/v7/libbeat/cmd"
-	"github.com/elastic/beats/v7/libbeat/cmd/instance"
-	"github.com/elastic/beats/v7/libbeat/publisher/processing"
+	_ "github.com/codragonzuo/beats/heartbeat/monitors/defaults"
+	cmd "github.com/codragonzuo/beats/libbeat/cmd"
+	"github.com/codragonzuo/beats/libbeat/cmd/instance"
+	"github.com/codragonzuo/beats/libbeat/publisher/processing"
 )
 
 // Name of this beat

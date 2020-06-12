@@ -23,9 +23,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/internal/testutil"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/internal/testutil"
+	"github.com/codragonzuo/beats/libbeat/logp"
 )
 
 func TestConfigAcceptValid(t *testing.T) {

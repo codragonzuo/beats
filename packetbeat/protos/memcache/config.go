@@ -20,8 +20,8 @@ package memcache
 import (
 	"time"
 
-	"github.com/elastic/beats/v7/packetbeat/config"
-	"github.com/elastic/beats/v7/packetbeat/protos"
+	"github.com/codragonzuo/beats/packetbeat/config"
+	"github.com/codragonzuo/beats/packetbeat/protos"
 )
 
 type memcacheConfig struct {

@@ -12,12 +12,12 @@ import (
 	cloudfunctions "google.golang.org/api/cloudfunctions/v1"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/function/provider"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/manager/core"
-	"github.com/elastic/beats/v7/x-pack/functionbeat/manager/core/bundle"
-	fngcp "github.com/elastic/beats/v7/x-pack/functionbeat/provider/gcp/gcp"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/function/provider"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/manager/core"
+	"github.com/codragonzuo/beats/x-pack/functionbeat/manager/core/bundle"
+	fngcp "github.com/codragonzuo/beats/x-pack/functionbeat/provider/gcp/gcp"
 )
 
 const (

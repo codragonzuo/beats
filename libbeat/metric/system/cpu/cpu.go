@@ -22,7 +22,7 @@ package cpu
 import (
 	"runtime"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 	sigar "github.com/elastic/gosigar"
 )
 

@@ -24,33 +24,33 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/elastic/beats/v7/filebeat/channel"
-	cfg "github.com/elastic/beats/v7/filebeat/config"
-	"github.com/elastic/beats/v7/filebeat/fileset"
-	_ "github.com/elastic/beats/v7/filebeat/include"
-	"github.com/elastic/beats/v7/filebeat/input"
-	"github.com/elastic/beats/v7/filebeat/registrar"
-	"github.com/elastic/beats/v7/libbeat/autodiscover"
-	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/cfgfile"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/common/cfgwarn"
-	"github.com/elastic/beats/v7/libbeat/common/reload"
-	"github.com/elastic/beats/v7/libbeat/esleg/eslegclient"
-	"github.com/elastic/beats/v7/libbeat/logp"
-	"github.com/elastic/beats/v7/libbeat/management"
-	"github.com/elastic/beats/v7/libbeat/monitoring"
-	"github.com/elastic/beats/v7/libbeat/outputs/elasticsearch"
-	"github.com/elastic/beats/v7/libbeat/publisher/pipetool"
+	"github.com/codragonzuo/beats/filebeat/channel"
+	cfg "github.com/codragonzuo/beats/filebeat/config"
+	"github.com/codragonzuo/beats/filebeat/fileset"
+	_ "github.com/codragonzuo/beats/filebeat/include"
+	"github.com/codragonzuo/beats/filebeat/input"
+	"github.com/codragonzuo/beats/filebeat/registrar"
+	"github.com/codragonzuo/beats/libbeat/autodiscover"
+	"github.com/codragonzuo/beats/libbeat/beat"
+	"github.com/codragonzuo/beats/libbeat/cfgfile"
+	"github.com/codragonzuo/beats/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	"github.com/codragonzuo/beats/libbeat/common/reload"
+	"github.com/codragonzuo/beats/libbeat/esleg/eslegclient"
+	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/management"
+	"github.com/codragonzuo/beats/libbeat/monitoring"
+	"github.com/codragonzuo/beats/libbeat/outputs/elasticsearch"
+	"github.com/codragonzuo/beats/libbeat/publisher/pipetool"
 
-	_ "github.com/elastic/beats/v7/filebeat/include"
+	_ "github.com/codragonzuo/beats/filebeat/include"
 
 	// Add filebeat level processors
-	_ "github.com/elastic/beats/v7/filebeat/processor/add_kubernetes_metadata"
-	_ "github.com/elastic/beats/v7/libbeat/processors/decode_csv_fields"
+	_ "github.com/codragonzuo/beats/filebeat/processor/add_kubernetes_metadata"
+	_ "github.com/codragonzuo/beats/libbeat/processors/decode_csv_fields"
 
 	// include all filebeat specific builders
-	_ "github.com/elastic/beats/v7/filebeat/autodiscover/builder/hints"
+	_ "github.com/codragonzuo/beats/filebeat/autodiscover/builder/hints"
 )
 
 const pipelinesWarning = "Filebeat is unable to load the Ingest Node pipelines for the configured" +

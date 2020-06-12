@@ -7,9 +7,9 @@ package fleet
 import (
 	"testing"
 
-	"github.com/elastic/beats/v7/libbeat/common"
+	"github.com/codragonzuo/beats/libbeat/common"
 
-	"github.com/elastic/beats/v7/libbeat/common/reload"
+	"github.com/codragonzuo/beats/libbeat/common/reload"
 )
 
 func TestConfigBlocks(t *testing.T) {
