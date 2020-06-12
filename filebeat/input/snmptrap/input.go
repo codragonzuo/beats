@@ -86,7 +86,7 @@ var (
 )
 
 func init() {
-	err := input.Register("syslog", NewInput)
+	err := input.Register("snmptrap", NewInput)
 	if err != nil {
 		panic(err)
 	}
