@@ -62,7 +62,13 @@ filebeat.inputs:
   # Note: After is the equivalent to previous and before is the equivalent to to next in Logstash
   #multiline.match: after
 
+- type: snmptrap
+  Name: snmptrap1 
+  protocol.udp:
+    host: "localhost:9000"  
+
 # ============================== Filebeat modules ==============================
+
 
 filebeat.config.modules:
   # Glob pattern for configuration loading
