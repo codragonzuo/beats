@@ -21,7 +21,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-
+        "fmt"
 	"github.com/pkg/errors"
 
 	"github.com/codragonzuo/beats/filebeat/channel"
@@ -86,13 +86,14 @@ var (
 )
 
 func init() {
+        fmt.Printf("snmptrap input Register\n")
 	err := input.Register("snmptrap", NewInput)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// Input define a syslog input
+// Input define a snmptrap input
 type Input struct {
 	sync.Mutex
 	started bool
@@ -108,9 +109,9 @@ func NewInput(
 	outlet channel.Connector,
 	context input.Context,
 ) (input.Input, error) {
-	cfgwarn.Experimental("Syslog input type is used")
+	cfgwarn.Experimental("snmptrap input type is used")
 
-	log := logp.NewLogger("syslog")
+	log := logp.NewLogger("snmptrap")
 
 	out, err := outlet.ConnectWith(cfg, beat.ClientConfig{
 		Processing: beat.ProcessingConfig{
@@ -127,12 +128,12 @@ func NewInput(
 	}
 
 	forwarder := harvester.NewForwarder(out)
-	cb := func(data []byte, metadata inputsource.NetworkMetadata) {
+	callback := func(data []byte, metadata inputsource.NetworkMetadata) {
 		ev := parseAndCreateEvent(data, metadata, time.Local, log)
 		forwarder.Send(ev)
 	}
 
-	server, err := factory(cb, config.Protocol)
+	server, err := factory(callback, config.Protocol)
 	if err != nil {
 		return nil, err
 	}

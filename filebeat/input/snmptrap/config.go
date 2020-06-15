@@ -41,7 +41,7 @@ type config struct {
 
 var defaultConfig = config{
 	ForwarderConfig: harvester.ForwarderConfig{
-		Type: "syslog",
+		Type: "snmptrap",
 	},
 }
 
@@ -81,7 +81,8 @@ func factory(
 	config common.ConfigNamespace,
 ) (inputsource.Network, error) {
 	n, cfg := config.Name(), config.Config()
-
+        
+        fmt.Printf("filebeat input snmptrap config=%s\n", n)
 	switch n {
 	case tcp.Name:
 		config := defaultTCP
