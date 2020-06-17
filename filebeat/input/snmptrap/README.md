@@ -1,5 +1,5 @@
 ## Snmp Trap
-
+ 
 ```
 import socket
 
