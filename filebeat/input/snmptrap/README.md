@@ -216,6 +216,8 @@ PKG_CONFIG="pkg-config"
 GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build033069755=/tmp/go-build"
 [root@node1 filebeat]# go env -w GOPROXY="https://goproxy.cn,direct"
 ```
+
+```
 [root@ecs-centos-7 thrift-0.13.0]# gcc  --version
 gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-39)
 Copyright (C) 2015 Free Software Foundation, Inc.
@@ -230,7 +232,7 @@ epel/x86_64/metalink                                                            
  * epel: mirrors.tuna.tsinghua.edu.cn
  * extras: mirrors.tuna.tsinghua.edu.cn
  * updates: mirrors.tuna.tsinghua.edu.cn
-
+```
 
 注意该过程需要你github的用户名和密码认证一下，该用户名也可以缓存在本地的配置文件中（[credential]部分），如果你用户名输入有误，则需要清除这个，不然后续认证会有问题。
 
@@ -262,7 +264,11 @@ snmptrap.py -v1 -c public 192.168.20.45:9000 1.3.6.1.4.1.20408.4.1.1.2 127.0.0.1
 ## SNMP报文发送测试
 ```python
 from pysnmp.hlapi import *
+
 g= sendNotification(SnmpEngine(),CommunityData('public', mpModel=0),UdpTransportTarget(('127.0.0.1', 9000)), ContextData(), 'trap',        NotificationType( ObjectIdentity('1.3.6.1.4.1.20408.4.1.1.2.0.432'),).addVarBinds(('1.3.6.1.2.1.1.1.0', OctetString('my system')) ))
+
 next(g)
+
 ##g= sendNotification(SnmpEngine(),CommunityData('public', mpModel=0),UdpTransportTarget(('192.168.20.45', 9000)), ContextData(), 'trap',        NotificationType( ObjectIdentity('1.3.6.1.4.1.20408.4.1.1.2.0.432'),).addVarBinds( ('1.3.6.1.2.1.1.3.0', 12345), ('1.3.6.1.6.3.18.1.3.0', '127.0.0.1'),    ('1.3.6.1.6.3.1.1.4.3.0', '1.3.6.1.4.1.20408.4.1.1.2'), ('1.3.6.1.2.1.1.1.0', OctetString('my system')) ))
+
 ```
