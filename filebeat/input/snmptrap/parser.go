@@ -21,15 +21,699 @@ package snmptrap
 
 import (
     "fmt"
+	"errors"
+	"math"
+	"strconv"
+	"strings"
+	"time"
+	"bytes"
+	"crypto/aes"
+    "crypto/cipher"
+	"crypto/des"
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/binary"
+	"encoding/json"
+	"io"
+	"log"
+//	"math/rand"
+	"net"
+//	"reflect"
 )
 
-//line parser.go:8
-const syslog_start int = 0
-const syslog_first_final int = 2
-const syslog_error int = -1
 
-const syslog_en_main int = 0
-const syslog_en_catch_all int = 1
+
+
+// V3user object.
+type V3user struct {
+	User    string
+	AuthAlg string //MD5 or SHA1
+	AuthPwd string
+	PrivAlg string //AES or DES
+	PrivPwd string
+}
+
+// SNMP object type that lets you do SNMP requests.
+type SNMP struct {
+	Target    string        // Target device for these SNMP events.
+	Community string        // Community to use to contact the device.
+	Version   SNMPVersion   // SNMPVersion to encode in the packets.
+	timeout   time.Duration // Timeout to use for all SNMP packets.
+	retries   int           // Number of times to retry an operation.
+	conn      net.Conn      // Cache the UDP connection in the object.
+
+	//SNMP V3 variables
+	user     string
+	authAlg  string //MD5 or SHA1
+	authPwd  string
+	privAlg  string //AES or DES
+	privPwd  string
+	engineID string
+
+	//V3 temp variables
+	authKey     string
+	privKey     string
+	engineBoots int32
+	engineTime  int32
+	desIV       uint32
+	aesIV       int64
+	TrapUsers   []V3user
+}
+
+// SNMP constants.
+const (
+	bufSize    int    = 16384
+	maxMsgSize int    = 65500
+	SnmpAES    string = "AES"
+	SnmpDES    string = "DES"
+	SnmpNOPRIV string = "NOPRIV"
+	SnmpSHA1   string = "SHA1"
+	SnmpMD5    string = "MD5"
+)
+
+
+func encryptDESCBC(dst, src, key, iv []byte) error {
+	desBlockEncrypter, err := des.NewCipher([]byte(key))
+	if err != nil {
+		return err
+	}
+	desEncrypter := cipher.NewCBCEncrypter(desBlockEncrypter, iv)
+	desEncrypter.CryptBlocks(dst, src)
+	return nil
+}
+
+func decryptDESCBC(dst, src, key, iv []byte) error {
+	desBlockEncrypter, err := des.NewCipher([]byte(key))
+	if err != nil {
+		return err
+	}
+	desDecrypter := cipher.NewCBCDecrypter(desBlockEncrypter, iv)
+	desDecrypter.CryptBlocks(dst, src)
+	return nil
+}
+
+func encryptAESCFB(dst, src, key, iv []byte) error {
+	aesBlockEncrypter, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return err
+	}
+	aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncrypter, iv)
+	aesEncrypter.XORKeyStream(dst, src)
+	return nil
+}
+
+func decryptAESCFB(dst, src, key, iv []byte) error {
+	aesBlockDecrypter, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return nil
+	}
+	aesDecrypter := cipher.NewCFBDecrypter(aesBlockDecrypter, iv)
+	aesDecrypter.XORKeyStream(dst, src)
+	return nil
+}
+
+func strXor(s1, s2 string) string {
+	if len(s1) != len(s2) {
+		panic("strXor called with two strings of different length\n")
+	}
+	n := len(s1)
+	b := make([]byte, n)
+	for i := 0; i < n; i++ {
+		b[i] = s1[i] ^ s2[i]
+	}
+	return string(b)
+}
+
+func passwordToKey(password string, engineID string, hashAlg string) string {
+	h := sha1.New()
+	if hashAlg == "MD5" {
+		h = md5.New()
+	}
+
+	count := 0
+	plen := len(password)
+	repeat := 1048576 / plen
+	remain := 1048576 % plen
+	for count < repeat {
+		io.WriteString(h, password)
+		count++
+	}
+	if remain > 0 {
+		io.WriteString(h, string(password[:remain]))
+	}
+	ku := string(h.Sum(nil))
+	//fmt.Printf("ku=% x\n", ku)
+
+	h.Reset()
+	io.WriteString(h, ku)
+	io.WriteString(h, engineID)
+	io.WriteString(h, ku)
+	localKey := h.Sum(nil)
+	//fmt.Printf("localKey=% x\n", localKey)
+
+	return string(localKey)
+}
+
+
+// The SNMP object identifier type.
+type Oid []int
+
+// String returns the string representation for this oid object.
+func (o Oid) String() string {
+	/* A zero-length Oid has to be valid as it's often used as the start of a
+	   Walk. */
+	if len(o) == 0 {
+		return "."
+	}
+	var result string
+	for _, val := range o {
+		result += fmt.Sprintf(".%d", val)
+	}
+	return result
+}
+
+// MustParseOid parses a string oid to an Oid instance. Panics on error.
+func MustParseOid(o string) Oid {
+	result, err := ParseOid(o)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+// ParseOid a text format oid into an Oid instance.
+func ParseOid(oid string) (Oid, error) {
+	// Special case "." = [], "" = []
+	if oid == "." || oid == "" {
+		return Oid{}, nil
+	}
+	if oid[0] == '.' {
+		oid = oid[1:]
+	}
+	oidParts := strings.Split(oid, ".")
+	res := make([]int, len(oidParts))
+	for idx, val := range oidParts {
+		parsedVal, err := strconv.Atoi(val)
+		if err != nil {
+			return nil, err
+		}
+		res[idx] = parsedVal
+	}
+	result := Oid(res)
+
+	return result, nil
+}
+
+// DecodeOid decodes a ASN.1 BER raw oid into an Oid instance.
+func DecodeOid(raw []byte) (*Oid, error) {
+	if len(raw) < 1 {
+		return nil, errors.New("oid is at least 1 byte long")
+	}
+
+	result := make([]int, 2)
+	val := 0
+	for idx, b := range raw {
+		if idx == 0 {
+			result[0] = int(math.Floor(float64(b) / 40))
+			result[1] = int(math.Mod(float64(b), 40))
+			continue
+		}
+		if b < 128 {
+			val = val*128 + int(b)
+			result = append(result, val)
+			val = 0
+		} else {
+			val = val*128 + int(b%128)
+		}
+	}
+	r := Oid(result)
+	return &r, nil
+}
+
+// Encode encodes the oid into an ASN.1 BER byte array.
+func (o Oid) Encode() ([]byte, error) {
+	if len(o) < 3 {
+		return nil, errors.New("oid needs to be at least 3 long")
+	}
+	var result []byte
+	if o[0] != 1 || o[1] != 3 {
+		return nil, errors.New("oid didn't start with .1.3")
+	}
+	/* Every o is supposed to start with .1.3, which is encoded as
+	   40 * first_byte + second byte. First_byte is ALWAYS 1, second
+	   byte is always 3, so it's 43, or hex 0x2b */
+	result = append(result, 0x2b)
+	for i := 2; i < len(o); i++ {
+		val := o[i]
+
+		toadd := make([]int, 0)
+		if val == 0 {
+			toadd = append(toadd, 0)
+		}
+		for val > 0 {
+			toadd = append(toadd, val%128)
+			val /= 128
+		}
+
+		for i := len(toadd) - 1; i >= 0; i-- {
+			sevenbits := toadd[i]
+			if i != 0 {
+				result = append(result, 128+byte(sevenbits))
+			} else {
+				result = append(result, byte(sevenbits))
+			}
+		}
+	}
+	return result, nil
+}
+
+// Copy copies an oid into a new object instance.
+func (o Oid) Copy() Oid {
+	dest := make([]int, len(o))
+	copy(dest, o)
+	return Oid(dest)
+}
+
+/* Within determines if an oid has this oid instance as a prefix.
+
+E.g. MustParseOid("1.2.3").Within("1.2") => true. */
+func (o Oid) Within(other Oid) bool {
+	if len(other) > len(o) {
+		return false
+	}
+	for idx, val := range other {
+		if o[idx] != val {
+			return false
+		}
+	}
+	return true
+}
+
+
+// BERType constants for the Type of the TLV field.
+type BERType uint8
+
+// Constants for the different types of the TLV fields.
+const (
+	AsnBoolean     BERType = 0x01
+	AsnInteger     BERType = 0x02
+	AsnBitStr      BERType = 0x03
+	AsnOctetStr    BERType = 0x04
+	AsnNull        BERType = 0x05
+	AsnObjectID    BERType = 0x06
+	AsnSequence    BERType = 0x10
+	AsnSet         BERType = 0x11
+	AsnUniversal   BERType = 0x00
+	AsnApplication BERType = 0x40
+	AsnContext     BERType = 0x80
+	AsnPrivate     BERType = 0xC0
+	AsnPrimitive   BERType = 0x00
+	AsnConstructor BERType = 0x20
+
+	AsnLongLen     BERType = 0x80
+	AsnExtensionID BERType = 0x1F
+	AsnBit8        BERType = 0x80
+
+	Integer     BERType = AsnUniversal | 0x02
+	Integer32   BERType = AsnUniversal | 0x02
+	Bitstring   BERType = AsnUniversal | 0x03
+	Octetstring BERType = AsnUniversal | 0x04
+	Null        BERType = AsnUniversal | 0x05
+	UOid        BERType = AsnUniversal | 0x06
+	Sequence    BERType = AsnConstructor | 0x10
+
+	Ipaddress BERType = AsnApplication | 0x00
+	Counter   BERType = AsnApplication | 0x01
+	Counter32 BERType = AsnApplication | 0x01
+	Gauge     BERType = AsnApplication | 0x02
+	Gauge32   BERType = AsnApplication | 0x02
+	Timeticks BERType = AsnApplication | 0x03
+	Opaque    BERType = AsnApplication | 0x04
+	Counter64 BERType = AsnApplication | 0x06
+
+	AsnGetRequest     BERType = 0xa0
+	AsnGetNextRequest BERType = 0xa1
+	AsnGetResponse    BERType = 0xa2
+	AsnSetRequest     BERType = 0xa3
+	AsnTrap           BERType = 0xa4
+	AsnGetBulkRequest BERType = 0xa5
+	AsnInform         BERType = 0xa6
+	AsnTrap2          BERType = 0xa7
+	AsnReport         BERType = 0xa8
+
+	noSuchObject   BERType = 0x80
+	noSuchInstance BERType = 0x81
+)
+
+// SNMPVersion indicates which SNMP version is in use.
+type SNMPVersion uint8
+
+// List the supported snmp versions.
+const (
+	SNMPv1  SNMPVersion = 0
+	SNMPv2c SNMPVersion = 1
+	SNMPv3  SNMPVersion = 3
+)
+
+// EncodeLength encodes an integer value as a BER compliant length value.
+func EncodeLength(length int) []byte {
+	// The first bit is used to indicate whether this is the final byte
+	// encoding the length. So, if the first bit is 0, just return a one
+	// byte response containing the byte-encoded length.
+	if length <= 0x7f {
+		return []byte{byte(length)}
+	}
+
+	// If the length is bigger the format is, first bit 1 + the rest of the
+	// bits in the first byte encode the length of the length, then follows
+	// the actual length.
+
+	// Technically the SNMP spec allows for packet lengths longer than can be
+	// specified in a 127-byte encoded integer, however, going out on a limb
+	// here, I don't think I'm going to support a use case that insane.
+
+	r := EncodeInteger(length)
+	numOctets := len(r)
+	result := make([]byte, 1+numOctets)
+	result[0] = 0x80 | byte(numOctets)
+	for i, b := range r {
+		result[1+i] = b
+	}
+	return result
+}
+
+// DecodeLength returns the length and the length of the length or an error.
+// Caveats: Does not support indefinite length. Couldn't find any
+// SNMP packet dump actually using that.
+func DecodeLength(toparse []byte) (int, int, error) {
+	// If the first bit is zero, the rest of the first byte indicates the length. Values up to 127 are encoded this way (unless you're using indefinite length, but we don't support that)
+	if len(toparse) == 0 {
+		return 0, 0, fmt.Errorf("no data")
+	}
+
+	if toparse[0] == 0x80 {
+		return 0, 0, fmt.Errorf("we don't support indefinite length encoding")
+	}
+	if toparse[0]&0x80 == 0 {
+		return int(toparse[0]), 1, nil
+	}
+
+	// If the first bit is one, the rest of the first byte encodes the length of then encoded length. So read how many bytes are part of the length.
+	numOctets := int(toparse[0] & 0x7f)
+	if len(toparse) < 1+numOctets {
+		return 0, 0, fmt.Errorf("invalid length")
+	}
+
+	// Decode the specified number of bytes as a BER Integer encoded
+	// value.
+	val, err := DecodeInteger(toparse[1 : numOctets+1])
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return val, 1 + numOctets, nil
+}
+
+// DecodeCounter64 decodes a counter64.
+func DecodeCounter64(toparse []byte) (uint64, error) {
+	if len(toparse) > 8 {
+		return 0, fmt.Errorf("don't support more than 64 bits")
+	}
+	var val uint64
+	val = 0
+	for _, b := range toparse {
+		val = val*256 + uint64(b)
+	}
+	return val, nil
+}
+
+// DecodeInteger decodes an integer. Will error out if it's longer than 64 bits.
+func DecodeInteger(toparse []byte) (int, error) {
+	if len(toparse) > 8 {
+		return 0, fmt.Errorf("don't support more than 64 bits")
+	}
+	val := 0
+	for _, b := range toparse {
+		val = val*256 + int(b)
+	}
+	return val, nil
+}
+
+// DecodeIntegerSigned decodes a signed integer. Will error out if it's longer than 64 bits.
+func DecodeIntegerSigned(toparse []byte) (int, error) {
+	if len(toparse) > 8 {
+		return 0, fmt.Errorf("don't support more than 64 bits")
+	}
+	val := 0
+	for _, b := range toparse {
+		val = val*256 + int(b)
+	}
+	// If highest order bit is 1, number is negative: decode as 2's complement.
+	if toparse[0]&0x80 != 0 {
+		nbits := len(toparse) * 8
+		twotonbits := uint(1) << uint(nbits)
+		val = val - int(twotonbits)
+	}
+	return val, nil
+}
+
+// DecodeIPAddress decodes an IP address.
+func DecodeIPAddress(toparse []byte) (string, error) {
+	if len(toparse) != 4 {
+		return "", fmt.Errorf("need 4 bytes for IP address")
+	}
+	return fmt.Sprintf("%d.%d.%d.%d", toparse[0], toparse[1], toparse[2], toparse[3]), nil
+}
+
+// EncodeInteger encodes an integer to BER format.
+func EncodeInteger(toEncode int) []byte {
+	if toEncode == 0 {
+		return []byte{0}
+	}
+	result := make([]byte, 8)
+	pos := 7
+	i := toEncode
+	for i > 0 {
+		result[pos] = byte(i % 256)
+		i = i >> 8
+		pos--
+	}
+	if result[pos+1] >= 0x80 {
+		result[pos] = 0x00
+		pos--
+	}
+	return result[pos+1 : 8]
+}
+
+//map转json
+func mapToJSON(tempMap *map[string]interface{}) string {
+
+	data, err := json.Marshal(tempMap)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return string(data)
+}
+
+// DecodeSequence decodes BER binary data into into *[]interface{}.
+func DecodeSequence(toparse []byte) ([]interface{}, error) {
+	var result []interface{}
+    //tempMap := make(map[string]interface{})
+
+	if len(toparse) < 2 {
+		return nil, fmt.Errorf("sequence cannot be shorter than 2 bytes")
+	}
+	sqType := BERType(toparse[0])
+	result = append(result, sqType)
+	
+	// Bit 6 is the P/C primitive/constructed bit. Which means it's a set, essentially.
+	if sqType != Sequence && (toparse[0]&0x20 == 0) {
+		return nil, fmt.Errorf("byte array parsed in is not a sequence")
+	}
+	seqLength, seqLenLen, err := DecodeLength(toparse[1:])
+	if err != nil {
+		return nil, errors.New("failed to parse sequence length" + strconv.Itoa(seqLenLen))
+	}
+
+	if seqLength == 0 {
+		return result, nil
+	}
+
+	lidx := 0
+	idx := 1 + seqLenLen
+	if 1+seqLenLen+seqLength > len(toparse) {
+		return nil, errors.New("sequence does not contain the amount of bytes reported in its length")
+	}
+	toparse = toparse[:(1 + seqLenLen + seqLength)]
+
+	// Let's guarantee progress.
+	for idx < len(toparse) && idx > lidx {
+		berType := toparse[idx]
+		berLength, berLenLen, err := DecodeLength(toparse[idx+1:])
+		if err != nil {
+			return nil, fmt.Errorf("length parse error @ idx %v", idx)
+		}
+
+		start := idx + 1 + berLenLen
+		end := idx + 1 + berLenLen + berLength
+		if start > len(toparse) || end > len(toparse) {
+			return nil, fmt.Errorf("parse error")
+		}
+		berValue := toparse[start:end]
+
+		start = idx
+		end = idx + 1 + berLenLen + berLength
+		if start > len(toparse) || end > len(toparse) {
+			return nil, fmt.Errorf("parse error")
+		}
+		berAll := toparse[start:end]
+
+		switch BERType(berType) {
+		case AsnBoolean:
+			if berLength != 1 {
+				return nil, fmt.Errorf("boolean length != 1 @ idx %v", idx)
+			}
+			result = append(result, berValue[0] == 0)
+		case AsnInteger:
+			decodedValue, err := DecodeIntegerSigned(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, decodedValue)
+		case AsnOctetStr:
+			result = append(result, string(berValue))
+		case AsnNull:
+			result = append(result, nil)
+		case AsnObjectID:
+			oid, err := DecodeOid(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, *oid)
+		case Gauge32, Counter32:
+			val, err := DecodeInteger(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, val)
+		case Counter64:
+			val, err := DecodeCounter64(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, val)
+
+		case Timeticks:
+			val, err := DecodeInteger(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, time.Duration(val)*10*time.Millisecond)
+		case Ipaddress:
+			val, err := DecodeIPAddress(berValue)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, val)
+		case Sequence:
+			pdu, err := DecodeSequence(berAll)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, pdu)
+		case AsnGetNextRequest, AsnGetRequest, AsnGetResponse, AsnReport, AsnTrap2, AsnTrap:
+			pdu, err := DecodeSequence(berAll)
+			if err != nil {
+				return nil, err
+			}
+			result = append(result, pdu)
+		case noSuchObject:
+			return nil, fmt.Errorf("No Such Object")
+		case noSuchInstance:
+			return nil, fmt.Errorf("No Such Instance currently exists at this OID")
+		default:
+			return nil, fmt.Errorf("did not understand type %v", berType)
+		}
+
+		lidx = idx
+		idx = idx + 1 + berLenLen + berLength
+	}
+
+	return result, nil
+}
+
+// EncodeSequence will encode an []interface{} into an SNMP bytestream.
+func EncodeSequence(toEncode []interface{}) ([]byte, error) {
+	switch toEncode[0].(type) {
+	default:
+		return nil, fmt.Errorf("first element of sequence to encode should be sequence type")
+	case BERType:
+		// OK
+	}
+
+	seqType := toEncode[0].(BERType)
+	var toEncap []byte
+	for _, val := range toEncode[1:] {
+		switch val := val.(type) {
+		default:
+			return nil, fmt.Errorf("couldn't handle type %T", val)
+		case nil:
+			toEncap = append(toEncap, byte(AsnNull))
+			toEncap = append(toEncap, 0)
+		case int:
+			enc := EncodeInteger(val)
+			// TODO encode length ?
+			toEncap = append(toEncap, byte(AsnInteger))
+			toEncap = append(toEncap, byte(len(enc)))
+			for _, b := range enc {
+				toEncap = append(toEncap, b)
+			}
+		case string:
+			enc := []byte(val)
+			toEncap = append(toEncap, byte(AsnOctetStr))
+			for _, b := range EncodeLength(len(enc)) {
+				toEncap = append(toEncap, b)
+			}
+			for _, b := range enc {
+				toEncap = append(toEncap, b)
+			}
+		case Oid:
+			enc, err := val.Encode()
+			if err != nil {
+				return nil, err
+			}
+			toEncap = append(toEncap, byte(AsnObjectID))
+			encLen := EncodeLength(len(enc))
+			for _, b := range encLen {
+				toEncap = append(toEncap, b)
+			}
+			for _, b := range enc {
+				toEncap = append(toEncap, b)
+			}
+		case []interface{}:
+			enc, err := EncodeSequence(val)
+			if err != nil {
+				return nil, err
+			}
+			for _, b := range enc {
+				toEncap = append(toEncap, b)
+			}
+		}
+	}
+
+	l := EncodeLength(len(toEncap))
+	// Encode length ...
+	result := []byte{byte(seqType)}
+	for _, b := range l {
+		result = append(result, b)
+	}
+	for _, b := range toEncap {
+		result = append(result, b)
+	}
+	return result, nil
+}
 
 
 
@@ -37,14 +721,193 @@ var (
 	noDuplicates = []byte{'-', '.'}
 )
 
+// Trap object.
+type Trap struct {
+	Version     int
+	TrapType    int // for V1 traps
+	OID         Oid
+	Other       interface{}
+	Community   string
+	Username    string
+	Address     string
+	VarBinds    map[string]interface{}
+	VarBindOIDs []string
+}
+
+func (w SNMP) decrypt(payload, privParam string) (string, error) {
+	buf := new(bytes.Buffer)
+	binary.Write(buf, binary.BigEndian, w.engineBoots)
+
+	if w.privAlg == SnmpAES {
+		buf2 := new(bytes.Buffer)
+		binary.Write(buf2, binary.BigEndian, w.engineTime)
+		iv := string(buf.Bytes()) + string(buf2.Bytes()) + privParam
+
+		// Decrypt
+		decrypted := make([]byte, len(payload))
+		err := decryptAESCFB(decrypted, []byte(payload), []byte(w.privKey), []byte(iv))
+		if err != nil {
+			return "", err
+		}
+		return string(decrypted), nil
+	}
+
+	desKey := w.privKey[:8]
+	preIV := w.privKey[8:16]
+	iv := strXor(preIV, privParam)
+
+	//DES Decrypt
+	plen := len(payload)
+	if (plen % 8) != 0 {
+		panic("DES encrypted payload is not multiple of 8 bytes\n")
+	}
+	decrypted := make([]byte, len(payload))
+	decryptDESCBC(decrypted, []byte(payload), []byte(desKey), []byte(iv))
+	return string(decrypted), nil
+}
+
+
+// ParseTrap parses a received SNMP trap and returns  a map of oid to objects
+//func (w SNMP) ParseTrap(response []byte) (Trap, error) {
+func ParseTrap(response []byte) (Trap, string, error) {
+	t := Trap{VarBinds: map[string]interface{}{}, VarBindOIDs: []string{}}
+    w := SNMP{}
+	message:= ""
+	decodedResponse, err := DecodeSequence(response)
+	if err != nil {
+		return t,message, err
+	}
+	if len(decodedResponse) < 4 {
+		log.Printf("Error: Invalid Decoded Response Length, decodedResponse: %v", decodedResponse)
+		return t, message,errors.New("Invalid Decoded Response Length")
+	}
+
+	// Fetch the varbinds out of the packet.
+	fmt.Printf("decodedResponse: %v\n", decodedResponse)
+	message = fmt.Sprintf("%v", decodedResponse)
+    for _,v:=range decodedResponse{
+        fmt.Print(v," ")
+    }
+    fmt.Println()
+	t.Version = decodedResponse[1].(int)
+	if t.Version <= 1 {
+		t.Version++
+	}
+
+	if t.Version < 3 {
+		t.Community = decodedResponse[2].(string)
+	} else {
+		/*
+			for i, val := range decodedResponse{
+				fmt.Printf("Resp:%v:type=%v\n",i,reflect.TypeOf(val));
+			}
+		*/
+		v3HeaderStr := decodedResponse[3].(string)
+		v3HeaderDecoded, err := DecodeSequence([]byte(v3HeaderStr))
+		if err != nil {
+			return t,message, err
+		}
+
+		w.engineID = v3HeaderDecoded[1].(string)
+		w.engineBoots = int32(v3HeaderDecoded[2].(int))
+		w.engineTime = int32(v3HeaderDecoded[3].(int))
+		w.user = v3HeaderDecoded[4].(string)
+		respAuthParam := v3HeaderDecoded[5].(string)
+		respPrivParam := v3HeaderDecoded[6].(string)
+
+		if len(respAuthParam) == 0 || len(respPrivParam) == 0 {
+			return t, message,errors.New("response is not encrypted")
+		}
+		if len(w.TrapUsers) == 0 {
+			return t, message,errors.New("No SNMP V3 trap user configured")
+		}
+
+		founduser := false
+		for _, v3user := range w.TrapUsers {
+			if v3user.User == w.user {
+				w.authAlg = v3user.AuthAlg
+				w.privAlg = v3user.PrivAlg
+				w.authPwd = v3user.AuthPwd
+				w.privPwd = v3user.PrivPwd
+				founduser = true
+				break
+			}
+		}
+		if !founduser {
+			return t, message, errors.New("No matching user found")
+		}
+
+		t.Username = w.user
+
+		//keys
+		w.authKey = passwordToKey(w.authPwd, w.engineID, w.authAlg)
+		privKey := passwordToKey(w.privPwd, w.engineID, w.authAlg)
+		w.privKey = string(([]byte(privKey))[0:16])
+
+		encryptedResp := decodedResponse[4].(string)
+		plainResp, _ := w.decrypt(encryptedResp, respPrivParam)
+
+		pduDecoded, err := DecodeSequence([]byte(plainResp))
+		if err != nil {
+			return t, message,err
+		}
+		decodedResponse = pduDecoded
+	}
+	//fmt.Printf("%#v\n",decodedResponse);
+
+	respPacket := decodedResponse[3].([]interface{})
+	var varbinds []interface{}
+	if t.Version == 1 {
+		if len(respPacket) < 7 {
+			log.Printf("Error: Invalid Response Packet Length\ndecodedResponse: %v\nrespPacket: %v", decodedResponse, respPacket)
+			return t, message,errors.New("Invalid Response Packet Length")
+		}
+		t.OID, _ = respPacket[1].(Oid)
+		t.Address, _ = respPacket[2].(string)
+		t.TrapType, _ = respPacket[3].(int)
+		t.Other = respPacket[4]
+		//fmt.Printf("Generic Trap: %d\n", respPacket[3])
+		varbinds = respPacket[6].([]interface{})
+	} else {
+		if len(respPacket) < 5 {
+			log.Printf("Error: Invalid Response Packet Length\ndecodedResponse: %v\nrespPacket: %v", decodedResponse, respPacket)
+			return t,message, errors.New("Invalid Response Packet Length")
+		}
+		varbinds = respPacket[4].([]interface{})
+	}
+
+	for i := 1; i < len(varbinds); i++ {
+		varoid := varbinds[i].([]interface{})[1]
+		result := varbinds[i].([]interface{})[2]
+		fmt.Printf("oid=%s  result=%s\n", varoid, result)
+		oid := varoid.(Oid).String()
+	    fmt.Printf("oid=%s\n", oid)
+		t.VarBinds[oid] = result
+		t.VarBindOIDs = append(t.VarBindOIDs, oid)
+	}
+	fmt.Printf("Version=%d\n",   t.Version)
+    fmt.Printf("Community=%s\n", t.Community)
+	//fmt.Printf("oid=%s\n", t.OID.String())
+	fmt.Printf("TrapType=%d\n", t.TrapType)
+	fmt.Printf("Address=%s\n", t.Address)
+    fmt.Printf("Bytes=%v\n", response)
+
+	return t,message, nil
+}
+
+
 // Parse parses Syslog events.
 func Parse(data []byte, event *event) {
 	//var p, cs int
 	//pe := len(data)
 	//tok := 0
 	//eof := len(data)
-	
+	_,message,_ := ParseTrap(data)
 	//event.Set
-        fmt.Printf("snmptrap log Received!\n")
-        
+    fmt.Printf("snmptrap log Received!\n")
+	fmt.Printf("msg=%s\n", message)
+    //event.SetMessage(data[tok:eof])
+//    var buffer []byte
+ //      buffer.WriteString(message) 
+	event.SetMessage([]byte(message))
 }
