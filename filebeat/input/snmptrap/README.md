@@ -100,6 +100,14 @@ PKG_CONFIG="pkg-config"
 GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build616420941=/tmp/go-build -gno-record-gcc-switches"
 [root@ecs-centos-7 ~]# ls
 ```
+## 修改Linux系统时间
+时间不对无法https上网，无法git下载代码
+```
+[root@node1]# date
+[root@node1]# date -s 20200618
+[root@node1]# date -s 19:32:30
+```
+
 ## 代码下载
 ```
 git clone https://github.com/codragonzuo/beats.git
