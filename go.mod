@@ -38,6 +38,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0
+	github.com/samuel/go-parser v0.0.0-20170131185712-99744db8e45c // indirect
 	github.com/samuel/go-thrift v0.0.0-20140522043831-2187045faa54
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
