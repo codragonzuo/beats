@@ -162,7 +162,7 @@ func (pb *packetbeat) setupSniffer() error {
 		filter = protos.Protos.BpfFilter(withVlans, withICMP)
 	}
 
-	pb.sniff, err = sniffer.New(false, filter, pb.createWorker, config.Interfaces)
+	pb.sniff, err = sniffer.New(false, filter, pb.createWorker,  "hello"  ,config.Interfaces)
 	return err
 }
 

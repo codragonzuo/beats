@@ -79,6 +79,7 @@ func New(
 	testMode bool,
 	filter string,
 	factory WorkerFactory,
+        mypub  string,
 	interfaces config.InterfacesConfig,
 ) (*Sniffer, error) {
 	s := &Sniffer{
@@ -207,7 +208,9 @@ func (s *Sniffer) Run() error {
 
 		counter++
 		logp.Debug("sniffer", "Packet number: %d", counter)
-		worker.OnPacket(data, &ci)
+		
+                fmt.Printf("Packet: %X \n", data)
+                worker.OnPacket(data, &ci)
 	}
 
 	return nil
