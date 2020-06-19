@@ -79,7 +79,7 @@ func New(
 	testMode bool,
 	filter string,
 	factory WorkerFactory,
-        mypub  string,
+        myfactory  WorkerFactory,
 	interfaces config.InterfacesConfig,
 ) (*Sniffer, error) {
 	s := &Sniffer{

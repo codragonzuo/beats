@@ -162,7 +162,7 @@ func (pb *packetbeat) setupSniffer() error {
 		filter = protos.Protos.BpfFilter(withVlans, withICMP)
 	}
 
-	pb.sniff, err = sniffer.New(false, filter, pb.createWorker,  "hello"  ,config.Interfaces)
+	pb.sniff, err = sniffer.New(false, filter, pb.createWorker,  pb.createMyWorker ,config.Interfaces)
 	return err
 }
 
@@ -287,6 +287,15 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 
 	return worker, nil
 }
+
+
+func (pb *packetbeat) createMyWorker(dl layers.LinkType) (sniffer.Worker, error) {
+
+        return nil, nil
+}
+
+
+
 
 func (pb *packetbeat) icmpConfig() (*common.Config, error) {
 	var icmp *common.Config
