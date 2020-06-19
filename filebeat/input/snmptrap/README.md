@@ -280,3 +280,47 @@ next(g)
 ##g= sendNotification(SnmpEngine(),CommunityData('public', mpModel=0),UdpTransportTarget(('192.168.20.45', 9000)), ContextData(), 'trap',        NotificationType( ObjectIdentity('1.3.6.1.4.1.20408.4.1.1.2.0.432'),).addVarBinds( ('1.3.6.1.2.1.1.3.0', 12345), ('1.3.6.1.6.3.18.1.3.0', '127.0.0.1'),    ('1.3.6.1.6.3.1.1.4.3.0', '1.3.6.1.4.1.20408.4.1.1.2'), ('1.3.6.1.2.1.1.1.0', OctetString('my system')) ))
 
 ```
+
+## 包冲突解决方法
+
+### （1）
+```
+# github.com/codragonzuo/beats/packetbeat/protos/dhcpv4
+protos/dhcpv4/dhcpv4.go:103:7: v4.Opcode undefined (type *dhcpv4.DHCPv4 has no field or method Opcode, but does have OpCode)
+protos/dhcpv4/dhcpv4.go:124:39: v4.OpcodeToString undefined (type *dhcpv4.DHCPv4 has no field or method OpcodeToString)
+protos/dhcpv4/dhcpv4.go:125:23: v4.HwTypeToString undefined (type *dhcpv4.DHCPv4 has no field or method HwTypeToString)
+protos/dhcpv4/dhcpv4.go:126:32: cannot call non-function v4.HopCount (type uint8)
+protos/dhcpv4/dhcpv4.go:127:59: cannot call non-function v4.TransactionID (type dhcpv4.TransactionID)
+protos/dhcpv4/dhcpv4.go:128:34: cannot call non-function v4.NumSeconds (type uint16)
+protos/dhcpv4/dhcpv4.go:130:23: v4.ClientHwAddrToString undefined (type *dhcpv4.DHCPv4 has no field or method ClientHwAddrToString)
+protos/dhcpv4/dhcpv4.go:134:21: cannot call non-function v4.ClientIPAddr (type net.IP)
+protos/dhcpv4/dhcpv4.go:135:44: cannot call non-function v4.ClientIPAddr (type net.IP)
+protos/dhcpv4/dhcpv4.go:137:19: cannot call non-function v4.YourIPAddr (type net.IP)
+protos/dhcpv4/dhcpv4.go:137:19: too many errors
+```
+解决办法：修改beats/go.mod里的require的dhcpv4版本号 
+```
+github.com/insomniacslk/dhcp v0.0.0-20180716144031-256240854619
+```
+### （2）thrift库冲突
+解决办法：修改beats/go.mod里的require的thrift版本号 
+```
+github.com/samuel/go-thrift v0.0.0-20140522043831-2187045faa54
+```
+```
+# github.com/codragonzuo/beats/packetbeat/protos/thrift
+protos/thrift/thrift_idl.go:47:11: field.Id undefined (type *parser.Field has no field or method Id, but does have ID)
+protos/thrift/thrift_idl.go:48:15: field.Id undefined (type *parser.Field has no field or method Id, but does have ID)
+protos/thrift/thrift_idl.go:56:16: field.Id undefined (type *parser.Field has no field or method Id, but does have ID)
+
+```
+###  （3） C.TPACKET_V3未定义
+```
+pkg/mod/github.com/tsg/gopacket@v0.0.0-20190320122513-dd3d0e41124a/pcap/pcap_poll_linux.go:22:34: could not determine kind of name for C.TPACKET_V3
+make: *** [packetbeat] 错误 2
+```
+官方解释： https://discuss.elastic.co/t/compile-packetbeat-on-centos6-8/190639/5
+
+解决方法： 手工修改pcap_poll_linux.go里的 C.TPACKET_V3 为 2
+
+
