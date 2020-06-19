@@ -295,12 +295,67 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 
 type MyCoder struct {
         ss string	
+        client beat.Client
 }
 
-func NewMyCoder(
+
+func (pb *packetbeat) Myworker(ch chan beat.Event, client beat.Client) {
+	//for {
+	//	select {
+	//	//case <-pb.done:
+	//	//	return
+	//	case event := <-ch:
+	//		//pub, _ := p.processor.Run(&event)
+	//		fields, err := pb.GetFields(event.Fields)
+        //              if fields != nil {
+	//			client.Publish(*field)
+	//		}
+	//	}
+	//}
+}
+
+
+func (pb *packetbeat)NewMyCoder(
 ) (*MyCoder, error) {
-	d := MyCoder{
-           ss: "MyDecoder"}
+        //
+	config := &pb.config
+	if !config.Flows.IsEnabled() {
+		return nil,nil
+	}
+
+	processors, err := processors.New(config.Flows.Processors)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := pb.pipeline.ConnectWith(beat.ClientConfig{
+		Processing: beat.ProcessingConfig{
+			EventMetadata: config.Flows.EventMetadata,
+			Processor:     processors,
+			KeepNull:      config.Flows.KeepNull,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+
+
+	//ch := make(chan beat.Event, 3)
+	//go p.Myworker(ch, client)
+	//return func(event beat.Event) {
+	//	select {
+	//	case ch <- event:
+	//	case <-p.done:
+	//		ch = nil // stop serving more send requests
+	//	}
+	//}, nil
+
+
+        d := MyCoder{
+            ss: "MyDecoder",
+            client: client}
+
         return &d, nil
 }
 
@@ -313,7 +368,7 @@ func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
 func (pb *packetbeat) createMyWorker(dl layers.LinkType) (sniffer.Worker, error) {
 
         
-        return  NewMyCoder()
+        return  pb.NewMyCoder()
 }
 
 
