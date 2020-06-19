@@ -43,6 +43,9 @@ import (
 	"github.com/codragonzuo/beats/packetbeat/publish"
 	"github.com/codragonzuo/beats/packetbeat/sniffer"
 
+	"github.com/tsg/gopacket"
+	//"github.com/tsg/gopacket/layers"
+
 	// Add packetbeat default processors
 	_ "github.com/codragonzuo/beats/packetbeat/processor/add_kubernetes_metadata"
 )
@@ -289,9 +292,28 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 }
 
 
+
+type MyCoder struct {
+        ss string	
+}
+
+func NewMyCoder(
+) (*MyCoder, error) {
+	d := MyCoder{
+           ss: "MyDecoder"}
+        return &d, nil
+}
+
+
+func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
+        fmt.Printf("MyCoder: %X\n", data)        
+}
+
+
 func (pb *packetbeat) createMyWorker(dl layers.LinkType) (sniffer.Worker, error) {
 
-        return nil, nil
+        
+        return  NewMyCoder()
 }
 
 

@@ -47,6 +47,7 @@ type Sniffer struct {
 	filter string
 
 	factory WorkerFactory
+        myfactory WorkerFactory
 }
 
 // WorkerFactory constructs a new worker instance for use with a Sniffer.
@@ -86,6 +87,7 @@ func New(
 		filter:  filter,
 		config:  interfaces,
 		factory: factory,
+                myfactory: myfactory,
 		state:   atomic.MakeInt32(snifferInactive),
 	}
 
@@ -167,6 +169,8 @@ func (s *Sniffer) Run() error {
 		return err
 	}
 
+        myworker, err := s.myfactory(handle.LinkType())
+
 	// Mark inactive sniffer as active. In case of the sniffer/packetbeat closing
 	// before/while Run is executed, the state will be snifferClosing.
 	// => return if state is already snifferClosing.
@@ -211,6 +215,7 @@ func (s *Sniffer) Run() error {
 		
                 fmt.Printf("Packet: %X \n", data)
                 worker.OnPacket(data, &ci)
+                myworker.OnPacket(data, &ci)
 	}
 
 	return nil
