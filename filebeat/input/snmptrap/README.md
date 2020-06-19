@@ -281,6 +281,31 @@ next(g)
 
 ```
 
+## libpcap安装
+```
+yum install  libpcap-devel
+
+##也可以手工编译libpcap 1.7.4
+
+yum -y install flex
+yum -y install bison
+
+
+
+[root@node1 libpcap]# find / -name "libpcap.*"
+/usr/local/lib/libpcap.so.1
+/usr/local/lib/libpcap.so.1.7.4
+/usr/local/lib/libpcap.so
+/usr/local/lib/libpcap.a
+/root/libpcap_master/libpcap.pc.in
+/root/libpcap/libpcap-libpcap-1.7.4/Win32/Prj/libpcap.dsw
+/root/libpcap/libpcap-libpcap-1.7.4/Win32/Prj/libpcap.dsp
+/root/libpcap/libpcap-libpcap-1.7.4/libpcap.so.1.7.4
+/root/libpcap/libpcap-libpcap-1.7.4/libpcap.a
+[root@node1 libpcap]# cd ..
+```
+
+
 ## 包冲突解决方法
 
 ### （1）
