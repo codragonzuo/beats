@@ -32,6 +32,9 @@ import (
 	"github.com/codragonzuo/beats/libbeat/processors"
 	"github.com/codragonzuo/beats/libbeat/service"
 
+        //PB "github.com/codragonzuo/beats/packetbeat/pb"
+
+
 	"github.com/codragonzuo/beats/packetbeat/config"
 	"github.com/codragonzuo/beats/packetbeat/decoder"
 	"github.com/codragonzuo/beats/packetbeat/flows"
@@ -361,7 +364,13 @@ func (pb *packetbeat)NewMyCoder(
 
 
 func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
-        fmt.Printf("MyCoder: %X\n", data)        
+     
+     //event="myevent"
+     //fields := PB.NewFields()
+     event := beat.Event{Fields: common.MapStr{}}
+     event.PutValue("@mycount", "mycount") 
+     d.client.Publish(event) 
+     fmt.Printf("MyCoder: %X\n", data)        
 }
 
 
