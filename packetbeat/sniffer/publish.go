@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package publish
+package sniffer
 
 import (
 	"net"
@@ -29,14 +29,14 @@ import (
 	"github.com/codragonzuo/beats/packetbeat/pb"
 )
 
-type TransactionPublisher struct {
+type PacketPublisher struct {
 	done      chan struct{}
 	pipeline  beat.Pipeline
 	canDrop   bool
-	processor transProcessor
+	processor packetProcessor
 }
 
-type transProcessor struct {
+type packetProcessor struct {
 	ignoreOutgoing bool
 	localIPs       []net.IP // TODO: Periodically update this list.
 	name           string
@@ -44,12 +44,12 @@ type transProcessor struct {
 
 var debugf = logp.MakeDebug("publish")
 
-func NewTransactionPublisher(
+func NewPacketPublisher(
 	name string,
 	pipeline beat.Pipeline,
 	ignoreOutgoing bool,
 	canDrop bool,
-) (*TransactionPublisher, error) {
+) (*PacketPublisher, error) {
 	addrs, err := common.LocalIPAddrs()
 	if err != nil {
 		return nil, err
@@ -61,11 +61,11 @@ func NewTransactionPublisher(
 		}
 	}
 
-	p := &TransactionPublisher{
+	p := &PacketPublisher{
 		done:     make(chan struct{}),
 		pipeline: pipeline,
 		canDrop:  canDrop,
-		processor: transProcessor{
+		processor: packetProcessor{
 			localIPs:       localIPs,
 			name:           name,
 			ignoreOutgoing: ignoreOutgoing,
@@ -74,11 +74,11 @@ func NewTransactionPublisher(
 	return p, nil
 }
 
-func (p *TransactionPublisher) Stop() {
+func (p *PacketPublisher) Stop() {
 	close(p.done)
 }
 
-func (p *TransactionPublisher) CreateReporter(
+func (p *PacketPublisher) CreateReporter(
 	config *common.Config,
 ) (func(beat.Event), error) {
 
@@ -126,7 +126,7 @@ func (p *TransactionPublisher) CreateReporter(
 	}, nil
 }
 
-func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
+func (p *PacketPublisher) worker(ch chan beat.Event, client beat.Client) {
 	for {
 		select {
 		case <-p.done:
@@ -140,7 +140,7 @@ func (p *TransactionPublisher) worker(ch chan beat.Event, client beat.Client) {
 	}
 }
 
-func (p *transProcessor) Run(event *beat.Event) (*beat.Event, error) {
+func (p *packetProcessor) Run(event *beat.Event) (*beat.Event, error) {
 	if err := validateEvent(event); err != nil {
 		logp.Warn("Dropping invalid event: %v", err)
 		return nil, nil
@@ -208,3 +208,4 @@ func MarshalPacketbeatFields(event *beat.Event, localIPs []net.IP) (*pb.Fields, 
 	}
 	return fields, nil
 }
+
