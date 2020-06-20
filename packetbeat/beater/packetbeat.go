@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+        "encoding/base64"
 
 	"github.com/tsg/gopacket/layers"
 
@@ -365,10 +366,13 @@ func (pb *packetbeat)NewMyCoder(
 
 func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      
-     //event="myevent"
-     //fields := PB.NewFields()
      event := beat.Event{Fields: common.MapStr{}}
      event.PutValue("@mycount", "mycount") 
+     
+     encodeString := base64.StdEncoding.EncodeToString(data)
+
+     event.PutValue("@base64Packet", encodeString)
+
      d.client.Publish(event) 
      fmt.Printf("MyCoder: %X\n", data)        
 }
