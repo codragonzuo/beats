@@ -373,6 +373,7 @@ func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
 
      event.PutValue("@base64Packet", encodeString)
 
+     event.PutValue("mylabel", "LABEL#1")
      d.client.Publish(event) 
      fmt.Printf("MyCoder: %X\n", data)        
 }
