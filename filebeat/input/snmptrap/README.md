@@ -429,6 +429,8 @@ require (
 And now when you compile this module (go install), it will use your local code rather than the other dependency.
 ```
 
+go list -m -versions github.com/docker/docker
+
 ## docker engine
 ···
 replace (
