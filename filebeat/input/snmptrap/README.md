@@ -374,3 +374,64 @@ metricbeat 编译
 mage -v build
 ```
 
+## go get
+```
+go get repo@branchname
+go get repo@tag
+go get repo@commithash
+
+
+go get github.com/someone/some_module@master
+go get github.com/someone/some_module@dev_branch
+
+```
+
+
+
+For example:
+
+module /my/module
+
+require (
+...
+github.com/someone/some_module latest
+...
+)
+
+will become
+
+module /my/module
+
+require (
+...
+github.com/someone/some_module v2.0.39
+...
+)
+after running go mod tidy
+
+share  improve this answer  
+
+
+```
+Using “replace” in go.mod to point to your local module
+Pam Selle   /   July 30, 2019   /  11 Comments
+If you want to say, point to the local version of a dependency in Go rather than the one over the web, use the replace keyword.
+
+The replace line goes above your require statements, like so:
+
+module github.com/pselle/foo
+
+replace github.com/pselle/bar => /Users/pselle/Projects/bar
+
+require (
+	github.com/pselle/bar v1.0.0
+)
+And now when you compile this module (go install), it will use your local code rather than the other dependency.
+```
+
+## docker engine
+···
+replace (
+	github.com/docker/docker v1.13.1 => github.com/docker/engine v0.0.0-20191113042239-ea84732a7725
+)
+···
