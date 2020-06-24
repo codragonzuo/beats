@@ -349,3 +349,28 @@ make: *** [packetbeat] 错误 2
 解决方法： 手工修改pcap_poll_linux.go里的 C.TPACKET_V3 为 2
 
 
+## mage文件找不到
+
+```
+$ go get -u -v github.com/magefile/mage
+github.com/magefile/mage (download)
+github.com/magefile/mage/types
+github.com/magefile/mage/mg
+github.com/magefile/mage/parse
+github.com/magefile/mage/sh
+github.com/magefile/mage/mage
+github.com/magefile/mage
+
+$ cd ~/Go/src/github.com/magefile/mage
+$ mage build
+$ mage -version
+Mage Build Tool v2
+Build Date: <not set>
+Commit: <not set>
+```
+
+metricbeat 编译
+```
+mage -v build
+```
+
