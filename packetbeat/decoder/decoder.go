@@ -78,7 +78,7 @@ type Decoder struct {
         portsrc        string
         portdst        string
         vlanid         string        
-
+        protocol       string
         client beat.Client
 
 }
@@ -230,9 +230,9 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
 	// add flow s.tats
 	if d.flowID != nil {
 		debugf("flow id flags: %v", d.flowID.Flags())
-                fmt.Printf("flow id flags: %v\n", d.flowID.Flags())
-                fmt.Printf("flow id rowflowid: %v\n", *(d.flowID))
-                fmt.Printf("flow %d\n", d.flowID.Get(2))
+                //fmt.Printf("flow id flags: %v\n", d.flowID.Flags())
+                //fmt.Printf("flow id rowflowid: %v\n", *(d.flowID))
+                //fmt.Printf("flow %d\n", d.flowID.Get(2))
                 //fmt.Printf("packet =%v\n", packet)
 	}
 
@@ -253,6 +253,7 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      event.PutValue("ip6src", d.ip6src)
      event.PutValue("ip6dst", d.ip6dst)
 
+     event.PutValue("protocol", d.protocol)
      event.PutValue("vlanid", d.vlanid)
      event.PutValue("macdst", d.macdst)
      event.PutValue("macsrc", d.macsrc)
@@ -279,7 +280,7 @@ func (d *Decoder) process(
 
                 d.macsrc = fmt.Sprintf("%s", d.eth.SrcMAC)
                 d.macdst = fmt.Sprintf("%s", d.eth.DstMAC)
-                fmt.Printf("mac: %s  %s\n",  d.eth.DstMAC , d.eth.SrcMAC)
+                fmt.Printf("dmac: %s  smac: %s\n",  d.eth.DstMAC , d.eth.SrcMAC)
 
 
 	case layers.LayerTypeDot1Q:
@@ -308,7 +309,8 @@ func (d *Decoder) process(
 
                 d.ip4src = fmt.Sprintf("%s", ip4.SrcIP)
                 d.ip4dst = fmt.Sprintf("%s", ip4.DstIP)
-                fmt.Printf("%s  %s\n", d.ip4src, d.ip4dst)
+                d.protocol = fmt.Sprintf("%d", ip4.Protocol)
+                fmt.Printf("SrcIP=%s  DstIP=%s Protocol=%s\n", d.ip4src, d.ip4dst, d.protocol)
 
 
 	case layers.LayerTypeIPv6:
@@ -325,7 +327,8 @@ func (d *Decoder) process(
 		packet.Tuple.IPLength = 16
                 d.ip6src = fmt.Sprintf("%s", ip6.SrcIP)
                 d.ip6dst = fmt.Sprintf("%s", ip6.DstIP)
-                fmt.Printf("%s  %s\n", d.ip6src, d.ip6dst)
+                //d.protocol = fmt.Sprintf("%d", ip6.Protocol)
+                fmt.Printf("SrcIP=%s  DstIP=%s\n", d.ip6src, d.ip6dst)
 
 	case layers.LayerTypeICMPv4:
 		debugf("ICMPv4 packet")
@@ -423,5 +426,5 @@ func (d *Decoder) onTCP(packet *protos.Packet) {
 
         d.portsrc = fmt.Sprintf("%d", src)
         d.portdst = fmt.Sprintf("%d", dst)
-        fmt.Printf("%s  %s\n", d.portsrc, d.portdst)
+        fmt.Printf("SrcPort=%s  DstPort=%s\n", d.portsrc, d.portdst)
 }
