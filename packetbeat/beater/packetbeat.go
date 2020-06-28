@@ -287,7 +287,27 @@ func (pb *packetbeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 		return nil, err
 	}
 
-	worker, err := decoder.New(pb.flows, dl, icmp4, icmp6, tcp, udp)
+
+        config := &pb.config
+        if !config.Flows.IsEnabled() {
+                return nil,nil
+        }
+
+        processors, err := processors.New(config.Flows.Processors)
+        if err != nil {
+                return nil, err
+        }
+
+        client, err := pb.pipeline.ConnectWith(beat.ClientConfig{
+                Processing: beat.ProcessingConfig{
+                        EventMetadata: config.Flows.EventMetadata,
+                        Processor:     processors,
+                        KeepNull:      config.Flows.KeepNull,
+                },
+        })
+
+
+	worker, err := decoder.New(pb.flows, dl, icmp4, icmp6, tcp, udp, client)
 	if err != nil {
 		return nil, err
 	}
