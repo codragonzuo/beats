@@ -21,11 +21,12 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"encoding/base64"
 
 	"github.com/pkg/errors"
 
 	"github.com/codragonzuo/beats/filebeat/channel"
-	cfg "github.com/codragonzuo/beats/filebeat/config"
+	"github.com/codragonzuo/beats/filebeat/config"
 	"github.com/codragonzuo/beats/filebeat/fileset"
 	_ "github.com/codragonzuo/beats/filebeat/include"
 	"github.com/codragonzuo/beats/filebeat/input"
@@ -57,22 +58,24 @@ import (
 	_ "sync"
 	_ "time"
 
-	_ "github.com/tsg/gopacket/layers"
+    "github.com/tsg/gopacket"
+	"github.com/tsg/gopacket/layers"
 
+    
 	//"github.com/elastic/beats/libbeat/beat"
 	//"github.com/elastic/beats/libbeat/common"
 	//"github.com/elastic/beats/libbeat/logp"
-	_ "github.com/codragonzuo/beats/libbeat/processors"
+	"github.com/codragonzuo/beats/libbeat/processors"
 	_ "github.com/codragonzuo/beats/libbeat/service"
 
 	//"github.com/elastic/beats/packetbeat/config"
-	_ "github.com/codragonzuo/beats/packetbeat/decoder"
+	 "github.com/codragonzuo/beats/packetbeat/decoder"
 	 "github.com/codragonzuo/beats/packetbeat/flows"
-	_ "github.com/codragonzuo/beats/packetbeat/procs"
-	_ "github.com/codragonzuo/beats/packetbeat/protos"
-	_ "github.com/codragonzuo/beats/packetbeat/protos/icmp"
-	_ "github.com/codragonzuo/beats/packetbeat/protos/tcp"
-	_ "github.com/codragonzuo/beats/packetbeat/protos/udp"
+	 "github.com/codragonzuo/beats/packetbeat/procs"
+	"github.com/codragonzuo/beats/packetbeat/protos"
+	 "github.com/codragonzuo/beats/packetbeat/protos/icmp"
+	 "github.com/codragonzuo/beats/packetbeat/protos/tcp"
+	 "github.com/codragonzuo/beats/packetbeat/protos/udp"
 	 "github.com/codragonzuo/beats/packetbeat/publish"
 	"github.com/codragonzuo/beats/packetbeat/sniffer"
 
@@ -91,12 +94,12 @@ var (
 
 // Filebeat is a beater object. Contains all objects needed to run the beat
 type Filebeat struct {
-	config         *cfg.Config
+	config         *config.Config
 	moduleRegistry *fileset.ModuleRegistry
 	done           chan struct{}
 	pipeline       beat.PipelineConnector
 	
-	cmdLineArgs cfg.Flags
+	cmdLineArgs  config.Flags
 	sniff       *sniffer.Sniffer
 	// publisher/pipeline
 	pipeline2 beat.Pipeline
@@ -106,11 +109,11 @@ type Filebeat struct {
 
 // New creates a new Filebeat pointer instance.
 func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
-	config := cfg.DefaultConfig
-	if err := rawConfig.Unpack(&config); err != nil {
+	fbconfig := config.DefaultConfig
+	if err := rawConfig.Unpack(&fbconfig); err != nil {
 		return nil, fmt.Errorf("Error reading config file: %v", err)
 	}
-    fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", config.Interfaces)
+    fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", fbconfig.Interfaces)
 
 	if err := cfgwarn.CheckRemoved6xSettings(
 		rawConfig,
@@ -123,7 +126,7 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, err
 	}
 
-	moduleRegistry, err := fileset.NewModuleRegistry(config.Modules, b.Info, true)
+	moduleRegistry, err := fileset.NewModuleRegistry(fbconfig.Modules, b.Info, true)
 	if err != nil {
 		return nil, err
 	}
@@ -136,20 +139,20 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, err
 	}
 
-	if err := config.FetchConfigs(); err != nil {
+	if err := fbconfig.FetchConfigs(); err != nil {
 		return nil, err
 	}
 
 	// Add inputs created by the modules
-	config.Inputs = append(config.Inputs, moduleInputs...)
+	fbconfig.Inputs = append(fbconfig.Inputs, moduleInputs...)
 
-	enabledInputs := config.ListEnabledInputs()
+	enabledInputs := fbconfig.ListEnabledInputs()
 	var haveEnabledInputs bool
 	if len(enabledInputs) > 0 {
 		haveEnabledInputs = true
 	}
 
-	if !config.ConfigInput.Enabled() && !config.ConfigModules.Enabled() && !haveEnabledInputs && config.Autodiscover == nil && !b.ConfigManager.Enabled() {
+	if !fbconfig.ConfigInput.Enabled() && !fbconfig.ConfigModules.Enabled() && !haveEnabledInputs && fbconfig.Autodiscover == nil && !b.ConfigManager.Enabled() {
 		if !b.InSetupCmd {
 			return nil, errors.New("no modules or inputs enabled and configuration reloading disabled. What files do you want me to watch?")
 		}
@@ -158,27 +161,277 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		logp.Warn("Setup called, but no modules enabled.")
 	}
 
-	if *once && config.ConfigInput.Enabled() && config.ConfigModules.Enabled() {
+	if *once && fbconfig.ConfigInput.Enabled() && fbconfig.ConfigModules.Enabled() {
 		return nil, errors.New("input configs and -once cannot be used together")
 	}
 
-	if config.IsInputEnabled("stdin") && len(enabledInputs) > 1 {
+	if fbconfig.IsInputEnabled("stdin") && len(enabledInputs) > 1 {
 		return nil, fmt.Errorf("stdin requires to be run in exclusive mode, configured inputs: %s", strings.Join(enabledInputs, ", "))
 	}
 
 	fb := &Filebeat{
 		done:           make(chan struct{}),
-		config:         &config,
+		config:         &fbconfig,
 		moduleRegistry: moduleRegistry,
+		cmdLineArgs:    config.CmdLineArgs,
 	}
 
 	err = fb.setupPipelineLoaderCallback(b)
 	if err != nil {
 		return nil, err
 	}
+	
+	err = fb.init(b)
+	if err != nil {
+		return nil, err
+	}
 
 	return fb, nil
 }
+
+// init packetbeat components
+func (fb *Filebeat) init(b *beat.Beat) error {
+	var err error
+	//fbcfg := &fb.config
+	// Enable the process watcher only if capturing live traffic
+	if fb.config.Interfaces.File == "" {
+		err = procs.ProcWatcher.Init(fb.config.Procs)
+		if err != nil {
+			logp.Critical(err.Error())
+			return err
+		}
+	} else {
+		logp.Info("Process watcher disabled when file input is used")
+	}
+
+	fb.pipeline2 = b.Publisher
+	fb.transPub, err = publish.NewTransactionPublisher(
+		b.Info.Name,
+		b.Publisher,
+		fb.config.IgnoreOutgoing,
+		fb.config.Interfaces.File == "",
+	)
+	if err != nil {
+		return err
+	}
+
+	logp.Debug("main", "Initializing protocol plugins")
+	err = protos.Protos.Init(false, fb.transPub, fb.config.Protocols, fb.config.ProtocolsList)
+	if err != nil {
+		return fmt.Errorf("Initializing protocol analyzers failed: %v", err)
+	}
+
+	if err := fb.setupFlows(); err != nil {
+		return err
+	}
+
+	return fb.setupSniffer()
+}
+
+
+func (fb *Filebeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
+	var icmp4 icmp.ICMPv4Processor
+	var icmp6 icmp.ICMPv6Processor
+	cfg, err := fb.icmpConfig()
+	if err != nil {
+		return nil, err
+	}
+	if cfg.Enabled() {
+		reporter, err := fb.transPub.CreateReporter(cfg)
+		if err != nil {
+			return nil, err
+		}
+
+		icmp, err := icmp.New(false, reporter, cfg)
+		if err != nil {
+			return nil, err
+		}
+
+		icmp4 = icmp
+		icmp6 = icmp
+	}
+
+	tcp, err := tcp.NewTCP(&protos.Protos)
+	if err != nil {
+		return nil, err
+	}
+
+	udp, err := udp.NewUDP(&protos.Protos)
+	if err != nil {
+		return nil, err
+	}
+
+
+        //config := &fb.config
+        if !fb.config.Flows.IsEnabled() {
+                return nil,nil
+        }
+
+        processors, err := processors.New(fb.config.Flows.Processors)
+        if err != nil {
+                return nil, err
+        }
+
+        client, err := fb.pipeline.ConnectWith(beat.ClientConfig{
+                Processing: beat.ProcessingConfig{
+                        EventMetadata: fb.config.Flows.EventMetadata,
+                        Processor:     processors,
+                        KeepNull:      fb.config.Flows.KeepNull,
+                },
+        })
+
+
+	worker, err := decoder.New(fb.flows, dl, icmp4, icmp6, tcp, udp, client)
+	if err != nil {
+		return nil, err
+	}
+
+	return worker, nil
+}
+
+func (fb *Filebeat) setupSniffer() error {
+	//config := &fb.config
+
+	icmp, err := fb.icmpConfig()
+	if err != nil {
+		return err
+	}
+
+	withVlans := fb.config.Interfaces.WithVlans
+	withICMP := icmp.Enabled()
+
+	filter := fb.config.Interfaces.BpfFilter
+	if filter == "" && !fb.config.Flows.IsEnabled() {
+		filter = protos.Protos.BpfFilter(withVlans, withICMP)
+	}
+
+	//fb.sniff, err = sniffer.New(false, filter, fb.createWorker, fb.config.Interfaces)
+	fb.sniff, err = sniffer.New(false, filter, fb.createWorker,  fb.createMyWorker , fb.config.Interfaces)
+	return err
+}
+
+func (fb *Filebeat) setupFlows() error {
+	//config := &fb.config
+	if !fb.config.Flows.IsEnabled() {
+		return nil
+	}
+
+	processors, err := processors.New(fb.config.Flows.Processors)
+	if err != nil {
+		return err
+	}
+
+	client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
+		Processing: beat.ProcessingConfig{
+			EventMetadata: fb.config.Flows.EventMetadata,
+			Processor:     processors,
+			KeepNull:      fb.config.Flows.KeepNull,
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	fb.flows, err = flows.NewFlows(client.PublishAll, fb.config.Flows)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+
+type MyCoder struct {
+        ss string	
+        client beat.Client
+}
+
+
+func (fb *Filebeat) Myworker(ch chan beat.Event, client beat.Client) {
+}
+
+
+
+func (fb *Filebeat)NewMyCoder(
+) (*MyCoder, error) {
+        //
+	//fbconfig := &fb.config
+	if !fb.config.Flows.IsEnabled() {
+		return nil,nil
+	}
+
+	processors, err := processors.New(fb.config.Flows.Processors)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
+		Processing: beat.ProcessingConfig{
+			EventMetadata: fb.config.Flows.EventMetadata,
+			Processor:     processors,
+			KeepNull:      fb.config.Flows.KeepNull,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+        d := MyCoder{
+            ss: "MyDecoder",
+            client: client}
+
+        return &d, nil
+}
+
+
+func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
+     
+     event := beat.Event{Fields: common.MapStr{}}
+     event.PutValue("@mycount", "mycount") 
+     
+     encodeString := base64.StdEncoding.EncodeToString(data)
+
+     event.PutValue("@base64Packet", encodeString)
+
+     event.PutValue("mylabel", "LABEL#1")
+     d.client.Publish(event) 
+     fmt.Printf("MyCoder: %X\n", data)        
+}
+
+
+func (fb *Filebeat) createMyWorker(dl layers.LinkType) (sniffer.Worker, error) {
+        return  fb.NewMyCoder()
+}
+
+func (fb *Filebeat) icmpConfig() (*common.Config, error) {
+	var icmp *common.Config
+	if fb.config.Protocols["icmp"].Enabled() {
+		icmp = fb.config.Protocols["icmp"]
+	}
+
+	for _, cfg := range fb.config.ProtocolsList {
+		info := struct {
+			Type string `config:"type" validate:"required"`
+		}{}
+
+		if err := cfg.Unpack(&info); err != nil {
+			return nil, err
+		}
+
+		if info.Type != "icmp" {
+			continue
+		}
+
+		if icmp != nil {
+			return nil, errors.New("More then one icmp configurations found")
+		}
+
+		icmp = cfg
+	}
+
+	return icmp, nil
+}
+
 
 // setupPipelineLoaderCallback sets the callback function for loading pipelines during setup.
 func (fb *Filebeat) setupPipelineLoaderCallback(b *beat.Beat) error {

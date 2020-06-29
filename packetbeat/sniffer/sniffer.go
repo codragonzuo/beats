@@ -32,7 +32,7 @@ import (
 	"github.com/codragonzuo/beats/libbeat/common/atomic"
 	"github.com/codragonzuo/beats/libbeat/logp"
 
-	"github.com/codragonzuo/beats/packetbeat/config"
+	"github.com/codragonzuo/beats/filebeat/config"
 )
 
 // Sniffer provides packet sniffing capabilities, forwarding packets read

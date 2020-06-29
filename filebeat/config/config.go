@@ -25,13 +25,15 @@ import (
 	"sort"
 	"time"
 	"flag"
-
+ 
 	"github.com/codragonzuo/beats/libbeat/autodiscover"
 	"github.com/codragonzuo/beats/libbeat/cfgfile"
 	"github.com/codragonzuo/beats/libbeat/common"
 	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/paths"
+	"github.com/codragonzuo/beats/libbeat/processors"
+	"github.com/codragonzuo/beats/packetbeat/procs"
 )
 
 // Defaults for config variables which are not set
@@ -41,6 +43,12 @@ const (
 
 type Config struct {
     Interfaces         InterfacesConfig     `config:"interfaces"`
+	Flows           *Flows                    `config:"flows"`
+	Protocols       map[string]*common.Config `config:"protocols"`
+	ProtocolsList   []*common.Config          `config:"protocols"`
+	Procs           procs.ProcsConfig         `config:"procs"`
+	IgnoreOutgoing  bool                      `config:"ignore_outgoing"`
+	
 	Inputs             []*common.Config     `config:"inputs"`
 	Registry           Registry             `config:"registry"`
 	ConfigDir          string               `config:"config_dir"`
@@ -50,6 +58,19 @@ type Config struct {
 	ConfigModules      *common.Config       `config:"config.modules"`
 	Autodiscover       *autodiscover.Config `config:"autodiscover"`
 	OverwritePipelines bool                 `config:"overwrite_pipelines"`
+}
+
+type Flows struct {
+	Enabled       *bool                   `config:"enabled"`
+	Timeout       string                  `config:"timeout"`
+	Period        string                  `config:"period"`
+	EventMetadata common.EventMetadata    `config:",inline"`
+	Processors    processors.PluginConfig `config:"processors"`
+	KeepNull      bool                    `config:"keep_null"`
+}
+
+func (f *Flows) IsEnabled() bool {
+	return f != nil && (f.Enabled == nil || *f.Enabled)
 }
 
 type Registry struct {
@@ -67,6 +88,7 @@ type InterfacesConfig struct {
 	BpfFilter    string `config:"bpf_filter"`
 	Snaplen      int    `config:"snaplen"`
 	BufferSizeMb int    `config:"buffer_size_mb"`
+	EnableAutoPromiscMode bool   `config:"auto_promisc_mode"`
 	TopSpeed     bool
 	Dumpfile     string
 	OneAtATime   bool
@@ -82,7 +104,7 @@ type Flags struct {
 }
 
 var (
-	cmdLineArgs = Flags{
+	CmdLineArgs = Flags{
 			file:       flag.String("I", "", "Read packet data from specified file"),
 			loop:       flag.Int("l", 1, "Loop file. 0 - loop forever"),
 			oneAtAtime: flag.Bool("O", false, "Read packets one at a time (press Enter)"),
@@ -97,11 +119,11 @@ var (
 			MigrateFile: "",
 		},
 		Interfaces: InterfacesConfig{
-			File:       *cmdLineArgs.file,
-			Loop:       *cmdLineArgs.loop,
-			TopSpeed:   *cmdLineArgs.topSpeed,
-			OneAtATime: *cmdLineArgs.oneAtAtime,
-			Dumpfile:   *cmdLineArgs.dumpfile,
+			File:       *CmdLineArgs.file,
+			Loop:       *CmdLineArgs.loop,
+			TopSpeed:   *CmdLineArgs.topSpeed,
+			OneAtATime: *CmdLineArgs.oneAtAtime,
+			Dumpfile:   *CmdLineArgs.dumpfile,
 		},
 		ShutdownTimeout:    0,
 		OverwritePipelines: false,

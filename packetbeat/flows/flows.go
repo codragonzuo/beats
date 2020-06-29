@@ -22,7 +22,7 @@ import (
 
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/logp"
-	"github.com/codragonzuo/beats/packetbeat/config"
+	"github.com/codragonzuo/beats/filebeat/config"
 )
 
 type Flows struct {
