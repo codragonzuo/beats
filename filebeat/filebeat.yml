@@ -67,6 +67,11 @@ filebeat.inputs:
   protocol.udp:
     host: "localhost:9000"  
 
+
+
+# ============================== Interfaces ====================================
+filebeat.interfaces.device: any
+
 # ============================== Filebeat modules ==============================
 
 

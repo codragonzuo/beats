@@ -51,6 +51,33 @@ import (
 
 	// include all filebeat specific builders
 	_ "github.com/codragonzuo/beats/filebeat/autodiscover/builder/hints"
+	
+	
+	//"errors"
+	_ "sync"
+	_ "time"
+
+	_ "github.com/tsg/gopacket/layers"
+
+	//"github.com/elastic/beats/libbeat/beat"
+	//"github.com/elastic/beats/libbeat/common"
+	//"github.com/elastic/beats/libbeat/logp"
+	_ "github.com/codragonzuo/beats/libbeat/processors"
+	_ "github.com/codragonzuo/beats/libbeat/service"
+
+	//"github.com/elastic/beats/packetbeat/config"
+	_ "github.com/codragonzuo/beats/packetbeat/decoder"
+	 "github.com/codragonzuo/beats/packetbeat/flows"
+	_ "github.com/codragonzuo/beats/packetbeat/procs"
+	_ "github.com/codragonzuo/beats/packetbeat/protos"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/icmp"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/tcp"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/udp"
+	 "github.com/codragonzuo/beats/packetbeat/publish"
+	"github.com/codragonzuo/beats/packetbeat/sniffer"
+
+	// Add packetbeat default processors
+	_ "github.com/codragonzuo/beats/packetbeat/processor/add_kubernetes_metadata"
 )
 
 const pipelinesWarning = "Filebeat is unable to load the Ingest Node pipelines for the configured" +
@@ -68,6 +95,13 @@ type Filebeat struct {
 	moduleRegistry *fileset.ModuleRegistry
 	done           chan struct{}
 	pipeline       beat.PipelineConnector
+	
+	cmdLineArgs cfg.Flags
+	sniff       *sniffer.Sniffer
+	// publisher/pipeline
+	pipeline2 beat.Pipeline
+	transPub *publish.TransactionPublisher
+	flows    *flows.Flows
 }
 
 // New creates a new Filebeat pointer instance.
@@ -76,6 +110,7 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 	if err := rawConfig.Unpack(&config); err != nil {
 		return nil, fmt.Errorf("Error reading config file: %v", err)
 	}
+    fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", config.Interfaces)
 
 	if err := cfgwarn.CheckRemoved6xSettings(
 		rawConfig,
