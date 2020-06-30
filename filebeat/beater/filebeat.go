@@ -55,8 +55,8 @@ import (
 	
 	
 	//"errors"
-	_ "sync"
-	_ "time"
+	"sync"
+	"time"
 
     "github.com/tsg/gopacket"
 	"github.com/tsg/gopacket/layers"
@@ -66,7 +66,7 @@ import (
 	//"github.com/elastic/beats/libbeat/common"
 	//"github.com/elastic/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/processors"
-	_ "github.com/codragonzuo/beats/libbeat/service"
+	"github.com/codragonzuo/beats/libbeat/service"
 
 	//"github.com/elastic/beats/packetbeat/config"
 	 "github.com/codragonzuo/beats/packetbeat/decoder"
@@ -114,6 +114,7 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, fmt.Errorf("Error reading config file: %v", err)
 	}
     fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", fbconfig.Interfaces)
+	fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", fbconfig.Flows)
 
 	if err := cfgwarn.CheckRemoved6xSettings(
 		rawConfig,
@@ -181,7 +182,7 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, err
 	}
 	
-	err = fb.init(b)
+	//err = fb.init(b)
 	if err != nil {
 		return nil, err
 	}
@@ -203,7 +204,7 @@ func (fb *Filebeat) init(b *beat.Beat) error {
 	} else {
 		logp.Info("Process watcher disabled when file input is used")
 	}
-
+    fmt.Printf("filebeat filebeat.go init call pipeline\n")
 	fb.pipeline2 = b.Publisher
 	fb.transPub, err = publish.NewTransactionPublisher(
 		b.Info.Name,
@@ -220,7 +221,7 @@ func (fb *Filebeat) init(b *beat.Beat) error {
 	if err != nil {
 		return fmt.Errorf("Initializing protocol analyzers failed: %v", err)
 	}
-
+    fmt.Printf("filebeat filebeat.go init call setupFlows\n")
 	if err := fb.setupFlows(); err != nil {
 		return err
 	}
@@ -228,6 +229,29 @@ func (fb *Filebeat) init(b *beat.Beat) error {
 	return fb.setupSniffer()
 }
 
+
+func (fb *Filebeat) mypatch() () {
+        //config := &fb.config
+        if !fb.config.Flows.IsEnabled() {
+                return 
+        }
+
+        processors, err := processors.New(fb.config.Flows.Processors)
+        if err != nil {
+                return 
+        }
+
+        client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
+                Processing: beat.ProcessingConfig{
+                        EventMetadata: fb.config.Flows.EventMetadata,
+                        Processor:     processors,
+                        KeepNull:      fb.config.Flows.KeepNull,
+                },
+        })
+
+     fmt.Printf("filebeat filebeat.go mypatch client= %v\n", client)
+
+}
 
 func (fb *Filebeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 	var icmp4 icmp.ICMPv4Processor
@@ -272,7 +296,7 @@ func (fb *Filebeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
                 return nil, err
         }
 
-        client, err := fb.pipeline.ConnectWith(beat.ClientConfig{
+        client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
                 Processing: beat.ProcessingConfig{
                         EventMetadata: fb.config.Flows.EventMetadata,
                         Processor:     processors,
@@ -280,6 +304,7 @@ func (fb *Filebeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
                 },
         })
 
+     fmt.Printf("filebeat filebeat.go createWorker client= %v\n", client)
 
 	worker, err := decoder.New(fb.flows, dl, icmp4, icmp6, tcp, udp, client)
 	if err != nil {
@@ -291,7 +316,7 @@ func (fb *Filebeat) createWorker(dl layers.LinkType) (sniffer.Worker, error) {
 
 func (fb *Filebeat) setupSniffer() error {
 	//config := &fb.config
-
+    fmt.Printf("filebeat filebeat.go init setupSniffer start\n")
 	icmp, err := fb.icmpConfig()
 	if err != nil {
 		return err
@@ -299,12 +324,14 @@ func (fb *Filebeat) setupSniffer() error {
 
 	withVlans := fb.config.Interfaces.WithVlans
 	withICMP := icmp.Enabled()
+	
+	fmt.Printf("filebeat filebeat.go withICMP=%v withVlans=%v\n", withVlans, withICMP)
 
 	filter := fb.config.Interfaces.BpfFilter
 	if filter == "" && !fb.config.Flows.IsEnabled() {
 		filter = protos.Protos.BpfFilter(withVlans, withICMP)
 	}
-
+    fmt.Printf("filebeat filebeat.go init setupSniffer call sniffer New\n")
 	//fb.sniff, err = sniffer.New(false, filter, fb.createWorker, fb.config.Interfaces)
 	fb.sniff, err = sniffer.New(false, filter, fb.createWorker,  fb.createMyWorker , fb.config.Interfaces)
 	return err
@@ -312,15 +339,18 @@ func (fb *Filebeat) setupSniffer() error {
 
 func (fb *Filebeat) setupFlows() error {
 	//config := &fb.config
+	fmt.Printf("filebeat filebeat.go setupFlows start \n")
+	fmt.Printf("filebeat filebeat.go setupFlows 1 config Flow=%v\n", fb.config.Flows) 
 	if !fb.config.Flows.IsEnabled() {
+	    fmt.Printf("SetupFlows return nil")
 		return nil
 	}
-
+    fmt.Printf("filebeat filebeat.go setupFlows 2 config Flow=%d\n", fb.config.Flows) 
 	processors, err := processors.New(fb.config.Flows.Processors)
 	if err != nil {
 		return err
 	}
-
+    fmt.Printf("filebeat filebeat.go  settupFlows call pipeline2 connect\n")
 	client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
 		Processing: beat.ProcessingConfig{
 			EventMetadata: fb.config.Flows.EventMetadata,
@@ -328,6 +358,7 @@ func (fb *Filebeat) setupFlows() error {
 			KeepNull:      fb.config.Flows.KeepNull,
 		},
 	})
+	fmt.Printf("filebeat filebeat.go  settupFlows client=%v\n", client)
 	if err != nil {
 		return err
 	}
@@ -355,16 +386,17 @@ func (fb *Filebeat) Myworker(ch chan beat.Event, client beat.Client) {
 func (fb *Filebeat)NewMyCoder(
 ) (*MyCoder, error) {
         //
+	fmt.Printf("filebeat filebeat.go NewMyCoder start 0000000\n")
 	//fbconfig := &fb.config
 	if !fb.config.Flows.IsEnabled() {
 		return nil,nil
 	}
-
+    fmt.Printf("1\n")
 	processors, err := processors.New(fb.config.Flows.Processors)
 	if err != nil {
 		return nil, err
 	}
-
+    fmt.Printf("2\n")
 	client, err := fb.pipeline2.ConnectWith(beat.ClientConfig{
 		Processing: beat.ProcessingConfig{
 			EventMetadata: fb.config.Flows.EventMetadata,
@@ -372,15 +404,19 @@ func (fb *Filebeat)NewMyCoder(
 			KeepNull:      fb.config.Flows.KeepNull,
 		},
 	})
+	if client == nil	{
+	    fmt.Printf("client == nil\n")
+	}
 	if err != nil {
 		return nil, err
 	}
-
-        d := MyCoder{
+    
+    d := MyCoder{
             ss: "MyDecoder",
             client: client}
-
-        return &d, nil
+    fmt.Printf("filebeat filebeat.go NewMyCoder end\n")
+    
+	return &d, nil
 }
 
 
@@ -394,13 +430,18 @@ func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      event.PutValue("@base64Packet", encodeString)
 
      event.PutValue("mylabel", "LABEL#1")
+	 //fmt.Printf("Mycoder = %v\n", d)
+	 //fmt.Printf("client = %v\n", d.client)
+	 //fmt.Printf("client = %v\n", data)
      d.client.Publish(event) 
-     fmt.Printf("MyCoder: %X\n", data)        
+     //fmt.Printf("MyCoder: %X\n", data)        
 }
 
 
 func (fb *Filebeat) createMyWorker(dl layers.LinkType) (sniffer.Worker, error) {
-        return  fb.NewMyCoder()
+        Coder, err := fb.NewMyCoder()
+		fmt.Printf("Coder=%v", Coder)
+        return  Coder, err//fb.NewMyCoder()
 }
 
 func (fb *Filebeat) icmpConfig() (*common.Config, error) {
@@ -429,6 +470,7 @@ func (fb *Filebeat) icmpConfig() (*common.Config, error) {
 		icmp = cfg
 	}
 
+    fmt.Printf("filebeat beater filebeat.go icmp=%v\n", icmp)
 	return icmp, nil
 }
 
@@ -489,6 +531,10 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	var err error
 	config := fb.config
 
+    fmt.Printf("filebeat filebeat.go Run start\n")
+
+    
+
 	if !fb.moduleRegistry.Empty() {
 		err = fb.loadModulesPipelines(b)
 		if err != nil {
@@ -508,6 +554,10 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	finishedLogger := newFinishedLogger(wgEvents)
 
 	// Setup registrar to persist state
+	
+	
+	 
+	fmt.Printf("filebeat filebeat.go Run config.Registry=%v\n", config.Registry)
 	registrar, err := registrar.New(config.Registry, finishedLogger)
 	if err != nil {
 		logp.Err("Could not init registrar: %v", err)
@@ -516,18 +566,25 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 
 	// Make sure all events that were published in
 	registrarChannel := newRegistrarLogger(registrar)
+    fmt.Printf("filebeat filebeat.go Run registrarChannel=%v\n", registrarChannel)
+    fmt.Printf("filebeat filebeat.go Run  call SetACKHandler begin\n")
 
 	err = b.Publisher.SetACKHandler(beat.PipelineACKHandler{
 		ACKEvents: newEventACKer(finishedLogger, registrarChannel).ackEvents,
 	})
+	fmt.Printf("filebeat filebeat.go Run  call SetACKHandler over\n")
 	if err != nil {
+	    fmt.Printf("filebeat filebeat.go Run  register error!\n")
 		logp.Err("Failed to install the registry with the publisher pipeline: %v", err)
 		return err
 	}
-
+    fmt.Printf("filebeat filebeat.go Run  call pipeline begin\n")
+	
+	
 	fb.pipeline = pipetool.WithDefaultGuarantees(b.Publisher, beat.GuaranteedSend)
 	fb.pipeline = withPipelineEventCounter(fb.pipeline, wgEvents)
-
+    fmt.Printf("filebeat filebeat.go Run  call pipeline end\n")
+	
 	outDone := make(chan struct{}) // outDone closes down all active pipeline connections
 	pipelineConnector := channel.NewOutletFactory(outDone).Create
 
@@ -559,6 +616,55 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 		return fmt.Errorf("Could not start registrar: %v", err)
 	}
 
+	
+	//begin
+	err = fb.init(b)
+	if err != nil {
+		return err
+	}
+	fb.mypatch()
+	defer func() {
+		if service.ProfileEnabled() {
+			logp.Debug("main", "Waiting for streams and transactions to expire...")
+			time.Sleep(time.Duration(float64(protos.DefaultTransactionExpiration) * 1.2))
+			logp.Debug("main", "Streams and transactions should all be expired now.")
+		}
+	}()
+
+	defer fb.transPub.Stop()
+
+	timeout := fb.config.ShutdownTimeout
+	if timeout > 0 {
+		defer time.Sleep(timeout)
+	}
+
+    fmt.Printf("filebeat beater filebeat.go Run call fb.flows.start()\n")
+
+	if fb.flows != nil {
+		fb.flows.Start()
+		defer fb.flows.Stop()
+	}
+
+	var wg sync.WaitGroup
+	errC := make(chan error, 1)
+
+	// Run the sniffer in background
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		err := fb.sniff.Run()
+		if err != nil {
+			errC <- fmt.Errorf("Sniffer main loop failed: %v", err)
+		}
+	}()
+	
+
+    //end
+
+
+
+
 	// Stopping registrar will write last state
 	defer registrar.Stop()
 
@@ -569,9 +675,15 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 		registrarChannel.Close()
 		close(outDone) // finally close all active connections to publisher pipeline
 	}()
+	
+
+    
 
 	// Wait for all events to be processed or timeout
 	defer waitEvents.Wait()
+
+
+
 
 	if config.OverwritePipelines {
 		logp.Debug("modules", "Existing Ingest pipelines will be updated")
@@ -632,7 +744,18 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	adiscover.Stop()
 	crawler.Stop()
 
-	timeout := fb.config.ShutdownTimeout
+
+    //begin
+	logp.Debug("main", "Waiting for the sniffer to finish")
+	wg.Wait()
+	//select {
+	//default:
+	//case err := <-errC:
+	//	return err
+	//}
+	//end
+
+	timeout2 := fb.config.ShutdownTimeout
 	// Checks if on shutdown it should wait for all events to be published
 	waitPublished := fb.config.ShutdownTimeout > 0 || *once
 	if waitPublished {
@@ -641,13 +764,17 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 			"Continue shutdown: All enqueued events being published."))
 		// Wait for either timeout or all events having been ACKed by outputs.
 		if fb.config.ShutdownTimeout > 0 {
-			logp.Info("Shutdown output timer started. Waiting for max %v.", timeout)
-			waitEvents.Add(withLog(waitDuration(timeout),
+			logp.Info("Shutdown output timer started. Waiting for max %v.", timeout2)
+			waitEvents.Add(withLog(waitDuration(timeout2),
 				"Continue shutdown: Time out waiting for events being published."))
 		} else {
 			waitEvents.AddChan(fb.done)
 		}
 	}
+
+
+
+
 
 	return nil
 }
@@ -655,7 +782,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 // Stop is called on exit to stop the crawling, spooling and registration processes.
 func (fb *Filebeat) Stop() {
 	logp.Info("Stopping filebeat")
-
+	fb.sniff.Stop()
 	// Stop Filebeat
 	close(fb.done)
 }
