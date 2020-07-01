@@ -363,7 +363,7 @@ func (fb *Filebeat) setupFlows() error {
 		return err
 	}
 
-	fb.flows, err = flows.NewFlows(client.PublishAll, fb.config.Flows)
+	//fb.flows, err = flows.NewFlows(client.PublishAll, fb.config.Flows)
 	if err != nil {
 		return err
 	}
