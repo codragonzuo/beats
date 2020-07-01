@@ -1,0 +1,9 @@
+- type: log
+  paths:
+    - /var/log/mysql.log
+  scan_frequency: 10s
+
+- type: log
+  paths:
+    - /var/log/apache.log
+  scan_frequency: 5s

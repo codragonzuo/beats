@@ -188,7 +188,7 @@ func LoadFile(path string) (*Config, error) {
         if err != nil {
 		return nil, err
 	}
-        fmt.Printf("libbeat common config.go c=%v", c)
+        fmt.Printf("libbeat common config.go LoadFile path=%s\n", path)
 	cfg := fromConfig(c)
 	cfg.PrintDebugf("load config file '%v' =>", path)
 	return cfg, err

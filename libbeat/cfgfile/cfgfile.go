@@ -138,6 +138,7 @@ func Load(path string, beatOverrides []ConditionalOverride) (*common.Config, err
 
 	cfgpath := GetPathConfig()
 
+        fmt.Printf("libbeat  cfgfile path=%s cfgpath=%v beatOverrides=%v configfiles=%v \n", path, cfgpath, beatOverrides, configfiles)
 	if path == "" {
 		list := []string{}
 		for _, cfg := range configfiles.List() {
@@ -148,6 +149,7 @@ func Load(path string, beatOverrides []ConditionalOverride) (*common.Config, err
 			}
 		}
 		config, err = common.LoadFiles(list...)
+                fmt.Printf("libbeat  cfgfile list=%v config=%+v  config.fields=%+v\n", list, config, (*config))
 	} else {
 		if !filepath.IsAbs(path) {
 			path = filepath.Join(cfgpath, path)
