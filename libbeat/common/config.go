@@ -161,7 +161,7 @@ func NewConfig2(in []byte, opts ...ucfg.Option) (*ucfg.Config, error) {
 // NewConfigWithFile loads a new configuration object from an external YAML file.
 func NewConfigWithFile2(name string, opts ...ucfg.Option) (*ucfg.Config, error) {
 	input, err := ioutil.ReadFile(name)
-	fmt.Printf("==============================\n%s\n=====================\n", input)
+	//fmt.Printf("==============================\n%s\n=====================\n", input)
         if err != nil {
 		return nil, err
 	}
