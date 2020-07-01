@@ -55,8 +55,8 @@ import (
 	
 	
 	//"errors"
-	"sync"
-	"time"
+	// "sync"
+	// "time"
 
     "github.com/tsg/gopacket"
 	"github.com/tsg/gopacket/layers"
@@ -66,7 +66,7 @@ import (
 	//"github.com/elastic/beats/libbeat/common"
 	//"github.com/elastic/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/processors"
-	"github.com/codragonzuo/beats/libbeat/service"
+	//"github.com/codragonzuo/beats/libbeat/service"
 
 	//"github.com/elastic/beats/packetbeat/config"
 	 "github.com/codragonzuo/beats/packetbeat/decoder"
@@ -183,9 +183,9 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 	}
 	
 	//err = fb.init(b)
-	if err != nil {
-		return nil, err
-	}
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	return fb, nil
 }
@@ -333,7 +333,7 @@ func (fb *Filebeat) setupSniffer() error {
 	}
     fmt.Printf("filebeat filebeat.go init setupSniffer call sniffer New\n")
 	//fb.sniff, err = sniffer.New(false, filter, fb.createWorker, fb.config.Interfaces)
-	fb.sniff, err = sniffer.New(false, filter, fb.createWorker,  fb.createMyWorker , fb.config.Interfaces)
+	//fb.sniff, err = sniffer.New(false, filter, fb.createWorker,  fb.createMyWorker , fb.config.Interfaces)
 	return err
 }
 
@@ -618,46 +618,46 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 
 	
 	//begin
-	err = fb.init(b)
-	if err != nil {
-		return err
-	}
-	fb.mypatch()
-	defer func() {
-		if service.ProfileEnabled() {
-			logp.Debug("main", "Waiting for streams and transactions to expire...")
-			time.Sleep(time.Duration(float64(protos.DefaultTransactionExpiration) * 1.2))
-			logp.Debug("main", "Streams and transactions should all be expired now.")
-		}
-	}()
+	//err = fb.init(b)
+	//if err != nil {
+	//	return err
+	//}
+	//fb.mypatch()
+	//defer func() {
+	//	if service.ProfileEnabled() {
+	//		logp.Debug("main", "Waiting for streams and transactions to expire...")
+	//		time.Sleep(time.Duration(float64(protos.DefaultTransactionExpiration) * 1.2))
+	//		logp.Debug("main", "Streams and transactions should all be expired now.")
+	//	}
+	//}()
 
-	defer fb.transPub.Stop()
+	//defer fb.transPub.Stop()
 
-	timeout := fb.config.ShutdownTimeout
-	if timeout > 0 {
-		defer time.Sleep(timeout)
-	}
+	//timeout := fb.config.ShutdownTimeout
+	//if timeout > 0 {
+	//	defer time.Sleep(timeout)
+	//}
 
     fmt.Printf("filebeat beater filebeat.go Run call fb.flows.start()\n")
 
-	if fb.flows != nil {
-		fb.flows.Start()
-		defer fb.flows.Stop()
-	}
+	//if fb.flows != nil {
+	//	fb.flows.Start()
+	//	defer fb.flows.Stop()
+	//}
 
-	var wg sync.WaitGroup
-	errC := make(chan error, 1)
+	//var wg sync.WaitGroup
+	//errC := make(chan error, 1)
 
 	// Run the sniffer in background
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-
-		err := fb.sniff.Run()
-		if err != nil {
-			errC <- fmt.Errorf("Sniffer main loop failed: %v", err)
-		}
-	}()
+	//wg.Add(1)
+	//go func() {
+	//	defer wg.Done()
+    //
+	//	err := fb.sniff.Run()
+	//	if err != nil {
+	//		errC <- fmt.Errorf("Sniffer main loop failed: %v", err)
+	//	}
+	//}()
 	
 
     //end
@@ -746,8 +746,8 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 
 
     //begin
-	logp.Debug("main", "Waiting for the sniffer to finish")
-	wg.Wait()
+	//logp.Debug("main", "Waiting for the sniffer to finish")
+	//wg.Wait()
 	//select {
 	//default:
 	//case err := <-errC:
@@ -755,7 +755,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	//}
 	//end
 
-	timeout2 := fb.config.ShutdownTimeout
+	timeout := fb.config.ShutdownTimeout
 	// Checks if on shutdown it should wait for all events to be published
 	waitPublished := fb.config.ShutdownTimeout > 0 || *once
 	if waitPublished {
@@ -764,17 +764,13 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 			"Continue shutdown: All enqueued events being published."))
 		// Wait for either timeout or all events having been ACKed by outputs.
 		if fb.config.ShutdownTimeout > 0 {
-			logp.Info("Shutdown output timer started. Waiting for max %v.", timeout2)
-			waitEvents.Add(withLog(waitDuration(timeout2),
+			logp.Info("Shutdown output timer started. Waiting for max %v.", timeout)
+			waitEvents.Add(withLog(waitDuration(timeout),
 				"Continue shutdown: Time out waiting for events being published."))
 		} else {
 			waitEvents.AddChan(fb.done)
 		}
 	}
-
-
-
-
 
 	return nil
 }
@@ -782,7 +778,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 // Stop is called on exit to stop the crawling, spooling and registration processes.
 func (fb *Filebeat) Stop() {
 	logp.Info("Stopping filebeat")
-	fb.sniff.Stop()
+	//fb.sniff.Stop()
 	// Stop Filebeat
 	close(fb.done)
 }
