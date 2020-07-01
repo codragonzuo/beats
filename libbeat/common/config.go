@@ -27,6 +27,10 @@ import (
 	"runtime"
 	"strings"
 
+	"io/ioutil"
+
+	yaml2  "gopkg.in/yaml.v2"
+
 	"github.com/codragonzuo/beats/libbeat/common/file"
 	"github.com/codragonzuo/beats/libbeat/logp"
 	ucfg "github.com/elastic/go-ucfg"
@@ -142,6 +146,36 @@ func OverwriteConfigOpts(options []ucfg.Option) {
 	configOpts = options
 }
 
+
+
+// NewConfig creates a new configuration object from the YAML string passed via in.
+func NewConfig2(in []byte, opts ...ucfg.Option) (*ucfg.Config, error) {
+	var m interface{}
+	if err := yaml2.Unmarshal(in, &m); err != nil {
+		return nil, err
+	}
+        c, err :=  ucfg.NewFrom(m, opts...)
+        return c, err
+}
+
+// NewConfigWithFile loads a new configuration object from an external YAML file.
+func NewConfigWithFile2(name string, opts ...ucfg.Option) (*ucfg.Config, error) {
+	input, err := ioutil.ReadFile(name)
+	fmt.Printf("==============================\n%s\n=====================\n", input)
+        if err != nil {
+		return nil, err
+	}
+
+	opts = append([]ucfg.Option{
+		ucfg.MetaData(ucfg.Meta{Source: name}),
+	}, opts...)
+	c, err :=  NewConfig2(input, opts...)
+        return c, err
+}
+
+
+
+
 func LoadFile(path string) (*Config, error) {
 	if IsStrictPerms() {
 		if err := OwnerHasExclusiveWritePerms(path); err != nil {
@@ -149,11 +183,12 @@ func LoadFile(path string) (*Config, error) {
 		}
 	}
 
-	c, err := yaml.NewConfigWithFile(path, configOpts...)
-	if err != nil {
+	//c, err := yaml.NewConfigWithFile(path, configOpts...)
+	c, err := NewConfigWithFile2(path, configOpts...)
+        if err != nil {
 		return nil, err
 	}
-
+        fmt.Printf("libbeat common config.go c=%v", c)
 	cfg := fromConfig(c)
 	cfg.PrintDebugf("load config file '%v' =>", path)
 	return cfg, err
