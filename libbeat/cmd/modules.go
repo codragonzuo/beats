@@ -45,6 +45,7 @@ type modulesManagerFactory func(beat *beat.Beat) (ModulesManager, error)
 // GenModulesCmd initializes a command to manage a modules.d folder, it offers
 // list, enable and siable actions
 func GenModulesCmd(name, version string, modulesFactory modulesManagerFactory) *cobra.Command {
+        fmt.Printf("libbeat cmd module.go GenModulesCmd dragon\n")
 	modulesCmd := cobra.Command{
 		Use:   "modules",
 		Short: "Manage configured modules",
@@ -60,7 +61,8 @@ func GenModulesCmd(name, version string, modulesFactory modulesManagerFactory) *
 
 // Instantiate a modules manager or die trying
 func getModules(settings instance.Settings, modulesFactory modulesManagerFactory) ModulesManager {
-	b, err := instance.NewInitializedBeat(settings)
+	fmt.Printf("libbeat cmd Modules getModules call NewInitializeBeat dragon \n")
+        b, err := instance.NewInitializedBeat(settings)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error initializing beat: %s\n", err)
 		os.Exit(1)
@@ -76,11 +78,13 @@ func getModules(settings instance.Settings, modulesFactory modulesManagerFactory
 }
 
 func genListModulesCmd(settings instance.Settings, modulesFactory modulesManagerFactory) *cobra.Command {
+        fmt.Printf("libbeat module.go genListModulesCmd dragon\n")
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List modules",
 		Run: func(cmd *cobra.Command, args []string) {
-			modules := getModules(settings, modulesFactory)
+			fmt.Printf("libbeat cmd module.go genListModulesCmd func dragon\n")
+                        modules := getModules(settings, modulesFactory)
 
 			fmt.Println("Enabled:")
 			for _, module := range modules.ListEnabled() {

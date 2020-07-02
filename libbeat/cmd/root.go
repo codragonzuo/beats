@@ -32,11 +32,14 @@ import (
 
 func init() {
 	// backwards compatibility workaround, convert -flags to --flags:
+        fmt.Printf("libbeat  cmd root.go cmd package init() start\n")
 	for i, arg := range os.Args[1:] {
 		if strings.HasPrefix(arg, "-") && !strings.HasPrefix(arg, "--") && len(arg) > 2 {
 			os.Args[1+i] = "-" + arg
 		}
 	}
+        fmt.Printf("libbeat  cmd root.go cmd package init() end\n")
+
 }
 
 // BeatsRootCmd handles all application command line interface, parses user
@@ -56,13 +59,15 @@ type BeatsRootCmd struct {
 // run command, which will be called if no args are given (for backwards compatibility),
 // and beat settings
 func GenRootCmdWithSettings(beatCreator beat.Creator, settings instance.Settings) *BeatsRootCmd {
+
+        fmt.Printf("libbeat  cmd root.go GenRootCmdWithSettings start\n")
 	if settings.IndexPrefix == "" {
 		settings.IndexPrefix = settings.Name
 	}
 
 	rootCmd := &BeatsRootCmd{}
 	rootCmd.Use = settings.Name
-
+        fmt.Printf("settings.Name--%s  dragon\n" ,settings.Name)
 	// Due to a dependence upon the beat name, the default config file path
 	err := cfgfile.ChangeDefaultCfgfileFlag(settings.Name)
 	if err != nil {
@@ -102,6 +107,8 @@ func GenRootCmdWithSettings(beatCreator beat.Creator, settings instance.Settings
 	// TODO deprecate when root command no longer executes run (7.0)
 	rootCmd.Flags().AddFlagSet(rootCmd.RunCmd.Flags())
 
+        fmt.Printf("libbeat  cmd root.go GenRootCmdWithSettings AddCommand\n")
+
 	// Register subcommands common to all beats
 	rootCmd.AddCommand(rootCmd.RunCmd)
 	rootCmd.AddCommand(rootCmd.SetupCmd)
@@ -111,5 +118,6 @@ func GenRootCmdWithSettings(beatCreator beat.Creator, settings instance.Settings
 	rootCmd.AddCommand(rootCmd.TestCmd)
 	rootCmd.AddCommand(rootCmd.KeystoreCmd)
 
+        fmt.Printf("libbeat  cmd root.go GenRootCmdWithSettings end\n")
 	return rootCmd
 }

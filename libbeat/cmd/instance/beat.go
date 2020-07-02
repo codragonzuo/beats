@@ -122,8 +122,10 @@ type beatConfig struct {
 var debugf = logp.MakeDebug("beat")
 
 func init() {
+        fmt.Printf("libbeat  cmd instance beat.go  instance package init dragon \n")
 	initRand()
 	preventDefaultTracing()
+        fmt.Printf("libbeat  cmd instance beat.go  instance package init dragon over \n")
 }
 
 // initRand initializes the runtime random number generator seed using
@@ -159,22 +161,28 @@ func preventDefaultTracing() {
 // instance.
 // XXX Move this as a *Beat method?
 func Run(settings Settings, bt beat.Creator) error {
+        fmt.Printf("libbeat  cmd instance beat.go Run begin dragon \n")
 	err := setUmaskWithSettings(settings)
 	if err != nil && err != errNotImplemented {
 		return errw.Wrap(err, "could not set umask")
 	}
 
 	name := settings.Name
+        //name = "packetbeat"
+        fmt.Printf("libbeat  cmd instance beat.go Run settings.Name=%s\n", name)
 	idxPrefix := settings.IndexPrefix
 	version := settings.Version
 
 	return handleError(func() error {
 		defer func() {
+		    fmt.Printf("libbeat  cmd instance beat.go Run handleError\n")
 			if r := recover(); r != nil {
 				logp.NewLogger(name).Fatalw("Failed due to panic.",
 					"panic", r, zap.Stack("stack"))
 			}
 		}()
+
+                fmt.Printf("libbeat  cmd instance beat.go Run call NewBeat dragon\n")
 		b, err := NewBeat(name, idxPrefix, version)
 		if err != nil {
 			return err
@@ -196,12 +204,16 @@ func Run(settings Settings, bt beat.Creator) error {
 		monitoring.NewString(beatRegistry, "name").Set(b.Info.Name)
 		monitoring.NewFunc(stateRegistry, "host", host.ReportInfo, monitoring.Report)
 
+
+        fmt.Printf("libbeat  cmd instance beat.go Run call lauch and over dragon\n")
 		return b.launch(settings, bt)
 	}())
+//        fmt.Printf("libbeat  cmd instance beat.go Run end dragon\n")
 }
 
 // NewInitializedBeat creates a new beat where all information and initialization is derived from settings
 func NewInitializedBeat(settings Settings) (*Beat, error) {
+        fmt.Printf("libbeat cmd instance beat.go NewInitializateBeat call NewBeat dragon\n")
 	b, err := NewBeat(settings.Name, settings.IndexPrefix, settings.Version)
 	if err != nil {
 		return nil, err
@@ -256,16 +268,20 @@ func NewBeat(name, indexPrefix, v string) (*Beat, error) {
 func (b *Beat) InitWithSettings(settings Settings) error {
 	err := b.handleFlags()
 	if err != nil {
+        fmt.Printf("libbeat  cmd instance beat.go InitWithSetting call handleFlags Error!\n")
 		return err
 	}
-
+        fmt.Printf("libbeat  cmd instance beat.go InitWithSetting return nil\n")
 	if err := plugin.Initialize(); err != nil {
+                fmt.Printf("libbeat  cmd instance beat.go InitWithSetting call Initialize Error!\n")
 		return err
 	}
-
+    fmt.Printf("libbeat  cmd instance beat.go InitWithSetting call b.configure settings=%v\n", settings)
 	if err := b.configure(settings); err != nil {
+                fmt.Printf("libbeat  cmd instance beat.go InitWithSetting call configure Error!\n")
 		return err
 	}
+    fmt.Printf("libbeat  cmd instance beat.go InitWithSetting return \n")
 
 	return nil
 }
@@ -300,6 +316,8 @@ func (b *Beat) Keystore() keystore.Keystore {
 // create and return the beater, this method also initializes all needed items,
 // including template registering, publisher, xpack monitoring
 func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
+
+        fmt.Printf("libbeat  cmd instance beat.go createrBeater begin dragon\n")
 	sub, err := b.BeatConfig()
 	if err != nil {
 		return nil, err
@@ -327,6 +345,8 @@ func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
 	if err != nil {
 		return nil, err
 	}
+
+
 
 	// Report central management state
 	mgmt := monitoring.GetNamespace("state").GetRegistry().NewRegistry("management")
@@ -361,6 +381,7 @@ func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
 		b.makeOutputFactory(b.Config.Output),
 	)
 
+
 	if err != nil {
 		return nil, fmt.Errorf("error initializing publisher: %+v", err)
 	}
@@ -371,12 +392,14 @@ func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
 	//       but refine publisher to disconnect clients on stop automatically
 	// defer pipeline.Close()
 
+        fmt.Printf("libbeat  cmd instance beat.go createrBeater 5555! \n")
 	b.Publisher = pipeline
 	beater, err := bt(&b.Beat, sub)
 	if err != nil {
 		return nil, err
 	}
 
+        fmt.Printf("libbeat  cmd instance beat.go createrBeater end dragon\n")
 	return beater, nil
 }
 
@@ -384,10 +407,14 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 	defer logp.Sync()
 	defer logp.Info("%s stopped.", b.Info.Beat)
 
+        fmt.Printf("libbeat  cmd instance beat.go launch start dragon 1!!!\n")
+    fmt.Printf("libbeat  cmd instance beat.go launch call InitWithSettings settings=%v!\n", settings)
 	err := b.InitWithSettings(settings)
 	if err != nil {
+                fmt.Printf("libbeat  cmd instance beat.go laucnh InitWithSettings failed dragon \n")
 		return err
 	}
+    fmt.Printf("libbeat  cmd instance beat.go lauch call InitWithSettings over success dragon \n")
 
 	// Windows: Mark service as stopped.
 	// After this is run, a Beat service is considered by the OS to be stopped
@@ -430,6 +457,8 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 		return err
 	}
 
+        fmt.Printf("libbeat  cmd instance beat.go lauch call createBeater dragon \n")
+
 	beater, err := b.createBeater(bt)
 	if err != nil {
 		return err
@@ -464,6 +493,8 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 	// Launch config manager
 	b.ConfigManager.Start()
 	defer b.ConfigManager.Stop()
+
+        fmt.Printf("libbeat  cmd instance beat.go lauch call beater.Run dragon \n")
 
 	return beater.Run(&b.Beat)
 }
@@ -575,7 +606,9 @@ func (b *Beat) Setup(settings Settings, bt beat.Creator, setup SetupSettings) er
 // handleFlags parses the command line flags. It invokes the HandleFlags
 // callback if implemented by the Beat.
 func (b *Beat) handleFlags() error {
+        fmt.Printf("libbeat  cmd instance beat.go handleFlags start\n")
 	flag.Parse()
+        fmt.Printf("libbeat  cmd instance beat.go handleFlags call cfgfile.HandleFlags\n")
 	return cfgfile.HandleFlags()
 }
 
@@ -584,18 +617,20 @@ func (b *Beat) handleFlags() error {
 // in the config. Lastly it invokes the Config method implemented by the beat.
 func (b *Beat) configure(settings Settings) error {
 	var err error
-
+        fmt.Printf("libbeat  cmd instance beat.go configure start\n")
 	cfg, err := cfgfile.Load("", settings.ConfigOverrides)
 	if err != nil {
 		return fmt.Errorf("error loading config file: %v", err)
 	}
 
+        fmt.Printf("libbeat  cmd instance beat.go configure call initPaths\n") 
 	if err := initPaths(cfg); err != nil {
 		return err
 	}
 
 	// We have to initialize the keystore before any unpack or merging the cloud
 	// options.
+        fmt.Printf("libbeat  cmd instance beat.go configure call LoadKeystore\n")
 	store, err := LoadKeystore(cfg, b.Info.Beat)
 	if err != nil {
 		return fmt.Errorf("could not initialize the keystore: %v", err)
@@ -614,6 +649,8 @@ func (b *Beat) configure(settings Settings) error {
 	if err != nil {
 		return err
 	}
+
+        fmt.Printf("libbeat  cmd instance beat.go configure unpacking \n")
 
 	b.RawConfig = cfg
 	err = cfg.Unpack(&b.Config)
@@ -642,6 +679,8 @@ func (b *Beat) configure(settings Settings) error {
 
 	logp.Info("Beat ID: %v", b.Info.ID)
 
+        fmt.Printf("libbeat  cmd instance beat.go configure log paths\n")
+
 	// initialize config manager
 	b.ConfigManager, err = management.Factory(b.Config.Management)(b.Config.Management, reload.Register, b.Beat.Info.ID)
 	if err != nil {
@@ -661,20 +700,28 @@ func (b *Beat) configure(settings Settings) error {
 		return err
 	}
 
+        fmt.Printf("libbeat  cmd instance beat.go configure BeatConfig over\n")
+
 	imFactory := settings.IndexManagement
 	if imFactory == nil {
 		imFactory = idxmgmt.MakeDefaultSupport(settings.ILM)
 	}
 	b.IdxSupporter, err = imFactory(nil, b.Beat.Info, b.RawConfig)
 	if err != nil {
+                fmt.Printf("libbeat  cmd instance beat.go configure imFactory error\n")
 		return err
 	}
+
+        fmt.Printf("libbeat  cmd instance beat.go configure imFactory over\n")
 
 	processingFactory := settings.Processing
 	if processingFactory == nil {
 		processingFactory = processing.MakeDefaultBeatSupport(true)
 	}
 	b.processing, err = processingFactory(b.Info, logp.L().Named("processors"), b.RawConfig)
+
+
+        fmt.Printf("libbeat  cmd instance beat.go configure end return\n")
 
 	return err
 }

@@ -37,8 +37,10 @@ func exitOnPanic() {
 func RunWith(
 	fn func(cmd *cobra.Command, args []string) error,
 ) func(cmd *cobra.Command, args []string) {
+        fmt.Printf("libbeat  common cli RunWith 1 \n")
 	return func(cmd *cobra.Command, args []string) {
 		defer exitOnPanic()
+                fmt.Printf("libbeat  common cli RunWith 2 %s\n", args)    
 		if err := fn(cmd, args); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 			os.Exit(1)

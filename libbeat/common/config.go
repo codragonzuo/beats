@@ -71,7 +71,8 @@ var hasSelector = logp.HasSelector
 var configDebugf = logp.Debug
 
 func NewConfig() *Config {
-	return fromConfig(ucfg.New())
+    fmt.Printf("libbeat  common NewConfig ucfg.New\n")	
+    return fromConfig(ucfg.New())
 }
 
 // NewConfigFrom creates a new Config object from the given input.
@@ -83,9 +84,9 @@ func NewConfig() *Config {
 func NewConfigFrom(from interface{}) (*Config, error) {
 	if str, ok := from.(string); ok {
 		c, err := yaml.NewConfig([]byte(str), configOpts...)
-		return fromConfig(c), err
+                fmt.Printf("NewConfigFrom- %s\n",str)	
+	        return fromConfig(c), err
 	}
-
 	c, err := ucfg.NewFrom(from, configOpts...)
 	return fromConfig(c), err
 }
@@ -127,7 +128,8 @@ func MergeConfigsWithOptions(cfgs []*Config, options ...ucfg.Option) (*Config, e
 }
 
 func NewConfigWithYAML(in []byte, source string) (*Config, error) {
-	opts := append(
+	fmt.Printf("NewConfigWithYAML source=%s\n", source)
+        opts := append(
 		[]ucfg.Option{
 			ucfg.MetaData(ucfg.Meta{Source: source}),
 		},
@@ -143,6 +145,7 @@ func OverwriteConfigOpts(options []ucfg.Option) {
 }
 
 func LoadFile(path string) (*Config, error) {
+        fmt.Printf("libbeat  common config.go LoadFile path=%s\n", path)
 	if IsStrictPerms() {
 		if err := OwnerHasExclusiveWritePerms(path); err != nil {
 			return nil, err
@@ -160,6 +163,8 @@ func LoadFile(path string) (*Config, error) {
 }
 
 func LoadFiles(paths ...string) (*Config, error) {
+        fmt.Printf("LoadFile path=%s\n", paths)
+
 	merger := cfgutil.NewCollector(nil, configOpts...)
 	for _, path := range paths {
 		cfg, err := LoadFile(path)

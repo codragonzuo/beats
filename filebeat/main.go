@@ -19,7 +19,7 @@ package main
 
 import (
 	"os"
-
+        "fmt"
 	"github.com/codragonzuo/beats/filebeat/cmd"
 )
 
@@ -32,6 +32,8 @@ import (
 // Finally, input uses the registrar information, on restart, to
 // determine where in each file to restart a harvester.
 func main() {
+        fmt.Printf("filebeat main.go\n")
+        fmt.Printf("filebeat main.go begin codragon\n")
 	if err := cmd.RootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}

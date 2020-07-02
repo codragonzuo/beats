@@ -18,7 +18,8 @@
 package input
 
 import (
-	"github.com/codragonzuo/beats/filebeat/channel"
+	"fmt"
+        "github.com/codragonzuo/beats/filebeat/channel"
 	"github.com/codragonzuo/beats/filebeat/registrar"
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/cfgfile"
@@ -35,6 +36,7 @@ type RunnerFactory struct {
 
 // NewRunnerFactory instantiates a new RunnerFactory
 func NewRunnerFactory(outlet channel.Factory, registrar *registrar.Registrar, beatDone chan struct{}) *RunnerFactory {
+        fmt.Printf("filebeat input RunnerFactory new \n")
 	return &RunnerFactory{
 		outlet:    outlet,
 		registrar: registrar,

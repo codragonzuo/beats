@@ -35,7 +35,8 @@ var (
 )
 
 func genGenerateCmd() *cobra.Command {
-	generateCmd := cobra.Command{
+	fmt.Printf("genGenerateCmd dragon\n")
+        generateCmd := cobra.Command{
 		Use:   "generate",
 		Short: "Generate Filebeat modules, filesets and fields.yml",
 	}

@@ -25,7 +25,7 @@ import (
 	"reflect"
 	"sync"
 	"time"
-
+        "fmt"
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/common"
 	"github.com/codragonzuo/beats/libbeat/common/atomic"
@@ -171,6 +171,7 @@ func New(
 	p.eventer.observer = p.observer
 	p.eventer.modifyable = true
 
+        fmt.Printf("pipeline New is callde \n")
 	if settings.WaitCloseMode == WaitOnPipelineClose && settings.WaitClose > 0 {
 		p.waitCloser = &waitCloser{}
 

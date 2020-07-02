@@ -51,6 +51,35 @@ import (
 
 	// include all filebeat specific builders
 	_ "github.com/codragonzuo/beats/filebeat/autodiscover/builder/hints"
+
+
+
+	//"errors"
+	_ "sync"
+	_ "time"
+
+	_ "github.com/tsg/gopacket/layers"
+
+	//"github.com/elastic/beats/libbeat/beat"
+	//"github.com/elastic/beats/libbeat/common"
+	//"github.com/elastic/beats/libbeat/logp"
+	_ "github.com/codragonzuo/beats/libbeat/processors"
+	_ "github.com/codragonzuo/beats/libbeat/service"
+
+	//"github.com/elastic/beats/packetbeat/config"
+	_ "github.com/codragonzuo/beats/packetbeat/decoder"
+	 "github.com/codragonzuo/beats/packetbeat/flows"
+	_ "github.com/codragonzuo/beats/packetbeat/procs"
+	_ "github.com/codragonzuo/beats/packetbeat/protos"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/icmp"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/tcp"
+	_ "github.com/codragonzuo/beats/packetbeat/protos/udp"
+	 "github.com/codragonzuo/beats/packetbeat/publish"
+	"github.com/codragonzuo/beats/packetbeat/sniffer"
+
+	// Add packetbeat default processors
+	_ "github.com/codragonzuo/beats/packetbeat/processor/add_kubernetes_metadata"
+
 )
 
 const pipelinesWarning = "Filebeat is unable to load the Ingest Node pipelines for the configured" +
@@ -65,17 +94,35 @@ var (
 // Filebeat is a beater object. Contains all objects needed to run the beat
 type Filebeat struct {
 	config         *cfg.Config
+
+	cmdLineArgs cfg.Flags
+	sniff       *sniffer.Sniffer
+
+	// publisher/pipeline
+	pipeline2 beat.Pipeline
+	transPub *publish.TransactionPublisher
+	flows    *flows.Flows
+
 	moduleRegistry *fileset.ModuleRegistry
 	done           chan struct{}
 	pipeline       beat.PipelineConnector
 }
 
+
+
 // New creates a new Filebeat pointer instance.
 func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
-	config := cfg.DefaultConfig
-	if err := rawConfig.Unpack(&config); err != nil {
+        fmt.Printf("filebeat beater filebeat.go New()  beat.Beat! dragon\n")
+        	
+        config := cfg.DefaultConfig
+	
+        fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", config.Interfaces)
+        if err := rawConfig.Unpack(&config); err != nil {
 		return nil, fmt.Errorf("Error reading config file: %v", err)
 	}
+        
+        fmt.Printf("get DefaultConfig Success! dragon\n")
+        fmt.Printf("fliebeat beater filebeat.go New()  interfaces=%v\n", config.Interfaces)
 
 	if err := cfgwarn.CheckRemoved6xSettings(
 		rawConfig,
@@ -142,6 +189,9 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, err
 	}
 
+        fmt.Printf("filebeat beater filebeat.go New()  beat.Beat Over ! dragon\n")
+
+
 	return fb, nil
 }
 
@@ -198,7 +248,8 @@ func (fb *Filebeat) loadModulesPipelines(b *beat.Beat) error {
 
 // Run allows the beater to be run as a beat.
 func (fb *Filebeat) Run(b *beat.Beat) error {
-	var err error
+	fmt.Printf("filebeat beater filebeat.go Run begin dragon\n")
+        var err error
 	config := fb.config
 
 	if !fb.moduleRegistry.Empty() {

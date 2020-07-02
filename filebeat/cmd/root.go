@@ -19,7 +19,7 @@ package cmd
 
 import (
 	"flag"
-
+        "fmt"
 	"github.com/spf13/pflag"
 
 	"github.com/codragonzuo/beats/filebeat/beater"
@@ -39,6 +39,7 @@ var Name = "filebeat"
 var RootCmd *cmd.BeatsRootCmd
 
 func init() {
+        fmt.Printf("filebeat cmd root.go cmd package init start\n")
 	var runFlags = pflag.NewFlagSet(Name, pflag.ExitOnError)
 	runFlags.AddGoFlag(flag.CommandLine.Lookup("once"))
 	runFlags.AddGoFlag(flag.CommandLine.Lookup("modules"))
@@ -47,10 +48,17 @@ func init() {
 		Name:          Name,
 		HasDashboards: true,
 	}
-	RootCmd = cmd.GenRootCmdWithSettings(beater.New, settings)
+	fmt.Printf("filebeat cmd root.go  init  dragon\n")
+        fmt.Printf("filebeat cmd root.go  init  call GenRootCmdWithSettings  beat.Creater <- beater.New , New() function pointer\n")
+        RootCmd = cmd.GenRootCmdWithSettings(beater.New, settings)
 	RootCmd.PersistentFlags().AddGoFlag(flag.CommandLine.Lookup("M"))
 	RootCmd.TestCmd.Flags().AddGoFlag(flag.CommandLine.Lookup("modules"))
 	RootCmd.SetupCmd.Flags().AddGoFlag(flag.CommandLine.Lookup("modules"))
-	RootCmd.AddCommand(cmd.GenModulesCmd(Name, "", buildModulesManager))
-	RootCmd.AddCommand(genGenerateCmd())
+        
+        fmt.Printf("filebeat cmd root.go  init  call  AddCommandcall GenModulesCmd\n")
+        RootCmd.AddCommand(cmd.GenModulesCmd(Name, "", buildModulesManager))
+	
+        fmt.Printf("filebeat cmd root.go  init  call  AddCommandcall genGenerateCmd\n")
+        RootCmd.AddCommand(genGenerateCmd())
+        fmt.Printf("filebeat cmd root.go cmd package int end dragon\n")
 }

@@ -19,7 +19,7 @@ package input
 
 import (
 	"time"
-
+        "fmt"
 	cfg "github.com/codragonzuo/beats/filebeat/config"
 	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
 )
@@ -38,6 +38,7 @@ type inputConfig struct {
 }
 
 func (c *inputConfig) Validate() error {
+        fmt.Printf("filebeat input config Validate\n")
 	if c.InputType != "" {
 		cfgwarn.Deprecate("6.0.0", "input_type input config is deprecated. Use type instead.")
 		c.Type = c.InputType

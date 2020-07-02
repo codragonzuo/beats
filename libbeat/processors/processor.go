@@ -19,7 +19,7 @@ package processors
 
 import (
 	"strings"
-
+        "fmt"
 	"github.com/pkg/errors"
 
 	"github.com/codragonzuo/beats/libbeat/beat"
@@ -51,20 +51,28 @@ func NewList(log *logp.Logger) *Processors {
 
 // New creates a list of processors from a list of free user configurations.
 func New(config PluginConfig) (*Processors, error) {
+        fmt.Printf("libbeat  processors processors.go New start\n")
 	procs := NewList(nil)
 
 	for _, procConfig := range config {
-		// Handle if/then/else processor which has multiple top-level keys.
+	       fmt.Printf("libbeat  processors processors.go New for \n")	
+               // Handle if/then/else processor which has multiple top-level keys.
 		if procConfig.HasField("if") {
-			p, err := NewIfElseThenProcessor(procConfig)
+	                fmt.Printf("libbeat  processors processors.go New NewIfElse start\n")
+             		p, err := NewIfElseThenProcessor(procConfig)
+                        fmt.Printf("libbeat  processors processors.go New NewIfElse over\n")
 			if err != nil {
-				return nil, errors.Wrap(err, "failed to make if/then/else processor")
+                             fmt.Printf("libbeat  processors processors.go New if then else error\n")
+                             return nil, errors.Wrap(err, "failed to make if/then/else processor")
 			}
+                        fmt.Printf("libbeat  processors processors.go New call AddProcessor start\n") 
 			procs.AddProcessor(p)
+                        fmt.Printf("libbeat  processors processors.go New call AddProcessor over\n")
 			continue
 		}
 
 		if len(procConfig.GetFields()) != 1 {
+                        fmt.Printf("libbeat  processors processors.go New action error\n")
 			return nil, errors.Errorf("each processor must have exactly one "+
 				"action, but found %d actions (%v)",
 				len(procConfig.GetFields()),
@@ -74,6 +82,7 @@ func New(config PluginConfig) (*Processors, error) {
 		actionName := procConfig.GetFields()[0]
 		actionCfg, err := procConfig.Child(actionName, -1)
 		if err != nil {
+                        fmt.Printf("libbeat  processors processors.go New actionCfg error\n")
 			return nil, err
 		}
 
@@ -84,23 +93,28 @@ func New(config PluginConfig) (*Processors, error) {
 				validActions = append(validActions, k)
 
 			}
+                        fmt.Printf("libbeat  processors processors.go New action not exist error\n")
 			return nil, errors.Errorf("the processor action %s does not exist. Valid actions: %v", actionName, strings.Join(validActions, ", "))
 		}
 
 		actionCfg.PrintDebugf("Configure processor action '%v' with:", actionName)
 		constructor := gen.Plugin()
+                fmt.Printf("libbeat  processors processors.go New call constructor start %s\n", actionName)
 		plugin, err := constructor(actionCfg)
+                fmt.Printf("libbeat  processors processors.go New call constructor over\n")
 		if err != nil {
 			return nil, err
 		}
-
+                fmt.Printf("libbeat  processors processors.go New call AddProcessor2  start\n")
 		procs.AddProcessor(plugin)
+                fmt.Printf("libbeat  processors processors.go New call AddProcessor2  over\n")
 	}
 
 	if len(procs.List) > 0 {
 		procs.log.Debugf("Generated new processors: %v", procs)
 	}
-	return procs, nil
+	fmt.Printf("libbeat  processors processors.go New end\n")
+        return procs, nil
 }
 
 // AddProcessor adds a single Processor to Processors

@@ -41,6 +41,7 @@ type Factory = func(config *common.Config, connector channel.Connector, context 
 var registry = make(map[string]Factory)
 
 func Register(name string, factory Factory) error {
+        fmt.Printf("filebeat input Registery Register begin\n")
 	logp.Info("Registering input factory")
 	if name == "" {
 		return fmt.Errorf("Error registering input: name cannot be empty")
@@ -54,7 +55,7 @@ func Register(name string, factory Factory) error {
 
 	registry[name] = factory
 	logp.Info("Successfully registered input")
-
+        fmt.Printf("filebeat input Registery Register over\n")
 	return nil
 }
 

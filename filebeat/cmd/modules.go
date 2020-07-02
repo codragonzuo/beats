@@ -19,7 +19,7 @@ package cmd
 
 import (
 	"strings"
-
+        "fmt"
 	"github.com/pkg/errors"
 
 	"github.com/codragonzuo/beats/libbeat/beat"
@@ -34,7 +34,7 @@ func buildModulesManager(beat *beat.Beat) (cmd.ModulesManager, error) {
 	if err != nil {
 		return nil, errors.Errorf("modules management requires 'filebeat.config.modules.path' setting")
 	}
-
+        fmt.Printf("filebeat cmd buildModulesManager %s  dragon\n", glob)
 	if !strings.HasSuffix(glob, "*.yml") {
 		return nil, errors.Errorf("wrong settings for config.modules.path, it is expected to end with *.yml. Got: %s", glob)
 	}

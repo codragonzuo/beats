@@ -18,8 +18,8 @@
 package input
 
 import (
-	"errors"
-
+ 	"errors"
+        "fmt"  
 	"github.com/codragonzuo/beats/libbeat/plugin"
 )
 
@@ -31,13 +31,16 @@ type inputPlugin struct {
 const pluginKey = "filebeat.input"
 
 func init() {
+        fmt.Printf("filebeat input plugin.go input package init start\n")
 	plugin.MustRegisterLoader(pluginKey, func(ifc interface{}) error {
 		p, ok := ifc.(inputPlugin)
+                fmt.Printf("filebeat input plugin.go p.name=%s\n", p.name)
 		if !ok {
 			return errors.New("plugin does not match filebeat input plugin type")
 		}
 
 		if p.factory != nil {
+                        fmt.Printf("filebeat input plugin.go p.name=%s\n", p.name)
 			if err := Register(p.name, p.factory); err != nil {
 				return err
 			}
@@ -45,11 +48,13 @@ func init() {
 
 		return nil
 	})
+        fmt.Printf("filebeat input plugin.go input package init end\n")
 }
 
 func Plugin(
 	module string,
 	factory Factory,
 ) map[string][]interface{} {
+        fmt.Printf("filebeat input plugin.go Plugin\n")
 	return plugin.MakePlugin(pluginKey, inputPlugin{module, factory})
 }

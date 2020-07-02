@@ -19,7 +19,7 @@ package main
 
 import (
 	"os"
-
+        "fmt"
 	"github.com/codragonzuo/beats/libbeat/cmd"
 	"github.com/codragonzuo/beats/libbeat/mock"
 )
@@ -27,7 +27,10 @@ import (
 var RootCmd = cmd.GenRootCmdWithSettings(mock.New, mock.Settings)
 
 func main() {
+        fmt.Printf("libbeat main begin dragon\n")
 	if err := RootCmd.Execute(); err != nil {
+                fmt.Printf("libbeat man end error !\n")
 		os.Exit(1)
 	}
+        fmt.Printf("libbeat main end success\n")
 }

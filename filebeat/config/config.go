@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"sort"
 	"time"
+        "flag"
 
 	"github.com/codragonzuo/beats/libbeat/autodiscover"
 	"github.com/codragonzuo/beats/libbeat/cfgfile"
@@ -40,6 +41,7 @@ const (
 
 type Config struct {
 	Inputs             []*common.Config     `config:"inputs"`
+	Interfaces         InterfacesConfig     `config:"interfaces"`
 	Registry           Registry             `config:"registry"`
 	ConfigDir          string               `config:"config_dir"`
 	ShutdownTimeout    time.Duration        `config:"shutdown_timeout"`
@@ -57,15 +59,72 @@ type Registry struct {
 	MigrateFile  string        `config:"migrate_file"`
 }
 
+type InterfacesConfig struct {
+	Device       string `config:"device"`
+	Type         string `config:"type"`
+	File         string `config:"file"`
+	WithVlans    bool   `config:"with_vlans"`
+	BpfFilter    string `config:"bpf_filter"`
+	Snaplen      int    `config:"snaplen"`
+	BufferSizeMb int    `config:"buffer_size_mb"`
+	TopSpeed     bool
+	Dumpfile     string
+	OneAtATime   bool
+	Loop         int
+}
+
+type Flags struct {
+        file       *string
+        loop       *int
+        oneAtAtime *bool
+        topSpeed   *bool
+        dumpfile   *string
+}
+
+//var cmdLineArgs flags
+
+func init() {
+        fmt.Printf("filebeat config package init()\n")
+
+  //      cmdLineArgs = flags{
+    //            file:       flag.String("I", "", "Read packet data from specified file"),
+      //          loop:       flag.Int("l", 1, "Loop file. 0 - loop forever"),
+        //        oneAtAtime: flag.Bool("O", false, "Read packets one at a time (press Enter)"),
+          //      topSpeed:   flag.Bool("t", false, "Read packets as fast as possible, without sleeping"),
+  //              dumpfile:   flag.String("dump", "", "Write all captured packets to this libpcap file"),
+    //    }
+}
+
+
+
 var (
+
+
+        cmdLineArgs = Flags{
+                file:       flag.String("I", "", "Read packet data from specified file"),
+                loop:       flag.Int("l", 1, "Loop file. 0 - loop forever"),
+                oneAtAtime: flag.Bool("O", false, "Read packets one at a time (press Enter)"),
+                topSpeed:   flag.Bool("t", false, "Read packets as fast as possible, without sleeping"),
+                dumpfile:   flag.String("dump", "", "Write all captured packets to this libpcap file"),
+        }
+
+
+
 	DefaultConfig = Config{
 		Registry: Registry{
 			Path:        "registry",
 			Permissions: 0600,
 			MigrateFile: "",
 		},
-		ShutdownTimeout:    0,
-		OverwritePipelines: false,
+		Interfaces: InterfacesConfig{
+			File:       *cmdLineArgs.file,
+			Loop:       *cmdLineArgs.loop,
+			TopSpeed:   *cmdLineArgs.topSpeed,
+			OneAtATime: *cmdLineArgs.oneAtAtime,
+			Dumpfile:   *cmdLineArgs.dumpfile,
+		},
+	        ShutdownTimeout:    0,
+                OverwritePipelines: false,
 	}
 )
 

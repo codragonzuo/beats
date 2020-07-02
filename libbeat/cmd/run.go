@@ -20,6 +20,7 @@ package cmd
 import (
 	"flag"
 	"os"
+        "fmt"
 
 	"github.com/spf13/cobra"
 
@@ -28,12 +29,16 @@ import (
 )
 
 func genRunCmd(settings instance.Settings, beatCreator beat.Creator) *cobra.Command {
-	name := settings.Name
+	fmt.Printf("libbeat  cmd run.go  genRunCmd start !!\n")
+
+
+        name := settings.Name
 	runCmd := cobra.Command{
 		Use:   "run",
 		Short: "Run " + name,
 		Run: func(cmd *cobra.Command, args []string) {
-			err := instance.Run(settings, beatCreator)
+			fmt.Printf("libbeat  cmd run.go Run!!\n")
+                        err := instance.Run(settings, beatCreator)
 			if err != nil {
 				os.Exit(1)
 			}
@@ -50,5 +55,7 @@ func genRunCmd(settings instance.Settings, beatCreator beat.Creator) *cobra.Comm
 		runCmd.Flags().AddFlagSet(settings.RunFlags)
 	}
 
+
+        fmt.Printf("libbeat  cmd run.go  genRunCmd end !!\n")
 	return &runCmd
 }

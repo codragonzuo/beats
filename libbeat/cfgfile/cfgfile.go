@@ -98,20 +98,22 @@ func GetDefaultCfgfile() string {
 func HandleFlags() error {
 	// default for the home path is the binary location
 	home, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+        fmt.Printf("cfgfile 1111\n")
 	if err != nil {
 		if *homePath == "" {
-			return fmt.Errorf("The absolute path to %s could not be obtained. %v",
+			return fmt.Errorf("The absolute path to %s could not be obtained. iv",
 				os.Args[0], err)
 		}
 		home = *homePath
 	}
-
+        fmt.Printf("cfgfile 2222\n")
 	defaults.SetString("path.home", -1, home)
-
+        fmt.Printf("cfgfile 3333\n")
 	if len(overwrites.GetFields()) > 0 {
 		overwrites.PrintDebugf("CLI setting overwrites (-E flag):")
 	}
-
+        fmt.Printf("cfgfile 4444\n")
 	return nil
 }
 
@@ -147,11 +149,13 @@ func Load(path string, beatOverrides []ConditionalOverride) (*common.Config, err
 				list = append(list, cfg)
 			}
 		}
-		config, err = common.LoadFiles(list...)
+		fmt.Printf("libbeat cfgfile load path=%s\n", list)
+                config, err = common.LoadFiles(list...)
 	} else {
 		if !filepath.IsAbs(path) {
 			path = filepath.Join(cfgpath, path)
 		}
+                fmt.Printf("libbeat cfgfile load path=%s\n", path)
 		config, err = common.LoadFile(path)
 	}
 	if err != nil {

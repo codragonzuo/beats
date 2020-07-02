@@ -98,20 +98,26 @@ func MakeDefaultSupport(
 	modifiers ...modifier,
 ) SupportFactory {
 	return func(info beat.Info, log *logp.Logger, beatCfg *common.Config) (Supporter, error) {
-		cfg := struct {
+	
+             fmt.Printf("libbeat  publisher processing default.go MakeDefaultSupport begin\n")	
+             cfg := struct {
 			common.EventMetadata `config:",inline"`      // Fields and tags to add to each event.
 			Processors           processors.PluginConfig `config:"processors"`
 			TimeSeries           bool                    `config:"timeseries.enabled"`
 		}{}
 		if err := beatCfg.Unpack(&cfg); err != nil {
+                        fmt.Printf("libbeat  publisher processing default.go MakeDefaultSupport unpack error\n")
 			return nil, err
 		}
 
+                fmt.Printf("libbeat  publisher processing default.go MakeDefaultSupport call processors.New\n")
 		processors, err := processors.New(cfg.Processors)
+                fmt.Printf("libbeat  publisher processing default.go MakeDefaultSupport call processors.New over\n")
 		if err != nil {
 			return nil, fmt.Errorf("error initializing processors: %v", err)
 		}
 
+                fmt.Printf("libbeat  publisher processing default.go MakeDefaultSupport call newBuilder\n")
 		return newBuilder(info, log, processors, cfg.EventMetadata, modifiers, !normalize, cfg.TimeSeries)
 	}
 }
