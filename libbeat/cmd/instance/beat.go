@@ -205,8 +205,10 @@ func Run(settings Settings, bt beat.Creator) error {
 		monitoring.NewFunc(stateRegistry, "host", host.ReportInfo, monitoring.Report)
 
 
-        fmt.Printf("libbeat  cmd instance beat.go Run call lauch and over dragon\n")
-		return b.launch(settings, bt)
+                fmt.Printf("libbeat  cmd instance beat.go Run call lauch and over dragon\n")
+		err1 := b.launch(settings, bt)
+                return err1
+                 
 	}())
 //        fmt.Printf("libbeat  cmd instance beat.go Run end dragon\n")
 }
@@ -496,7 +498,12 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 
         fmt.Printf("libbeat  cmd instance beat.go lauch call beater.Run dragon \n")
 
-	return beater.Run(&b.Beat)
+	err1 :=  beater.Run(&b.Beat)
+        
+        //close(b.done)
+        fmt.Printf("libbeat  cmd instance beat.go call beater.Run\n")
+        beater.Stop()
+        return err1
 }
 
 // TestConfig check all settings are ok and the beat can be run
