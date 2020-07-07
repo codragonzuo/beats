@@ -432,8 +432,102 @@ And now when you compile this module (go install), it will use your local code r
 go list -m -versions github.com/docker/docker
 
 ## docker engine
-···
+```
 replace (
 	github.com/docker/docker v1.13.1 => github.com/docker/engine v0.0.0-20191113042239-ea84732a7725
 )
-···
+```
+
+## Thrift 安装
+
+wget http://apache.mirrors.hoobly.com/thrift/0.13.0/thrift-0.13.0.tar.gz
+tar -xvf thrift-0.13.0.tar.gz
+
+cd thrift-0.13.0
+
+./configure
+
+./configure --without-nodejs
+	
+
+checking for bison version >= 2.5... no
+configure: error: Bison version 2.5 or higher must be installed on the system!
+
+[root@node1 thrift-0.13.0]# yum install  bison
+已加载插件：fastestmirror, priorities, security
+设置安装进程
+Loading mirror speeds from cached hostfile
+包 bison-2.4.1-5.el6.x86_64 已安装并且是最新版本
+
+thrift -r --gen go tutorial.thrift
+
+
+
+## gcc5.0安装
+```
+
+./contrib/download_prerequisites
+
+https://stackoverflow.com/questions/9297933/cannot-configure-gcc-mpfr-not-found
+
+
+
+安装依赖
+./contrib/download_prerequisites
+
+./configure
+
+configure --disable-multilib   ？？？？
+
+make
+
+
+查看版本：
+[root@node1 gcc-5.4.0]# /usr/local/bin/gcc --version
+gcc (GCC) 5.4.0
+Copyright © 2015 Free Software Foundation, Inc.
+[root@node1 gcc-5.4.0]#
+
+[root@node1 gcc-5.4.0]# /usr/local/bin/g++ --version
+g++ (GCC) 5.4.0
+Copyright © 2015 Free Software Foundation, Inc.
+
+
+
+
+rm -rf /usr/bin/gcc
+rm -rf /usr/bin/g++
+ln -s /usr/local/gcc5/bin/gcc /usr/bin/gcc
+ln -s /usr/local/gcc5/bin/g++ /usr/bin/g++
+
+
+
+运行程序时可能会出现/lib64/libstdc++.so.6: version  `GLIBCXX_3.4.20' not found，是因为升级安装了gcc，生成的动态库没有替换老版本的gcc动态库导致的。
+
+ 查看包含最新的动态链接库的位置
+
+find / -name "libstdc++.so*"
+
+
+找到在/usr/local/gcc5/lib64/文件夹下
+
+cp /usr/local/gcc5/lib64/libstdc++.so.6.0.21 /usr/lib64/libstdc++.so.6.0.21
+rm -f /usr/lib64/libstdc++.so.6
+ln /usr/lib64/libstdc++.so.6.0.21 /usr/lib64/libstdc++.so.6
+
+[root@node1 gcc-5.4.0]# ls /usr/local/lib64/libstdc++* -all -t
+-rw-r--r-- 1 root root     2397 7月   6 08:28 /usr/local/lib64/libstdc++.so.6.0.21-gdb.py
+-rw-r--r-- 1 root root 28717220 7月   6 08:28 /usr/local/lib64/libstdc++.a
+-rwxr-xr-x 1 root root      965 7月   6 08:28 /usr/local/lib64/libstdc++.la
+lrwxrwxrwx 1 root root       19 7月   6 08:28 /usr/local/lib64/libstdc++.so -> libstdc++.so.6.0.21
+lrwxrwxrwx 1 root root       19 7月   6 08:28 /usr/local/lib64/libstdc++.so.6 -> libstdc++.so.6.0.21
+-rwxr-xr-x 1 root root 11169643 7月   6 08:28 /usr/local/lib64/libstdc++.so.6.0.21
+-rw-r--r-- 1 root root 10838586 7月   6 08:28 /usr/local/lib64/libstdc++fs.a
+-rwxr-xr-x 1 root root      905 7月   6 08:28 /usr/local/lib64/libstdc++fs.la
+```
+
+
+
+
+
+
