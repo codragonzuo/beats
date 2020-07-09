@@ -136,7 +136,7 @@ setup.template.settings:
 # These settings control loading the sample dashboards to the Kibana index. Loading
 # the dashboards is disabled by default and can be enabled either by setting the
 # options here or by using the `setup` command.
-#setup.dashboards.enabled: false
+# setup.dashboards.enabled: false
 
 # The URL from where to download the dashboards archive. By default this URL
 # has a value which is computed based on the Beat name and version. For released
@@ -228,7 +228,16 @@ processors:
 
 # Sets log level. The default log level is info.
 # Available log levels are: error, warning, info, debug
-#logging.level: debug
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  keepfiles: 10
+  permissions: 0644
+
+
+
 
 # At debug level, you can selectively enable logging only for some components.
 # To enable all selectors use ["*"]. Examples of other selectors are "beat",
@@ -256,6 +265,18 @@ processors:
 # that it is pointing to your Elasticsearch monitoring cluster, you can simply
 # uncomment the following line.
 #monitoring.elasticsearch:
+
+monitoring:
+  enabled: true
+  cluster_uuid: metron 
+  elasticsearch:
+    hosts: ["https://192.168.20.45:9200"] 
+#    api_key:  id:api_key 
+    username: metron
+    password: metron
+
+
+
 
 # ================================= Migration ==================================
 
