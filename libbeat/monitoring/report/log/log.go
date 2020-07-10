@@ -20,7 +20,7 @@ package log
 import (
 	"sync"
 	"time"
-
+        "fmt"
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/common"
 	"github.com/codragonzuo/beats/libbeat/logp"
@@ -133,7 +133,9 @@ func (r *reporter) snapshotLoop() {
 		}
 
 		cur := makeSnapshot(r.registry)
+                fmt.Printf("snapshowLoop cur=%v\n", cur)
 		delta := makeDeltaSnapshot(last, cur)
+                fmt.Printf("snapshowLoop delta=%v\n", delta)
 		last = cur
 
 		r.logSnapshot(delta)
