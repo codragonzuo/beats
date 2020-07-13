@@ -36,7 +36,7 @@ type RunnerFactory struct {
 
 // NewRunnerFactory instantiates a new RunnerFactory
 func NewRunnerFactory(outlet channel.Factory, registrar *registrar.Registrar, beatDone chan struct{}) *RunnerFactory {
-        fmt.Printf("filebeat input RunnerFactory new \n")
+        fmt.Printf("filebeat input RunnerFactory new, outlet=??? \n")
 	return &RunnerFactory{
 		outlet:    outlet,
 		registrar: registrar,
@@ -50,7 +50,10 @@ func (r *RunnerFactory) Create(
 	c *common.Config,
 	meta *common.MapStrPointer,
 ) (cfgfile.Runner, error) {
+
+        fmt.Printf("filebeat input RunnerFactory.go Create call outlet(pipelinei beat.PipelineConnector), pipeline=%v\n", pipeline)
 	connector := r.outlet(pipeline)
+        fmt.Printf("filebeat input RunnerFactory.go Create connector := r.outlet(pipeline) connector=%v\n", connector)
 	p, err := New(c, connector, r.beatDone, r.registrar.GetStates(), meta)
 	if err != nil {
 		// In case of error with loading state, input is still returned
@@ -64,3 +67,4 @@ func (r *RunnerFactory) CheckConfig(cfg *common.Config) error {
 	_, err := r.Create(pipeline.NewNilPipeline(), cfg, nil)
 	return err
 }
+

@@ -111,8 +111,12 @@ func NewInput(
 ) (input.Input, error) {
 	cfgwarn.Experimental("snmptrap input type is used")
 
+
+        fmt.Printf("filebeat  Snmptrap NewInput\n")
 	log := logp.NewLogger("snmptrap")
 
+
+        fmt.Printf("filebeat  snmptrap NewInput call channel.Connector ConnectWith Connector=%v\n", outlet)
 	out, err := outlet.ConnectWith(cfg, beat.ClientConfig{
 		Processing: beat.ProcessingConfig{
 			DynamicFields: context.DynamicFields,

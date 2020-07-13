@@ -19,6 +19,7 @@ package channel
 
 import (
 	"github.com/codragonzuo/beats/libbeat/beat"
+        "fmt"
 )
 
 type OutletFactory struct {
@@ -40,5 +41,6 @@ func NewOutletFactory(done <-chan struct{}) *OutletFactory {
 // This guarantees ordering between events as required by the registrar for
 // file.State updates
 func (f *OutletFactory) Create(p beat.PipelineConnector) Connector {
+        fmt.Printf("filebeat channel OutletFactory Create called parent:%v  pipeline:%v\n", f, p)
 	return &pipelineConnector{parent: f, pipeline: p}
 }

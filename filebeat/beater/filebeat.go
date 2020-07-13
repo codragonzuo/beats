@@ -34,7 +34,8 @@ import (
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/cfgfile"
 	"github.com/codragonzuo/beats/libbeat/common"
-	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
+	//"github.com/codragonzuo/beats/libbeat/common/config"
+        "github.com/codragonzuo/beats/libbeat/common/cfgwarn"
 	"github.com/codragonzuo/beats/libbeat/common/reload"
 	"github.com/codragonzuo/beats/libbeat/esleg/eslegclient"
 	"github.com/codragonzuo/beats/libbeat/logp"
@@ -184,6 +185,8 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		moduleRegistry: moduleRegistry,
 	}
 
+
+        fmt.Printf("filebeat beater filebeat.go call setupPipelineLoaderCallback\n")
 	err = fb.setupPipelineLoaderCallback(b)
 	if err != nil {
 		return nil, err
@@ -248,12 +251,14 @@ func (fb *Filebeat) loadModulesPipelines(b *beat.Beat) error {
 
 // Run allows the beater to be run as a beat.
 func (fb *Filebeat) Run(b *beat.Beat) error {
-	fmt.Printf("filebeat beater filebeat.go Run begin dragon\n")
+	fmt.Printf("\n------------------------------------------------\nfilebeat beater filebeat.go Run begin dragon\n")
         var err error
 	config := fb.config
 
+        
 	if !fb.moduleRegistry.Empty() {
-		err = fb.loadModulesPipelines(b)
+	        fmt.Printf("filebeat beater filebeat.go Run call loadModulesPipelines\n")
+                err = fb.loadModulesPipelines(b)
 		if err != nil {
 			return err
 		}
@@ -271,7 +276,8 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	finishedLogger := newFinishedLogger(wgEvents)
 
 	// Setup registrar to persist state
-	registrar, err := registrar.New(config.Registry, finishedLogger)
+	fmt.Printf("filebeat beater filebeat.go Run call registrar.New\n")
+        registrar, err := registrar.New(config.Registry, finishedLogger)
 	if err != nil {
 		logp.Err("Could not init registrar: %v", err)
 		return err
@@ -280,6 +286,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	// Make sure all events that were published in
 	registrarChannel := newRegistrarLogger(registrar)
 
+        fmt.Printf("filebeat beater filebeat.go Run call Publisher.SetAckHandler\n")
 	err = b.Publisher.SetACKHandler(beat.PipelineACKHandler{
 		ACKEvents: newEventACKer(finishedLogger, registrarChannel).ackEvents,
 	})
@@ -289,10 +296,25 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	}
 
 	fb.pipeline = pipetool.WithDefaultGuarantees(b.Publisher, beat.GuaranteedSend)
+        fmt.Printf("filebeat beater filebeat.go Run fb.pipeline=%v\n", fb.pipeline)
+
 	fb.pipeline = withPipelineEventCounter(fb.pipeline, wgEvents)
 
+        fmt.Printf("filebeat beater filebeat.go Run fb.pipeline=%v\n", fb.pipeline)
+
+        fmt.Printf("filebeat beater filebeat.go Run create pipelineConnector\n")
 	outDone := make(chan struct{}) // outDone closes down all active pipeline connections
 	pipelineConnector := channel.NewOutletFactory(outDone).Create
+
+        fmt.Printf("filebeat beater filebeat.go Run pipelineConnector=%v\n", pipelineConnector)
+	//out, err := pipelineConnector.ConnectWith(fb.config, beat.ClientConfig{
+	//	Processing: b.ProcessingConfig{
+	//		DynamicFields: context.DynamicFields,
+	//	},
+	//})
+
+        
+
 
 	// Create a ES connection factory for dynamic modules pipeline loading
 	var pipelineLoaderFactory fileset.PipelineLoaderFactory
@@ -302,10 +324,15 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 		logp.Warn(pipelinesWarning)
 	}
 
+        fmt.Printf("filebeat beater filebeat.go Run call RunnerFactoryWithCommonInputSettings------------\n")
 	inputLoader := channel.RunnerFactoryWithCommonInputSettings(b.Info,
 		input.NewRunnerFactory(pipelineConnector, registrar, fb.done))
+
+        fmt.Printf("filebeat beater filebeat.go Run call fileset.NewFactory-------------\n")
 	moduleLoader := fileset.NewFactory(inputLoader, b.Info, pipelineLoaderFactory, config.OverwritePipelines)
 
+
+        fmt.Printf("filebeat beater filebeat.go Run call newCrawler--------------\n")
 	crawler, err := newCrawler(inputLoader, moduleLoader, config.Inputs, fb.done, *once)
 	if err != nil {
 		logp.Err("Could not init crawler: %v", err)
@@ -317,6 +344,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	// That means, crawler is stopped first.
 
 	// Start the registrar
+        fmt.Printf("filebeat  beater filebeat.go Run call registrar begin-------------------\n")
 	err = registrar.Start()
 	if err != nil {
 		return fmt.Errorf("Could not start registrar: %v", err)
@@ -340,12 +368,14 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 		logp.Debug("modules", "Existing Ingest pipelines will be updated")
 	}
 
+
+        fmt.Printf("filebeat  beater filebeat.go Run call crawler.Start begin----------------\n")
 	err = crawler.Start(fb.pipeline, config.ConfigInput, config.ConfigModules)
 	if err != nil {
 		crawler.Stop()
 		return fmt.Errorf("Failed to start crawler: %+v", err)
 	}
-
+        fmt.Printf("filebeat  beater filebeat.go Run call crawler.Start end----------------\n")
 	// If run once, add crawler completion check as alternative to done signal
 	if *once {
 		runOnce := func() {
@@ -357,8 +387,10 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	}
 
 	// Register reloadable list of inputs and modules
+        fmt.Printf("filebeat  beater filebeat.go Run call cfgfile.NewRunnerList begin------------------\n")
 	inputs := cfgfile.NewRunnerList(management.DebugK, inputLoader, fb.pipeline)
 	reload.Register.MustRegisterList("filebeat.inputs", inputs)
+        fmt.Printf("filebeat  beater filebeat.go Run call cfgfile.NewRunnerList end----------------------\n")
 
 	modules := cfgfile.NewRunnerList(management.DebugK, moduleLoader, fb.pipeline)
 	reload.Register.MustRegisterList("filebeat.modules", modules)

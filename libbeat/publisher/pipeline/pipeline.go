@@ -171,7 +171,7 @@ func New(
 	p.eventer.observer = p.observer
 	p.eventer.modifyable = true
 
-        fmt.Printf("pipeline New is callde \n")
+        fmt.Printf("libbeat Publiser Pipeline.go Pipeline New is called \n")
 	if settings.WaitCloseMode == WaitOnPipelineClose && settings.WaitClose > 0 {
 		p.waitCloser = &waitCloser{}
 
@@ -193,7 +193,9 @@ func New(
 	p.eventSema = newSema(maxEvents)
 
 	p.output = newOutputController(beat, monitors, p.observer, p.queue)
-	p.output.Set(out)
+	
+        fmt.Printf("libbeat Publiser Pipeline.go Output beat.Info=%v \n monitors=%v\n observer=%v\n queue=%v\n", beat, monitors, p.observer, p.queue)
+        p.output.Set(out)
 
 	return p, nil
 }

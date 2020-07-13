@@ -71,13 +71,16 @@ func (c *crawler) Start(
 	log.Infof("Loading Inputs: %v", len(c.inputConfigs))
 
 	// Prospect the globs/paths given on the command line and launch harvesters
-	for _, inputConfig := range c.inputConfigs {
+        fmt.Printf("filebeat beater crawler Start pipeline beat.PipelineConnector=%v\n", pipeline)	
+        fmt.Printf("filebeat beater crawler Start call startInput(pipeline, inputConfig)\n")
+        for _, inputConfig := range c.inputConfigs {
 		err := c.startInput(pipeline, inputConfig)
 		if err != nil {
 			return fmt.Errorf("starting input failed: %+v", err)
 		}
 	}
 
+        fmt.Printf("filebeat beater crawler start call cfgfile.NewReloader configInputs\n")
 	if configInputs.Enabled() {
 		c.inputReloader = cfgfile.NewReloader(pipeline, configInputs)
 		if err := c.inputReloader.Check(c.inputsFactory); err != nil {
@@ -86,6 +89,7 @@ func (c *crawler) Start(
 
 	}
 
+        fmt.Printf("filebeat beater crawler start call cfgfile.NewReloader configModules\n")
 	if configModules.Enabled() {
 		c.modulesReloader = cfgfile.NewReloader(pipeline, configModules)
 		if err := c.modulesReloader.Check(c.modulesFactory); err != nil {
@@ -106,6 +110,7 @@ func (c *crawler) Start(
 	}
 
 	log.Infof("Loading and starting Inputs completed. Enabled inputs: %v", len(c.inputs))
+        fmt.Printf("filebeat beater crawler.go Start end\n")
 
 	return nil
 }
@@ -118,6 +123,8 @@ func (c *crawler) startInput(
 		return nil
 	}
 
+        fmt.Printf("filebeat beater crawler startInput config=%v\n", config)
+
 	var h map[string]interface{}
 	config.Unpack(&h)
 	id, err := hashstructure.Hash(h, nil)
@@ -128,6 +135,7 @@ func (c *crawler) startInput(
 		return fmt.Errorf("input with same ID already exists: %v", id)
 	}
 
+        fmt.Printf("filebeat beater crawler call inputsFactory.Create pipeline=%v  config=%v\n", pipeline, config)
 	runner, err := c.inputsFactory.Create(pipeline, config, nil)
 	if err != nil {
 		return fmt.Errorf("Error while initializing input: %+v", err)

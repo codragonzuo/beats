@@ -221,6 +221,29 @@ processors:
 # uncomment the following line.
 #monitoring.elasticsearch:
 
+
+
+# Sets log level. The default log level is info.
+# Available log levels are: error, warning, info, debug
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  keepfiles: 10
+  permissions: 0644
+
+
+
+monitoring:
+  enabled: true
+  cluster_uuid: metron 
+  elasticsearch:
+    hosts: ["https://192.168.20.45:9200"] 
+#    api_key:  id:api_key 
+    username: metron
+    password: metron
+
 # ================================= Migration ==================================
 
 # This allows to enable 6.7 migration aliases

@@ -384,6 +384,13 @@ func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
 	)
 
 
+        //client, err  := pipeline.Connect()
+        //if err != nil {
+        //    fmt.Printf("pipeline Connect Error ! \n")
+        //}
+        //fmt.Printf("libbeat cmd instance beat.go createrbeat Client=%v\n", client)
+
+
 	if err != nil {
 		return nil, fmt.Errorf("error initializing publisher: %+v", err)
 	}
@@ -466,6 +473,8 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 		return err
 	}
 
+        fmt.Printf("libbeat  cmd instance beat.go b.Publisher=%v\n", b.Publisher)
+
 	r, err := b.setupMonitoring(settings)
 	if err != nil {
 		return err
@@ -497,6 +506,8 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 	defer b.ConfigManager.Stop()
 
         fmt.Printf("libbeat  cmd instance beat.go lauch call beater.Run dragon \n")
+
+        fmt.Printf("libbeat  cmd instance beat.go lauch b.Publisher=%v\n", b.Publisher)
 
 	err1 :=  beater.Run(&b.Beat)
         
@@ -978,6 +989,8 @@ func (b *Beat) setupMonitoring(settings Settings) (report.Reporter, error) {
 			Format:          reporterSettings.Format,
 			ClusterUUID:     monitoringClusterUUID,
 		}
+                
+                fmt.Printf("libbeat cmd instance beat.go setupMonitoring call report New\n")
 		reporter, err := report.New(b.Info, settings, monitoringCfg, b.Config.Output)
 		if err != nil {
 			return nil, err

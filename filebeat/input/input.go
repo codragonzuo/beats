@@ -64,7 +64,7 @@ func New(
 	states []file.State,
 	dynFields *common.MapStrPointer,
 ) (*Runner, error) {
-        fmt.Printf("filebeat input input.go New begin")
+        fmt.Printf("filebeat input input.go New begin\n")
 	input := &Runner{
 		config:   defaultConfig,
 		wg:       &sync.WaitGroup{},
