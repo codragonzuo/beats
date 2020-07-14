@@ -18,6 +18,7 @@
 package channel
 
 import (
+        "fmt"
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/cfgfile"
 	"github.com/codragonzuo/beats/libbeat/common"
@@ -168,6 +169,8 @@ func newCommonConfigEditor(
 			fields["event"] = event
 		}
 
+
+                fmt.Printf("filebeat channel runner.go pipeline processer edit\n")
 		// assemble the processors. Ordering is important.
 		// 1. add support for index configuration via processor
 		// 2. add processors added by the input that wants to connect
