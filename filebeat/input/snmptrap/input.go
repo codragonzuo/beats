@@ -122,6 +122,7 @@ func NewInput(
 			DynamicFields: context.DynamicFields,
 		},
 	})
+        fmt.Printf("filebeat  snmptrap NewInput outlet=%v  cfg=%v\n", out, cfg)
 	if err != nil {
 		return nil, err
 	}

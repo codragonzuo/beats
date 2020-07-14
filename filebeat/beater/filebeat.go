@@ -306,7 +306,7 @@ func (fb *Filebeat) Run(b *beat.Beat) error {
 	outDone := make(chan struct{}) // outDone closes down all active pipeline connections
 	pipelineConnector := channel.NewOutletFactory(outDone).Create
 
-        fmt.Printf("filebeat beater filebeat.go Run pipelineConnector=%v\n", pipelineConnector)
+        fmt.Printf("#######################################################\nfilebeat beater filebeat.go Run pipelineConnector=%v\n", pipelineConnector)
 	//out, err := pipelineConnector.ConnectWith(fb.config, beat.ClientConfig{
 	//	Processing: b.ProcessingConfig{
 	//		DynamicFields: context.DynamicFields,
