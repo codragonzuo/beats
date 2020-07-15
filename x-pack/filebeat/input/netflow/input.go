@@ -9,7 +9,7 @@ import (
 	"net"
 	"sync"
 	"time"
-
+        "fmt"
 	"github.com/pkg/errors"
 
 	"github.com/codragonzuo/beats/filebeat/channel"
@@ -132,7 +132,7 @@ func NewInput(
 		logger:    logger,
 		queueSize: config.PacketQueueSize,
 	}
-
+        fmt.Printf("Netflow input NewInput\n")
 	input.udp = udp.New(&config.Config, input.packetDispatch)
 	return input, nil
 }

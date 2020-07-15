@@ -74,6 +74,19 @@ filebeat.inputs:
   protocol.udp:
     host: "localhost:9000"  
 
+
+- type: netflow
+  max_message_size: 10KiB
+  host: "127.0.0.1:1337"
+  protocols: [ v5, v9, ipfix ]
+  expiration_timeout: 30m
+  queue_size: 8192
+  custom_definitions:
+#  - path/to/fields.yml
+  detect_sequence_reset: true
+
+
+
 #flows
 filebeat.flows:
   # Set network flow timeout. Flow is killed if no packet is received before being

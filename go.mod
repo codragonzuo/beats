@@ -42,6 +42,7 @@ require (
 	github.com/samuel/go-thrift v0.0.0-20140522043831-2187045faa54
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
+	github.com/stretchr/testify v1.5.0
 	github.com/tsg/gopacket v0.0.0-20190320122513-dd3d0e41124a
 	github.com/u-root/u-root v6.0.0+incompatible // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c

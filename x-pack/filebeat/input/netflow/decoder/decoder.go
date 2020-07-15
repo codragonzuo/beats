@@ -86,7 +86,7 @@ func (p *Decoder) Read(buf *bytes.Buffer, source net.Addr) (records []record.Rec
 		return nil, io.EOF
 	}
 	version := binary.BigEndian.Uint16(buf.Bytes()[:2])
-
+        fmt.Printf("Netflow received version=%v\n", version)
 	handler, exists := p.protos[version]
 	if !exists {
 		return nil, fmt.Errorf("netflow protocol version %d not supported", version)
