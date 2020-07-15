@@ -26,6 +26,8 @@ import (
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/monitoring"
 	"github.com/codragonzuo/beats/libbeat/monitoring/report"
+        //"github.com/codragonzuo/beats/libbeat/publisher/pipeline"
+        //"github.com/codragonzuo/beats/libbeat/beat"
 )
 
 // List of metrics that are gauges. This is used to identify metrics that should
@@ -79,14 +81,14 @@ type reporter struct {
 	done     chan struct{}
 	period   time.Duration
 	registry *monitoring.Registry
-
+        Client   beat.Client
 	// output
 	logger *logp.Logger
 }
 
 // MakeReporter returns a new Reporter that periodically reports metrics via
 // logp. If cfg is nil defaults will be used.
-func MakeReporter(beat beat.Info, cfg *common.Config) (report.Reporter, error) {
+func MakeReporter(beat beat.Info, cfg *common.Config, pipeline beat.Pipeline) (report.Reporter, error) {
 	config := defaultConfig
 	if cfg != nil {
 		if err := cfg.Unpack(&config); err != nil {
@@ -94,14 +96,20 @@ func MakeReporter(beat beat.Info, cfg *common.Config) (report.Reporter, error) {
 		}
 	}
 
+
+        //client, err := pipeline.Connect()
+        //if err != nil {
+        //    fmt.Printf("MakeReporter Connect error =%v\n", err)
+        //}
+
 	r := &reporter{
 		done:     make(chan struct{}),
 		period:   config.Period,
 		logger:   logp.NewLogger("monitoring"),
 		registry: monitoring.Default,
+                //Client:  client,
 	}
 
-	r.wg.Add(1)
 	go func() {
 		defer r.wg.Done()
 		r.snapshotLoop()
@@ -137,6 +145,13 @@ func (r *reporter) snapshotLoop() {
 		delta := makeDeltaSnapshot(last, cur)
                 fmt.Printf("snapshowLoop delta=%v\n", delta)
 		last = cur
+
+                event := beat.Event{Fields: common.MapStr{}}
+                event.PutValue("@monitoring", "monitor-dragon")
+                event.PutValue("monitoring.stqat", "state dragon")
+
+                //r.Client.Publish(event)
+
 
 		r.logSnapshot(delta)
 	}
