@@ -186,6 +186,8 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
 
 	packet := protos.Packet{Ts: ci.Timestamp}
 
+        fmt.Printf("Decoder OnPacket, ci=%v\n", ci)
+
 	debugf("decode packet data")
 	processed := false
 
@@ -244,6 +246,8 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
 	}
 
 
+     packet_time := fmt.Sprintf("%s", ci.Timestamp.Format("20060102150405"))
+     packet_len  := fmt.Sprintf("%d", ci.Length)
 
      event := beat.Event{Fields: common.MapStr{}}
      event.PutValue("@netflow", "netflow-dragon")
@@ -260,6 +264,8 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      event.PutValue("portdst", d.portdst)
      event.PutValue("portsrc", d.portsrc)
 
+     event.PutValue("timestamp", packet_time)
+     event.PutValue("packetlen", packet_len)
 
      d.client.Publish(event)
 

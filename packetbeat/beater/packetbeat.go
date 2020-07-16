@@ -385,17 +385,23 @@ func (pb *packetbeat)NewMyCoder(
 
 
 func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
-     
-     event := beat.Event{Fields: common.MapStr{}}
-     event.PutValue("@mycount", "mycount") 
-     
-     encodeString := base64.StdEncoding.EncodeToString(data)
 
-     event.PutValue("@base64Packet", encodeString)
+    packet_time := fmt.Sprintf("%s", ci.Timestamp.Format("20060102150405"))
+    packet_len  := fmt.Sprintf("%d", ci.Length) 
+    event := beat.Event{Fields: common.MapStr{}}
+    event.PutValue("@mycount", "mycount") 
+     
+    encodeString := base64.StdEncoding.EncodeToString(data)
 
-     event.PutValue("mylabel", "LABEL#1")
-     d.client.Publish(event) 
-     fmt.Printf("MyCoder: %X\n", data)        
+    event.PutValue("@base64Packet", encodeString)
+
+    event.PutValue("mylabel", "LABEL#1")
+    
+    event.PutValue("timestamp", packet_time)
+    event.PutValue("packetlen", packet_len)
+
+    d.client.Publish(event) 
+    fmt.Printf("MyCoder: -------------------\n%X\n", data)        
 }
 
 
