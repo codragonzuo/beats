@@ -83,6 +83,7 @@ type Beat struct {
 
 	keystore   keystore.Keystore
 	processing processing.Supporter
+        MsgPublisher  *pipeline.Pipeline
 }
 
 type beatConfig struct {
@@ -180,6 +181,7 @@ func Run(settings Settings, bt beat.Creator) error {
 			return err
 		}
 
+                fmt.Printf("libbeat Run handle Error call monitoring New Registry\n")
 		// Add basic info
 		registry := monitoring.GetNamespace("info").GetRegistry()
 		monitoring.NewString(registry, "version").Set(b.Info.Version)
@@ -372,11 +374,13 @@ func (b *Beat) createBeater(bt beat.Creator) (beat.Beater, error) {
 	// defer pipeline.Close()
 
 	b.Publisher = pipeline
+        b.MsgPublisher = pipeline
+        // bt is filebeat or packetbeat New function
 	beater, err := bt(&b.Beat, sub)
 	if err != nil {
 		return nil, err
 	}
-
+        fmt.Printf("libbeat createBeater  pipeline=%v\n", pipeline)
 	return beater, nil
 }
 
@@ -924,6 +928,7 @@ func (b *Beat) setupMonitoring(settings Settings) (report.Reporter, error) {
 			Format:          reporterSettings.Format,
 			ClusterUUID:     monitoringClusterUUID,
 		}
+                fmt.Printf("libbeat beat  setupMonitoring pipeline=%v\n", b.MsgPublisher)
 		reporter, err := report.New(b.Info, settings, monitoringCfg, b.Config.Output)
 		if err != nil {
 			return nil, err

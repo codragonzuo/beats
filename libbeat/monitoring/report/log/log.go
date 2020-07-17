@@ -26,8 +26,6 @@ import (
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/monitoring"
 	"github.com/codragonzuo/beats/libbeat/monitoring/report"
-        //"github.com/codragonzuo/beats/libbeat/publisher/pipeline"
-        //"github.com/codragonzuo/beats/libbeat/beat"
 )
 
 // List of metrics that are gauges. This is used to identify metrics that should
@@ -74,6 +72,7 @@ var strConsts = map[string]bool{
 var (
 	// StartTime is the time that the process was started.
 	StartTime = time.Now()
+        myclient beat.Client = nil
 )
 
 type reporter struct {
@@ -84,31 +83,41 @@ type reporter struct {
         Client   beat.Client
 	// output
 	logger *logp.Logger
+        Beat    string
 }
 
 // MakeReporter returns a new Reporter that periodically reports metrics via
 // logp. If cfg is nil defaults will be used.
 func MakeReporter(beat beat.Info, cfg *common.Config, pipeline beat.Pipeline) (report.Reporter, error) {
 	config := defaultConfig
+        fmt.Printf("libbeat monitoring log.log MakeReporter config=%v\n", config)
 	if cfg != nil {
 		if err := cfg.Unpack(&config); err != nil {
 			return nil, err
 		}
 	}
+        fmt.Printf("beat.Beat=%v\n", beat.Beat)
+        if  beat.Beat != "filebeat" {
+            client, err := pipeline.Connect()
+            if err != nil {
+                fmt.Printf("MakeReporter Connect error =%v\n", err)
+            }
+            myclient = client
+        }
+        fmt.Printf("libbeat monitoring log.log New reporter period=%v\n", config.Period)
 
-
-        //client, err := pipeline.Connect()
-        //if err != nil {
-        //    fmt.Printf("MakeReporter Connect error =%v\n", err)
-        //}
-
+        fmt.Printf("libbeat MakeReporter pipeline=%v\n", pipeline)
 	r := &reporter{
 		done:     make(chan struct{}),
-		period:   config.Period,
+		period:   10 * time.Second, //config.Period,
 		logger:   logp.NewLogger("monitoring"),
 		registry: monitoring.Default,
-                //Client:  client,
+                Client:  myclient,
+                Beat:    beat.Beat,
 	}
+        
+
+        fmt.Printf("libbeat monitoring log.log MakeReporter reporter=%v\n", r)
 
 	go func() {
 		defer r.wg.Done()
@@ -124,6 +133,7 @@ func (r *reporter) Stop() {
 
 func (r *reporter) snapshotLoop() {
 	r.logger.Infof("Starting metrics logging every %v", r.period)
+        fmt.Printf("libbeat monitoring snapshotLoop logging every %v\n", r.period)
 	defer r.logger.Infof("Stopping metrics logging.")
 	defer func() {
 		r.logTotals(makeDeltaSnapshot(monitoring.MakeFlatSnapshot(), makeSnapshot(r.registry)))
@@ -131,6 +141,8 @@ func (r *reporter) snapshotLoop() {
 
 	ticker := time.NewTicker(r.period)
 	defer ticker.Stop()
+
+        fmt.Printf("monitor report log.log walk into snapshotLoop\n")
 
 	var last monitoring.FlatSnapshot
 	for {
@@ -141,18 +153,20 @@ func (r *reporter) snapshotLoop() {
 		}
 
 		cur := makeSnapshot(r.registry)
-                fmt.Printf("snapshowLoop cur=%v\n", cur)
+                //fmt.Printf("snapshowLoop cur=%v\n", cur)
 		delta := makeDeltaSnapshot(last, cur)
-                fmt.Printf("snapshowLoop delta=%v\n", delta)
+                //fmt.Printf("snapshowLoop delta=%v\n", delta)
 		last = cur
-
+                
                 event := beat.Event{Fields: common.MapStr{}}
                 event.PutValue("@monitoring", "monitor-dragon")
-                event.PutValue("monitoring.stqat", "state dragon")
-
-                //r.Client.Publish(event)
-
-
+                event.PutValue("monitoring.state", "state dragon")
+                event.PutValue("flag", "codragonzuo")
+                
+                if r.Beat != "filebeat" {
+                    r.Client.Publish(event)
+                    //fmt.Printf("codragonzuo publish monitoring\n")
+                }
 		r.logSnapshot(delta)
 	}
 }

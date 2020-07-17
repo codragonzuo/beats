@@ -32,7 +32,7 @@ import (
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/processors"
 	"github.com/codragonzuo/beats/libbeat/service"
-
+        //mypipeline  "github.com/codragonzuo/beats/libbeat/publisher/pipeline"
         //PB "github.com/codragonzuo/beats/packetbeat/pb"
 
 
@@ -64,6 +64,8 @@ type packetbeat struct {
 	pipeline beat.Pipeline
 	transPub *publish.TransactionPublisher
 	flows    *flows.Flows
+        //MsgPublisher * mypipeline.Pipeline
+        
 }
 
 type flags struct {
@@ -107,6 +109,7 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		cmdLineArgs: cmdLineArgs,
 	}
 	err = pb.init(b)
+        //pb.MsgPublisher = pb.pipeline
 	if err != nil {
 		return nil, err
 	}
@@ -130,6 +133,7 @@ func (pb *packetbeat) init(b *beat.Beat) error {
 	}
 
 	pb.pipeline = b.Publisher
+        fmt.Printf("packetbeat pb.pipeline=%v\n", pb.pipeline)
 	pb.transPub, err = publish.NewTransactionPublisher(
 		b.Info.Name,
 		b.Publisher,
