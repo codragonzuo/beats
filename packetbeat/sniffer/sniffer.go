@@ -213,7 +213,8 @@ func (s *Sniffer) Run() error {
 		counter++
 		logp.Debug("sniffer", "Packet number: %d", counter)
 		
-                fmt.Printf("Packet: %X \n", data)
+                //fmt.Printf("Packet: %X \n", data)
+                fmt.Printf("------------------------------------\nSniffer Run Packet number: %d\n", counter)
                 worker.OnPacket(data, &ci)
                 myworker.OnPacket(data, &ci)
 	}

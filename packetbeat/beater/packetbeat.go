@@ -401,7 +401,8 @@ func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
     event.PutValue("packetlen", packet_len)
 
     d.client.Publish(event) 
-    fmt.Printf("MyCoder: -------------------\n%X\n", data)        
+//    fmt.Printf("MyCoder: -------------------\n%X\n", data)        
+    fmt.Printf("packetbeat beater packetbeat.go MyCoder-OnPacket full packet Received and BASE64 Send !\n")
 }
 
 

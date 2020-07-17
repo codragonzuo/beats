@@ -268,7 +268,8 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      event.PutValue("packetlen", packet_len)
 
      d.client.Publish(event)
-
+     
+     fmt.Printf("Decoder  OnPacket Received packet and Send 5 meta-data packet Success !\n")
 
 }
 
