@@ -77,7 +77,8 @@ filebeat.inputs:
 - type: monitor
   Name: monitor11
 
-
+- type: dblog
+  Name: dblog12
 
 
 - type: netflow

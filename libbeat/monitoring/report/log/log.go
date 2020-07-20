@@ -156,7 +156,7 @@ func (r *reporter) snapshotLoop() {
 		cur := makeSnapshot(r.registry)
                 //fmt.Printf("snapshowLoop cur=%v\n", cur)
 		delta := makeDeltaSnapshot(last, cur)
-                fmt.Printf("snapshowLoop delta=%v\n", delta)
+                //fmt.Printf("snapshowLoop delta=%v\n", delta)
                 //for country := range delta.Strings {
                 //   fmt.Println(country, delta.Strings [country])
                 //}	
