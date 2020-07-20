@@ -26,6 +26,7 @@ require (
 	github.com/fatih/color v1.9.0
 	github.com/garyburd/redigo v1.6.0
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofrs/flock v0.7.1
 	github.com/gofrs/uuid v3.3.0+incompatible
 	github.com/golang/snappy v0.0.1
