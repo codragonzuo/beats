@@ -157,12 +157,57 @@ func (r *reporter) snapshotLoop() {
                 //fmt.Printf("snapshowLoop cur=%v\n", cur)
 		delta := makeDeltaSnapshot(last, cur)
                 fmt.Printf("snapshowLoop delta=%v\n", delta)
-		last = cur
+                //for country := range delta.Strings {
+                //   fmt.Println(country, delta.Strings [country])
+                //}	
+
+                //for country := range delta.Ints {
+                //   fmt.Println(country, delta.Ints [country])
+                //}
+
+
+                //for country := range delta.Floats {
+                //   fmt.Println(country, delta.Floats [country])
+                //}
+
+                //for country := range delta.StringSlices {
+                //   fmt.Println(country, delta.StringSlices [country])
+                //}
+
+
+
+        	last = cur
                 
                 event := beat.Event{Fields: common.MapStr{}}
                 event.PutValue("@monitoring", "monitor-dragon")
                 event.PutValue("monitoring.state", "state dragon")
                 event.PutValue("flag", "codragonzuo")
+
+
+
+                for country := range delta.Strings {
+                   event.PutValue(country, delta.Strings [country])
+                }
+
+                for country := range delta.Bools {
+                   event.PutValue(country, delta.Bools [country])
+                }
+
+
+                for country := range delta.Ints {
+                   event.PutValue(country, delta.Ints [country])
+                }
+
+
+                for country := range delta.Floats {
+                   event.PutValue(country, delta.Floats [country])
+                }
+
+                for country := range delta.StringSlices {
+                   event.PutValue(country, delta.StringSlices [country])
+                }
+
+
                 
                 if r.Beat != "filebeat" {
                     r.Client.Publish(event)
