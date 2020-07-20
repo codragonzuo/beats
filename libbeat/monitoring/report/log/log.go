@@ -26,6 +26,7 @@ import (
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/monitoring"
 	"github.com/codragonzuo/beats/libbeat/monitoring/report"
+        "github.com/codragonzuo/beats/filebeat/input/monitor"
 )
 
 // List of metrics that are gauges. This is used to identify metrics that should
@@ -155,7 +156,7 @@ func (r *reporter) snapshotLoop() {
 		cur := makeSnapshot(r.registry)
                 //fmt.Printf("snapshowLoop cur=%v\n", cur)
 		delta := makeDeltaSnapshot(last, cur)
-                //fmt.Printf("snapshowLoop delta=%v\n", delta)
+                fmt.Printf("snapshowLoop delta=%v\n", delta)
 		last = cur
                 
                 event := beat.Event{Fields: common.MapStr{}}
@@ -166,6 +167,9 @@ func (r *reporter) snapshotLoop() {
                 if r.Beat != "filebeat" {
                     r.Client.Publish(event)
                     //fmt.Printf("codragonzuo publish monitoring\n")
+                } else
+                {
+                    monitor.Monitorfowwarder.Send(event)
                 }
 		r.logSnapshot(delta)
 	}

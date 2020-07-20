@@ -46,10 +46,12 @@ import (
 type mapper []string
 
 
-
+var (
+    Monitorfowwarder * harvester.Forwarder
+)
 func init() {
-    fmt.Printf("snmptrap input Register\n")
-	err := input.Register("snmptrap", NewInput)
+    fmt.Printf("monitor  input Register\n")
+	err := input.Register("monitor", NewInput)
 	if err != nil {
 		panic(err)
 	}
@@ -95,7 +97,8 @@ func NewInput(
 	//	forwarder.Send(ev)
 	//}
     fmt.Printf("input monitor forwarder=%v\n", forwarder)
-	//server, err := factory(callback, config.Protocol)
+	Monitorfowwarder = forwarder
+        //server, err := factory(callback, config.Protocol)
 	if err != nil {
 		return nil, err
 	}

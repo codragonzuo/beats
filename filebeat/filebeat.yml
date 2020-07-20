@@ -74,6 +74,11 @@ filebeat.inputs:
   protocol.udp:
     host: "localhost:9000"  
 
+- type: monitor
+  Name: monitor11
+
+
+
 
 - type: netflow
   max_message_size: 10KiB
@@ -195,7 +200,7 @@ setup.kibana:
 
 output.file:
   path: "./"
-  filename: packetbeat.pacp
+  filename: filebeat.log
   #rotate_every_kb: 10000
   #number_of_files: 7
   #permissions: 0600
