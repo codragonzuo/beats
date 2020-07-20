@@ -82,6 +82,8 @@ type Input struct {
 //	server  inputsource.Network
 	config  *config
 	log     *logp.Logger
+        done    chan interface{}
+        Monitorfowwarder * harvester.Forwarder
 }
 
 // NewInput creates a new syslog input
@@ -125,6 +127,7 @@ func NewInput(
 //		server:  server,
 		config:  &config,
 		log:     log,
+                Monitorfowwarder: forwarder,
 	}, nil
 }
 
@@ -141,7 +144,21 @@ func (p *Input) Run() {
 		//	return
 		//}
 		p.started = true
-	}
+                p.done =  make(chan interface{})
+                go func (){
+                 //defer  
+                 for {
+                    select {
+                        case <-p.done: 
+                            return
+                       default:
+                    }
+                    time.Sleep(5*time.Second)
+                    sqlquery()
+                    //Monitorfowwarder
+                  }
+                }()
+        }
 }
 
 // Stop stops the syslog input.
@@ -153,10 +170,14 @@ func (p *Input) Stop() {
 	if !p.started {
 		return
 	}
-
+     
 	p.log.Info("Stopping Syslog input")
 	//p.server.Stop()
+        //close(p.done)
+        //p.done.Close()
+        p.done <- 1
 	p.started = false
+
 }
 
 // Wait stops the syslog input.
@@ -223,7 +244,7 @@ func sqlquery(){
         fmt.Printf("db.query error \n")
         panic(err.Error()) // proper error handling instead of panic in your app
     }
-
+    
     for results.Next() {
         var tag Tag
         // for each row, scan the result into our tag composite object
