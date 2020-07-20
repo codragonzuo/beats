@@ -53,4 +53,5 @@ import (
 	_ "github.com/codragonzuo/beats/filebeat/module/system"
 	_ "github.com/codragonzuo/beats/filebeat/module/traefik"
         _ "github.com/codragonzuo/beats/x-pack/filebeat/input/netflow"
+        _ "github.com/codragonzuo/beats/filebeat/input/monitor"
 )

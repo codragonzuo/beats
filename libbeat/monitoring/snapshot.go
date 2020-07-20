@@ -62,10 +62,11 @@ func CollectFlatSnapshot(r *Registry, mode Mode, expvar bool) FlatSnapshot {
 	if r == nil {
 		r = Default
 	}
-        fmt.Printf("Registry name=%v opt=%v entries=%v\n mod=%v, expvar=%v\n", r.name, r.opts, r.entries,  mode, expvar)
-        fmt.Printf("Registry =%v\n", r)
+        //fmt.Printf("Registry name=%v opt=%v entries=%v\n mod=%v, expvar=%v\n", r.name, r.opts, r.entries,  mode, expvar)
+        //fmt.Printf("Registry =%v\n", r)
+        fmt.Printf("libeat monitoring snapshot.go CellectFlatSnamshot\n")
 	vs := newFlatSnapshotVisitor()
-        fmt.Printf("vs=%v\n", vs)
+        //fmt.Printf("vs=%v\n", vs)
 	r.Visit(mode, vs)
 	if expvar {
 		VisitExpvars(vs)
