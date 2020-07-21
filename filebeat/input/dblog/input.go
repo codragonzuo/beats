@@ -23,7 +23,8 @@ import (
 	"time"
         "fmt"
 	"github.com/pkg/errors"
-
+    //"github.com/bitly/go-simplejson"
+    _ "encoding/json"
 	"github.com/codragonzuo/beats/filebeat/channel"
 	"github.com/codragonzuo/beats/filebeat/harvester"
 	"github.com/codragonzuo/beats/filebeat/input"
@@ -83,7 +84,7 @@ type Input struct {
 	config  *config
 	log     *logp.Logger
         done    chan interface{}
-        Monitorfowwarder * harvester.Forwarder
+        myfowwarder * harvester.Forwarder
 }
 
 // NewInput creates a new syslog input
@@ -104,19 +105,20 @@ func NewInput(
 	if err != nil {
 		return nil, err
 	}
-
 	config := defaultConfig
+    fmt.Printf("dblog NewInput config=%v\n", config)
 	if err = cfg.Unpack(&config); err != nil {
 		return nil, err
 	}
+	fmt.Printf("dblog NewInput config=%v\n", config)
 
 	forwarder := harvester.NewForwarder(out)
 	//callback := func(data []byte, metadata inputsource.NetworkMetadata) {
 	//	ev := parseAndCreateEvent(data, metadata, time.Local, log)
 	//	forwarder.Send(ev)
 	//}
-        fmt.Printf("input dblog NewInput forwarder=%v\n", forwarder)
-        //server, err := factory(callback, config.Protocol)
+    fmt.Printf("input dblog NewInput forwarder=%v\n", forwarder)
+
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +129,7 @@ func NewInput(
 //		server:  server,
 		config:  &config,
 		log:     log,
-                Monitorfowwarder: forwarder,
+                myfowwarder: forwarder,
 	}, nil
 }
 
@@ -154,7 +156,7 @@ func (p *Input) Run() {
                        default:
                     }
                     time.Sleep(5*time.Second)
-                    sqlquery()
+                    p.sqlquery()
                     //Monitorfowwarder
                   }
                 }()
@@ -226,10 +228,12 @@ func mapValueToName(v int, m mapper) (string, error) {
 }
 
 
-func sqlquery(){
+func (p *Input) sqlquery(){
     
-    db, err := sql.Open("mysql", "root:qwer1234@tcp(127.0.0.1:3306)/ambari")
-
+//    db, err := sql.Open("mysql", "root:qwer1234@tcp(127.0.0.1:3306)/ambari")
+     db_conn := fmt.Sprintf("%s:%s@tcp(%s)/%s", p.config.Username, p.config.Password, p.config.Host, p.config.DBName)
+	 fmt.Printf("DBType=%s, db_conn=%s\n", p.config.DBType, db_conn)
+	 db, err := sql.Open(p.config.DBType, db_conn)
     // if there is an error opening the connection, handle it
     if err != nil {
         //log.Print(err.Error())
@@ -239,11 +243,17 @@ func sqlquery(){
     defer db.Close()
 
     // Execute the query
-    results, err := db.Query("select alert_id ,alert_label from alert_history where alert_id > 8840")
+    // results, err := db.Query("select alert_id ,alert_label from alert_history where alert_id > 8960") 
+	
+	sql_query := fmt.Sprintf("%s where %s > %d", p.config.QueryString, p.config.IdName, p.config.IdStart)
+	fmt.Println(sql_query)
+	results, err := db.Query(sql_query)
     if err != nil {
         fmt.Printf("db.query error \n")
-        panic(err.Error()) // proper error handling instead of panic in your app
+        return
     }
+	
+	DoRowsMapper(results, p.myfowwarder)
     
     for results.Next() {
         var tag Tag
@@ -254,8 +264,59 @@ func sqlquery(){
         }
                 // and then print out the tag's Name attribute
         //log.Printf(tag.Name)
-        fmt.Printf("%d  %s\n", tag.ID, tag.Name)
+        //fmt.Printf("%d  %s\n", tag.ID, tag.Name)
     }
 
+}
+
+func DoRowsMapper(rows *sql.Rows, forwarder * harvester.Forwarder) () { 
+ 
+  // 获取列名 
+  columns, err := rows.Columns() 
+  if err != nil { 
+    panic(err.Error()) // proper error handling instead of panic in your app 
+  } 
+ 
+  // Make a slice for the values 
+  values := make([]sql.RawBytes, len(columns)) 
+ 
+  scanArgs := make([]interface{}, len(values)) 
+  for i := range values { 
+    scanArgs[i] = &values[i] 
+  } 
+ 
+  var rbody []map[string] string//interface{}
+  for rows.Next() {
+    err = rows.Scan(scanArgs...) 
+    if err != nil { 
+      panic(err.Error())
+    } 
+    
+	//t := make(map[string]interface{})
+
+    rowMap := make(map[string]string) 
+    var value string 
+    for i, col := range values { 
+      // Here we can check if the value is nil (NULL value) 
+      if col != nil { 
+        value = string(col) 
+        rowMap[columns[i]] = value 
+      } 
+    } 
+	fmt.Printf(" %v\n", rowMap)
+	rbody = append(rbody, rowMap)
+  } 
+  //cnnJson := make(map[string]interface{})
+  //cnnJson["body"] = rbody
+  //b, _ := json.Marshal(cnnJson)
+  //cnnn := string(b)
+  //fmt.Printf("jsondata: %s\n", cnnn)
+  
+  
+    event := beat.Event{Fields: common.MapStr{}}
+	event.PutValue("@dblog", "dblog-dragon")
+	event.PutValue("dblog", rbody)
+	forwarder.Send(event)
+				
 }
 

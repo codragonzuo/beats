@@ -79,7 +79,15 @@ filebeat.inputs:
 
 - type: dblog
   Name: dblog12
-
+  host: "192.168.20.45:3306"
+  dbtype: "mysql"
+  dbname: "ambari"
+  max_message_num: 20
+  username: root
+  password: qwer1234
+  id_name:  alert_id
+  id_start: 8800
+  query_sql: "select alert_id ,alert_label from alert_history "
 
 - type: netflow
   max_message_size: 10KiB

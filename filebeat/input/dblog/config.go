@@ -21,109 +21,64 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dustin/go-humanize"
-
-	"github.com/codragonzuo/beats/filebeat/harvester"
-	"github.com/codragonzuo/beats/filebeat/inputsource"
-	netcommon "github.com/codragonzuo/beats/filebeat/inputsource/common"
-	"github.com/codragonzuo/beats/filebeat/inputsource/tcp"
-	"github.com/codragonzuo/beats/filebeat/inputsource/udp"
-	"github.com/codragonzuo/beats/filebeat/inputsource/unix"
 	"github.com/codragonzuo/beats/libbeat/common"
-	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
-	"github.com/codragonzuo/beats/libbeat/logp"
+	"github.com/codragonzuo/beats/libbeat/common/transport/kerberos"
+	"github.com/codragonzuo/beats/libbeat/common/transport/tlscommon"
 )
 
 type config struct {
-	harvester.ForwarderConfig `config:",inline"`
-	Protocol                  common.ConfigNamespace `config:"protocol"`
+	Topics                    common.ConfigNamespace `config:"topics"`
+	ClientID                 string            `config:"client_id"`
+    Username                 string            `config:"username" validate:"required"`
+    Password                 string            `config:"password" validate:"required"`
+    Host                     string            `config:"host" validate:"required"`
+    DBType                   string            `config:"dbtype" validate:"required"`
+    DBName                   string            `config:"dbname" validate:"required"`
+	IdName                   string            `config:"id_name"  validate:"required"`
+	IdStart                  int32             `config:"id_start"  validate:"required"`
+	MaxMessageNum            int32             `config:"max_message_num"  validate:"required"`
+	QueryString              string            `config:"query_sql"  validate:"required"`
 }
 
 var defaultConfig = config{
-	ForwarderConfig: harvester.ForwarderConfig{
-		Type: "monitor",
-	},
+	ClientID : "client_xxx",
 }
 
-type syslogTCP struct {
-	tcp.Config    `config:",inline"`
-	LineDelimiter string `config:"line_delimiter" validate:"nonzero"`
-}
 
-var defaultTCP = syslogTCP{
-	Config: tcp.Config{
-		Timeout:        time.Minute * 5,
-		MaxMessageSize: 20 * humanize.MiByte,
-	},
-	LineDelimiter: "\n",
-}
 
-type syslogUnix struct {
-	unix.Config   `config:",inline"`
-	LineDelimiter string `config:"line_delimiter" validate:"nonzero"`
-}
 
-var defaultUnix = syslogUnix{
-	Config: unix.Config{
-		Timeout:        time.Minute * 5,
-		MaxMessageSize: 20 * humanize.MiByte,
-	},
-	LineDelimiter: "\n",
-}
 
-var defaultUDP = udp.Config{
-	MaxMessageSize: 10 * humanize.KiByte,
-	Timeout:        time.Minute * 5,
-}
-
-func factory(
-	nf inputsource.NetworkFunc,
+func getconfig(
 	config common.ConfigNamespace,
-) (inputsource.Network, error) {
+) (error) {
 	n, cfg := config.Name(), config.Config()
         
-        fmt.Printf("filebeat input snmptrap config=%s\n", n)
-	switch n {
-	case tcp.Name:
-		config := defaultTCP
-		if err := cfg.Unpack(&config); err != nil {
-			return nil, err
-		}
-
-		splitFunc := netcommon.SplitFunc([]byte(config.LineDelimiter))
-		if splitFunc == nil {
-			return nil, fmt.Errorf("error creating splitFunc from delimiter %s", config.LineDelimiter)
-		}
-
-		logger := logp.NewLogger("input.syslog.tcp").With("address", config.Config.Host)
-		factory := netcommon.SplitHandlerFactory(netcommon.FamilyTCP, logger, tcp.MetadataCallback, nf, splitFunc)
-
-		return tcp.New(&config.Config, factory)
-	case unix.Name:
-		cfgwarn.Beta("Syslog Unix socket support is beta.")
-
-		config := defaultUnix
-		if err := cfg.Unpack(&config); err != nil {
-			return nil, err
-		}
-
-		splitFunc := netcommon.SplitFunc([]byte(config.LineDelimiter))
-		if splitFunc == nil {
-			return nil, fmt.Errorf("error creating splitFunc from delimiter %s", config.LineDelimiter)
-		}
-
-		logger := logp.NewLogger("input.syslog.unix").With("path", config.Config.Path)
-		factory := netcommon.SplitHandlerFactory(netcommon.FamilyUnix, logger, unix.MetadataCallback, nf, splitFunc)
-
-		return unix.New(&config.Config, factory)
-
-	case udp.Name:
-		config := defaultUDP
-		if err := cfg.Unpack(&config); err != nil {
-			return nil, err
-		}
-		return udp.New(&config, nf), nil
-	default:
-		return nil, fmt.Errorf("you must choose between TCP or UDP")
+    fmt.Printf("filebeat input dblog config=%s\n", n)
+	dbconfig := defaultConfig
+	if err := cfg.Unpack(&dbconfig); err != nil {
+		return err
 	}
+    return nil
 }
+
+
+
+type kafkaInputConfig struct {
+        Hosts                    []string          `config:"hosts" validate:"required"`
+        Topics                   []string          `config:"topics" validate:"required"`
+        ClientID                 string            `config:"client_id"`
+        ConnectBackoff           time.Duration     `config:"connect_backoff" validate:"min=0"`
+        TLS                      *tlscommon.Config `config:"ssl"`
+        Kerberos                 *kerberos.Config  `config:"kerberos"`
+        Username                 string            `config:"username"`
+        Password                 string            `config:"password"`
+		DBType                 string            `config:"password"`
+}
+
+type ConfigFetch struct {
+        Min     int32 `config:"min" validate:"min=1"`
+        Default int32 `config:"default" validate:"min=1"`
+        Max     int32 `config:"max" validate:"min=0"`
+}
+
+
