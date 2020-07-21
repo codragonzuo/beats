@@ -18,17 +18,17 @@
 package dblog
 
 import (
-	"strings"
+	_ "strings"
 	"sync"
 	"time"
         "fmt"
-	"github.com/pkg/errors"
+	_ "github.com/pkg/errors"
     //"github.com/bitly/go-simplejson"
     _ "encoding/json"
 	"github.com/codragonzuo/beats/filebeat/channel"
 	"github.com/codragonzuo/beats/filebeat/harvester"
 	"github.com/codragonzuo/beats/filebeat/input"
-	"github.com/codragonzuo/beats/filebeat/inputsource"
+	_ "github.com/codragonzuo/beats/filebeat/inputsource"
 	"github.com/codragonzuo/beats/libbeat/beat"
 	"github.com/codragonzuo/beats/libbeat/common"
 	"github.com/codragonzuo/beats/libbeat/common/cfgwarn"
@@ -59,7 +59,7 @@ var (
  * Tag... - a very simple struct
  */
 type Tag struct {
-    ID   int    `json:"id"`
+    ID   int32    `json:"id"`
     Name string `json:"name"`
 }
 
@@ -80,11 +80,11 @@ type Input struct {
 	sync.Mutex
 	started bool
 	outlet  channel.Outleter
-//	server  inputsource.Network
 	config  *config
 	log     *logp.Logger
-        done    chan interface{}
-        myfowwarder * harvester.Forwarder
+	done    chan interface{}
+	myfowwarder * harvester.Forwarder
+	id_start int32
 }
 
 // NewInput creates a new syslog input
@@ -113,11 +113,8 @@ func NewInput(
 	fmt.Printf("dblog NewInput config=%v\n", config)
 
 	forwarder := harvester.NewForwarder(out)
-	//callback := func(data []byte, metadata inputsource.NetworkMetadata) {
-	//	ev := parseAndCreateEvent(data, metadata, time.Local, log)
-	//	forwarder.Send(ev)
-	//}
-    fmt.Printf("input dblog NewInput forwarder=%v\n", forwarder)
+
+	fmt.Printf("input dblog NewInput forwarder=%v\n", forwarder)
 
 	if err != nil {
 		return nil, err
@@ -126,10 +123,10 @@ func NewInput(
 	return &Input{
 		outlet:  out,
 		started: false,
-//		server:  server,
 		config:  &config,
 		log:     log,
-                myfowwarder: forwarder,
+		myfowwarder: forwarder,
+		id_start: config.IdStart,
 	}, nil
 }
 
@@ -139,28 +136,20 @@ func (p *Input) Run() {
 	defer p.Unlock()
 
 	if !p.started {
-		//p.log.Infow("Starting Syslog input", "protocol", p.config.Protocol.Name())
-		//err := p.server.Start()
-		//if err != nil {
-		//	p.log.Error("Error starting the server", "error", err)
-		//	return
-		//}
 		p.started = true
-                p.done =  make(chan interface{})
-                go func (){
-                 //defer  
-                 for {
-                    select {
-                        case <-p.done: 
-                            return
-                       default:
-                    }
-                    time.Sleep(5*time.Second)
-                    p.sqlquery()
-                    //Monitorfowwarder
-                  }
-                }()
-        }
+		p.done =  make(chan interface{})
+		go func (){
+			for {
+				select {
+					case <-p.done: 
+						return
+					default:
+				}
+				time.Sleep(5*time.Second)
+				p.sqlquery()
+			}
+		}()
+	}
 }
 
 // Stop stops the syslog input.
@@ -172,14 +161,10 @@ func (p *Input) Stop() {
 	if !p.started {
 		return
 	}
-     
-	p.log.Info("Stopping Syslog input")
-	//p.server.Stop()
-        //close(p.done)
-        //p.done.Close()
-        p.done <- 1
-	p.started = false
 
+	p.log.Info("Stopping Syslog input")
+	p.done <- 1
+	p.started = false
 }
 
 // Wait stops the syslog input.
@@ -187,45 +172,7 @@ func (p *Input) Wait() {
 	p.Stop()
 }
 
-func createEvent(ev *event, metadata inputsource.NetworkMetadata, timezone *time.Location, log *logp.Logger) beat.Event {
-	f := common.MapStr{
-		"message": strings.TrimRight(ev.Message(), "\n"),
-	}
-	return newBeatEvent(ev.Timestamp(timezone), metadata, f)
-}
 
-func parseAndCreateEvent(data []byte, metadata inputsource.NetworkMetadata, timezone *time.Location, log *logp.Logger) beat.Event {
-	ev := newEvent()
-	//Parse(data, ev)
-	//if !ev.IsValid() {
-	//	log.Errorw("can't parse event as syslog rfc3164", "message", string(data))
-	//	return newBeatEvent(time.Now(), metadata, common.MapStr{
-	//		"message": string(data),
-	//	})
-	//}
-	return createEvent(ev, metadata, time.Local, log)
-}
-
-func newBeatEvent(timestamp time.Time, metadata inputsource.NetworkMetadata, fields common.MapStr) beat.Event {
-	event := beat.Event{
-		Timestamp: timestamp,
-		Meta: common.MapStr{
-			"truncated": metadata.Truncated,
-		},
-		Fields: fields,
-	}
-	if metadata.RemoteAddr != nil {
-		event.Fields.Put("log.source.address", metadata.RemoteAddr.String())
-	}
-	return event
-}
-
-func mapValueToName(v int, m mapper) (string, error) {
-	if v < 0 || v >= len(m) {
-		return "", errors.Errorf("value out of bound: %d", v)
-	}
-	return m[v], nil
-}
 
 
 func (p *Input) sqlquery(){
@@ -245,7 +192,7 @@ func (p *Input) sqlquery(){
     // Execute the query
     // results, err := db.Query("select alert_id ,alert_label from alert_history where alert_id > 8960") 
 	
-	sql_query := fmt.Sprintf("%s where %s > %d", p.config.QueryString, p.config.IdName, p.config.IdStart)
+	sql_query := fmt.Sprintf("%s where %s > %d", p.config.QueryString, p.config.IdName, p.id_start) //p.config.IdStart)
 	fmt.Println(sql_query)
 	results, err := db.Query(sql_query)
     if err != nil {
@@ -253,7 +200,7 @@ func (p *Input) sqlquery(){
         return
     }
 	
-	DoRowsMapper(results, p.myfowwarder)
+	p.DoRowsMapper(results, p.myfowwarder)
     
     for results.Next() {
         var tag Tag
@@ -262,14 +209,16 @@ func (p *Input) sqlquery(){
         if err != nil {
             panic(err.Error()) // proper error handling instead of panic in your app
         }
-                // and then print out the tag's Name attribute
-        //log.Printf(tag.Name)
-        //fmt.Printf("%d  %s\n", tag.ID, tag.Name)
+
+        fmt.Printf("%d  %d\n", tag.ID, p.id_start)
+		if p.id_start < tag.ID {
+			p.id_start = tag.ID
+		}
     }
 
 }
 
-func DoRowsMapper(rows *sql.Rows, forwarder * harvester.Forwarder) () { 
+func (p *Input) DoRowsMapper(rows *sql.Rows, forwarder * harvester.Forwarder) () { 
  
   // 获取列名 
   columns, err := rows.Columns() 
@@ -291,32 +240,23 @@ func DoRowsMapper(rows *sql.Rows, forwarder * harvester.Forwarder) () {
     if err != nil { 
       panic(err.Error())
     } 
-    
-	//t := make(map[string]interface{})
 
-    rowMap := make(map[string]string) 
-    var value string 
-    for i, col := range values { 
-      // Here we can check if the value is nil (NULL value) 
-      if col != nil { 
-        value = string(col) 
-        rowMap[columns[i]] = value 
-      } 
-    } 
-	fmt.Printf(" %v\n", rowMap)
+ 
+	rowMap := make(map[string]string) 
+	var value string 
+	for i, col := range values { 
+		if col != nil { 
+			value = string(col) 
+			rowMap[columns[i]] = value 
+		}
+	} 
+	//fmt.Printf(" %v\n", rowMap)
 	rbody = append(rbody, rowMap)
-  } 
-  //cnnJson := make(map[string]interface{})
-  //cnnJson["body"] = rbody
-  //b, _ := json.Marshal(cnnJson)
-  //cnnn := string(b)
-  //fmt.Printf("jsondata: %s\n", cnnn)
-  
-  
-    event := beat.Event{Fields: common.MapStr{}}
+	}
+
+	event := beat.Event{Fields: common.MapStr{}}
 	event.PutValue("@dblog", "dblog-dragon")
 	event.PutValue("dblog", rbody)
 	forwarder.Send(event)
-				
 }
 
