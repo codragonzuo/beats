@@ -96,6 +96,9 @@ func  (p *CalculatorHandler) Doconfig(ctx context.Context, commandid int32, oper
         p.cb.Stoppacketbeat()
         break
 
+    case 5:
+        fmt.Printf("Doconfig commandid=5\n")
+        break
     default:
         break
     }

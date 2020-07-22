@@ -50,7 +50,7 @@ func main() {
     //configfile.Jsontoyamltest()
     //configfile.Yamltojsontest()
     
-    //runserver()
+    runserver()
 
     jsontest()
 }

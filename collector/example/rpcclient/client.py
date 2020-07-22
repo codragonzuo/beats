@@ -64,8 +64,17 @@ def main():
     print('Check log: %s' % log.value)
 
 
-
-    client.doconfig(3, 3, 'this is my json')
+    a = 0
+    if sys.argv[1]=='1':
+        a = client.doconfig(1, 1, 'start filebeat')
+    elif sys.argv[1] == '2':
+        a = client.doconfig(2, 2, 'stop filebeat')
+    elif sys.argv[1] == '3':
+        a = client.doconfig(3, 3, 'start packetbeat')
+    elif sys.argv[1] == '4':
+        a = client.doconfig(4, 4, 'stop packetbeat')
+    elif sys.argv[1] == '5':
+        a = client.doconfig(5, 5, '{"filebeat":{"input":"myinput"}}')
 
 
 
