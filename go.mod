@@ -5,6 +5,8 @@ go 1.13
 require (
 	4d63.com/tz v1.1.0
 	github.com/Shopify/sarama v1.26.4
+	github.com/apache/thrift v0.13.0
+	github.com/bitly/go-simplejson v0.5.0
 	github.com/cespare/xxhash/v2 v2.1.1
 	github.com/dlclark/regexp2 v1.2.0 // indirect
 	github.com/docker/distribution v2.7.1+incompatible // indirect
@@ -25,6 +27,7 @@ require (
 	github.com/elastic/gosigar v0.10.5
 	github.com/fatih/color v1.9.0
 	github.com/garyburd/redigo v1.6.0
+	github.com/ghodss/yaml v1.0.0
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofrs/flock v0.7.1
