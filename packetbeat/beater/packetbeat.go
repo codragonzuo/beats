@@ -370,19 +370,6 @@ func (pb *packetbeat)NewMyCoder(
 		return nil, err
 	}
 
-
-
-	//ch := make(chan beat.Event, 3)
-	//go p.Myworker(ch, client)
-	//return func(event beat.Event) {
-	//	select {
-	//	case ch <- event:
-	//	case <-p.done:
-	//		ch = nil // stop serving more send requests
-	//	}
-	//}, nil
-
-
         d := MyCoder{
             ss: "MyDecoder",
             client: client}
@@ -406,10 +393,10 @@ func (d *MyCoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
     
     event.PutValue("timestamp", packet_time)
     event.PutValue("packetlen", packet_len)
-
+    event.PutValue("@timestamp", time.Now())
     d.client.Publish(event) 
 //    fmt.Printf("MyCoder: -------------------\n%X\n", data)        
-    fmt.Printf("packetbeat beater packetbeat.go MyCoder-OnPacket full packet Received and BASE64 Send !\n")
+    fmt.Printf("packetbeat beater packetbeat.go MyCoder-OnPacket full  packet Success !\n")
 }
 
 

@@ -19,7 +19,7 @@ package decoder
 
 import (
 	"fmt"
-
+	"time"
 	"github.com/codragonzuo/beats/libbeat/logp"
         "github.com/codragonzuo/beats/libbeat/beat"
         "github.com/codragonzuo/beats/libbeat/common"
@@ -250,7 +250,9 @@ func (d *Decoder) OnPacket(data []byte, ci *gopacket.CaptureInfo) {
      packet_len  := fmt.Sprintf("%d", ci.Length)
 
      event := beat.Event{Fields: common.MapStr{}}
-     event.PutValue("@netflow", "netflow-dragon")
+     event.Fields["@timestamp"] = time.Now()     
+     event.PutValue("@timestamp", time.Now())
+     event.PutValue("@flow", "flow-dragon")
      event.PutValue("ip4src", d.ip4src)
      event.PutValue("ip4dst", d.ip4dst)
      
