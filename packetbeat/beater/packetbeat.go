@@ -19,7 +19,7 @@ package beater
 
 import (
 	"errors"
-	"flag"
+        "flag"
 	"fmt"
 	"sync"
 	"time"
@@ -80,11 +80,11 @@ var cmdLineArgs flags
 
 func init() {
 	cmdLineArgs = flags{
-		file:       flag.String("I", "", "Read packet data from specified file"),
-		loop:       flag.Int("l", 1, "Loop file. 0 - loop forever"),
-		oneAtAtime: flag.Bool("O", false, "Read packets one at a time (press Enter)"),
-		topSpeed:   flag.Bool("t", false, "Read packets as fast as possible, without sleeping"),
-		dumpfile:   flag.String("dump", "", "Write all captured packets to this libpcap file"),
+		file:       flag.String("P", "", "Read packet data from specified file"),
+		loop:       flag.Int("pl", 1,  "Loop file. 0 - loop forever"),
+		oneAtAtime: flag.Bool("pO", false, "Read packets one at a time (press Enter)"),
+		topSpeed:   flag.Bool("pt", false, "Read packets as fast as possible, without sleeping"),
+		dumpfile:   flag.String("pdump", "", "Write all captured packets to this libpcap file"),
 	}
 }
 
@@ -104,6 +104,9 @@ func New(b *beat.Beat, rawConfig *common.Config) (beat.Beater, error) {
 		return nil, err
 	}
 
+
+
+        fmt.Printf("Newbeat\n")
 	pb := &packetbeat{
 		config:      config,
 		cmdLineArgs: cmdLineArgs,
