@@ -151,10 +151,8 @@ func (c *client) Publish(_ context.Context, batch publisher.Batch) error {
 			c.observer.Dropped(1)
 			continue
 		}
-                fmt.Printf("kafka publish msg.topic=%v\n", msg.topic)
 		msg.ref = ref
 		msg.initProducerMessage()
-                fmt.Printf("kafka send async msg topic=%s\n", msg.msg.Topic)
 		ch <- &msg.msg
 	}
 
