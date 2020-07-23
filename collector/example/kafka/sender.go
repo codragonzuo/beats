@@ -16,10 +16,10 @@ func main() {
 
     // 构造一个消息
     msg := &sarama.ProducerMessage{}
-    msg.Topic = "web_log"
+    msg.Topic = "snmp"
     msg.Value = sarama.StringEncoder("this is a test log")
     // 连接kafka
-    client, err := sarama.NewSyncProducer([]string{"127.0.0.1:9092"}, config)
+    client, err := sarama.NewSyncProducer([]string{"192.168.20.45:6667"}, config)
     if err != nil {
         fmt.Println("producer closed, err:", err)
         return
