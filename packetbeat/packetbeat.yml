@@ -172,12 +172,28 @@ setup.kibana:
 
 
 
-output.file:
-  path: "./"
-  filename: packetbeat.log
-  #rotate_every_kb: 10000
-  #number_of_files: 7
-  #permissions: 0600
+#output.file:
+#  path: "./"
+#  filename: packetbeat.log
+#  #rotate_every_kb: 10000
+#  #number_of_files: 7
+#  #permissions: 0600
+
+
+
+
+output.kafka:
+  # initial brokers for reading cluster metadata
+  hosts: ["192.168.20.45:6667"]
+
+  # message topic selection + partitioning
+  topic: packet                   #'%{[fields.log_topic]}'
+  partition.round_robin:
+    reachable_only: false
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
+
 
 
 # ---------------------------- Elasticsearch Output ----------------------------
