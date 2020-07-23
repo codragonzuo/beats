@@ -14,31 +14,25 @@ func main() {
     config.Producer.Partitioner = sarama.NewRandomPartitioner // 新选出一个partition
     config.Producer.Return.Successes = true                   // 成功交付的消息将在success channel返回
 
-    // 构造一个消息
-    //msg := &sarama.ProducerMessage{}
-    //msg.Topic = "snmp"
-    //msg.Value = sarama.StringEncoder("this is a test log")
     // 连接kafka
+    fmt.Printf("config=%v\n", config)
+    fmt.Printf("kafka version=%s\n", config.Version)
     client, err := sarama.NewAsyncProducer([]string{"192.168.20.45:6667"}, config)
     if err != nil {
         fmt.Println("producer closed, err:", err)
         return
     }
     defer client.Close()
-    // 发送消息
 
+    // 构造一个消息
     msg := &sarama.ProducerMessage{
         Topic: "snmp",
         Value: sarama.ByteEncoder("this is a test log"),
         }
+
+    // 发送消息
     client.Input() <- msg
 
-    //pid, offset, err := client.SendMessage(msg)
-    //if err != nil {
-    //    fmt.Println("send msg failed, err:", err)
-    //    return
-    //}
-    //fmt.Printf("pid:%v offset:%v\n", pid, offset)
 }
 
 

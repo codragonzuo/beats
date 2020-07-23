@@ -77,17 +77,17 @@ filebeat.inputs:
 - type: monitor
   Name: monitor11
 
-- type: dblog
-  Name: dblog12
-  host: "192.168.20.45:3306"
-  dbtype: "mysql"
-  dbname: "ambari"
-  max_message_num: 20
-  username: root
-  password: qwer1234
-  id_name:  alert_id
-  id_start: 8800
-  query_sql: "select alert_id ,alert_label from alert_history "
+#- type: dblog
+#  Name: dblog12
+#  host: "192.168.20.45:3306"
+#  dbtype: "mysql"
+#  dbname: "ambari"
+#  max_message_num: 20
+#  username: root
+#  password: qwer1234
+#  id_name:  alert_id
+#  id_start: 8800
+#  query_sql: "select alert_id ,alert_label from alert_history "
 
 - type: netflow
   max_message_size: 10KiB
@@ -207,13 +207,26 @@ setup.kibana:
 
 
 
-output.file:
-  path: "./"
-  filename: filebeat.log
+#output.file:
+#  path: "./"
+#  filename: filebeat.log
   #rotate_every_kb: 10000
   #number_of_files: 7
   #permissions: 0600
 
+
+
+output.kafka:
+  # initial brokers for reading cluster metadata
+  hosts: ["192.168.20.45:6667"]
+
+  # message topic selection + partitioning
+  topic: snmp                   #'%{[fields.log_topic]}'
+  partition.round_robin:
+    reachable_only: false
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
 
 # ---------------------------- Elasticsearch Output ----------------------------
 #output.elasticsearch:

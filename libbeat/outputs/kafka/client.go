@@ -86,6 +86,7 @@ func newKafkaClient(
 		codec:    writer,
 		config:   *cfg,
 	}
+        fmt.Printf("New kafka Client created ! \n")
 	return c, nil
 }
 
@@ -95,13 +96,14 @@ func (c *client) Connect() error {
 
 	c.log.Debugf("connect: %v", c.hosts)
 
+        fmt.Printf("Kafka version=%s\n", c.config.Version)
 	// try to connect
 	producer, err := sarama.NewAsyncProducer(c.hosts, &c.config)
 	if err != nil {
 		c.log.Errorf("Kafka connect fails with: %+v", err)
 		return err
 	}
-
+        fmt.Printf("kafka client connetced host=%v, config=%v\n", c.hosts, c.config)
 	c.producer = producer
 
 	c.wg.Add(2)
@@ -149,9 +151,10 @@ func (c *client) Publish(_ context.Context, batch publisher.Batch) error {
 			c.observer.Dropped(1)
 			continue
 		}
-
+                fmt.Printf("kafka publish msg.topic=%v\n", msg.topic)
 		msg.ref = ref
 		msg.initProducerMessage()
+                fmt.Printf("kafka send async msg topic=%s\n", msg.msg.Topic)
 		ch <- &msg.msg
 	}
 
