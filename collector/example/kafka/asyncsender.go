@@ -17,7 +17,7 @@ func main() {
     // 连接kafka
     fmt.Printf("config=%v\n", config)
     fmt.Printf("kafka version=%s\n", config.Version)
-    client, err := sarama.NewAsyncProducer([]string{"192.168.20.45:6667"}, config)
+    client, err := sarama.NewAsyncProducer([]string{"192.168.20.45:6669"}, config)
     if err != nil {
         fmt.Println("producer closed, err:", err)
         return

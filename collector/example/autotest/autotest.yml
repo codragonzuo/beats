@@ -1,0 +1,32 @@
+#插件插件自动化测试数据主文件
+
+
+#Usecase Scene
+
+USECASE：
+    name: "测试插件重启"
+    process : collector_reload
+    collector_host: 192.168.20.45:1331
+    testdata:
+        - input:
+            enable: true
+            type: file
+            file: /var/log/filebeat/packetbeat.log.1
+        - input:
+            enable: true
+            type: monitor
+        - input:
+            enable: true
+            type: snmp
+            host:   192.168.20.45:3331
+        - input
+            enable: true
+            type: netflow
+            protocol: netflow_v9
+            host:   192.168.20.45:1037
+        - outputs
+            enable: true
+            type: kafka
+            host:   192.168.20.45:6669
+            topic:  snmp
+
