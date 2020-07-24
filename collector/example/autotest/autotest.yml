@@ -3,30 +3,50 @@
 
 #Usecase Scene
 
-USECASE：
-    name: "测试插件重启"
+USECASE :
+    name : 重启
     process : collector_reload
     collector_host: 192.168.20.45:1331
     testdata:
         - input:
             enable: true
+            label:  F-0001
             type: file
             file: /var/log/filebeat/packetbeat.log.1
         - input:
+            label:  F-0002
             enable: true
             type: monitor
         - input:
+            label:  F-0003
             enable: true
             type: snmp
             host:   192.168.20.45:3331
-        - input
+        - input:
+            label:  F-0004
             enable: true
             type: netflow
             protocol: netflow_v9
             host:   192.168.20.45:1037
-        - outputs
+        - input:
+            label:  F-0005
+            enable: true
+            type: dblog
+            dbtype: mysql
+            host:  192.168.20.45:3306
+            username: ambari
+            password: ambari
+            
+        - outputs:
+            label:  F-0006
             enable: true
             type: kafka
             host:   192.168.20.45:6669
             topic:  snmp
-
+        - packet:
+            label:  F-0007
+            enable: true
+            interface: any
+            filter: 
+            packetmeta: on
+ 
