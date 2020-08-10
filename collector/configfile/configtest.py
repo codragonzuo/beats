@@ -19,7 +19,7 @@ monitor = data['monitoring']
 
 clist = list()
 cinput = dict()
-
+plist = list()
 
 
 for input in inputlist:
@@ -82,25 +82,56 @@ for input in inputlist:
 
 if 'monitoring' in data.keys():
     print(data['monitoring'])
-    
+    monitoring=dict()
+    monitoring['enabled'] = data['monitoring']['enable']
+    monitoring['cluster_uuid'] = 'metron'
+    es = dict()
+    es['hosts'] = ["https://192.168.20.45:9200"]
+    es['username'] = 'metron'
+    es['password'] = 'metron'
+    monitoring['elasticsearch'] = es
+
 
 if 'outputs' in data.keys():
     print(data['outputs'])
     outputs = dict()
-    outputs['hosts'] = data['outputs']['host']
+    hostlist = list()
+    host = data['outputs']['host']
+    hostlist.append(host)
+    outputs['hosts'] = hostlist
     outputs['topic'] = data['outputs']['topic']
     outputs['compression'] = 'gzip'
     outputs['max_message_bytes'] = 1000000
     outputs['required_acks'] = 1
-    
+
 
 cdata = dict()
 cdata['filebeat.inputs'] = clist
 cdata['output.kafka']=outputs
+cdata['monitoring']=monitoring
 print(cdata)
 
 fw = open('filebeat.yml', 'w', encoding='utf-8')
 yaml.dump(cdata,fw,allow_unicode=True)
+
+##########################################################
+if 'packet' in data.keys():
+    packet = dict()
+    packet['interface'] = data['packet']['interface']
+    packet['filter'] = data['packet']['filter']
+    pdata = dict()
+    pdata['output.kafka']=outputs
+    pdata['monitoring']=monitoring
+    pdata['packetbeat.interfaces.device'] = packet['interface']
+    pdata['packetbeat.interfaces.bpf_filter'] = packet['filter']
+    flow=dict()
+    flow = dict()
+    flow['timeout'] = '30s'
+    flow['period'] = '10s'
+    pdata['packetbeat.flows'] = flow
+    fw = open('packetbeat.yml', 'w', encoding='utf-8')
+    yaml.dump(pdata,fw,allow_unicode=True)
+
 
 """
 # 方法1
