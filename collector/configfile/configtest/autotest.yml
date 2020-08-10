@@ -1,0 +1,60 @@
+#插件插件自动化测试数据主文件
+
+
+#Usecase Scene
+
+USECASE :
+    name : 重启
+    process : collector_reload
+    collector_host: 192.168.20.45:1331
+    input:
+        - enable: true
+          label:  F-0001
+          type: file
+          name: file1
+          path: /root/log/filebeat/*.log.1
+        - label:  F-0002
+          enable: true
+          name: monitor1
+          type: monitor
+#        - label:  F-0003
+#          enable: true
+#          type: snmptrap
+#          name: snmptrap1
+#          host:   127.0.0.1:9000
+#        - label:  F-0004
+#          name:  setflow1
+#          enable: true
+#          type: netflow
+#          protocol: netflow_v9
+#          host:   127.0.0.1:1337
+#        - label:  F-0005
+#          enable: true
+#          type: dblog
+#          name: dblog1
+#          dbtype: mysql
+#          dbname: ambari
+#          host:  192.168.20.45:3306
+#          username: root
+#          password: qwer1234
+#          id_name:  alert_id
+#          id_start: 8800
+#          max_message_num: 20
+#          query_sql: "select alert_id ,alert_label from alert_history "
+    packet:
+        label:  F-0007
+        enable: true
+        interface: any
+        filter: ""
+        packetmeta: on
+
+    outputs:
+        label:  F-0006
+        enable: true
+        type: kafka
+        host:   192.168.20.45:6669
+        topic:  forever 
+
+    monitoring:
+        type: monitor
+        enable: true
