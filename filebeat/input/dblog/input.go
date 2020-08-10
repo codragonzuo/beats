@@ -19,6 +19,7 @@ package dblog
 
 import (
 	_ "strings"
+        _ "strconv"
 	"sync"
 	"time"
         "fmt"
@@ -85,6 +86,7 @@ type Input struct {
 	done    chan interface{}
 	myfowwarder * harvester.Forwarder
 	id_start int32
+        IdName string
 }
 
 // NewInput creates a new syslog input
@@ -127,6 +129,7 @@ func NewInput(
 		log:     log,
 		myfowwarder: forwarder,
 		id_start: config.IdStart,
+                IdName: config.IdName,
 	}, nil
 }
 
@@ -233,27 +236,36 @@ func (p *Input) DoRowsMapper(rows *sql.Rows, forwarder * harvester.Forwarder) ()
   for i := range values { 
     scanArgs[i] = &values[i] 
   } 
- 
   var rbody []map[string] string//interface{}
-  for rows.Next() {
-    err = rows.Scan(scanArgs...) 
-    if err != nil { 
-      panic(err.Error())
-    } 
+	for rows.Next() {
+		err = rows.Scan(scanArgs...) 
+		if err != nil { 
+			panic(err.Error())
+		} 
 
- 
-	rowMap := make(map[string]string) 
-	var value string 
-	for i, col := range values { 
-		if col != nil { 
-			value = string(col) 
-			rowMap[columns[i]] = value 
+                //var id_start int
+                //id_start = 0 
+		rowMap := make(map[string]string) 
+		var value string 
+		for i, col := range values { 
+			if col != nil { 
+				value = string(col) 
+				rowMap[columns[i]] = value 
+			        if columns[i] == p.IdName {
+                                     fmt.Printf("idname= %s, value=%s\n", columns[i], value)
+                                     //id_start, _ := strconv.Atoi(value)
+                                 }
+                        }
 		}
-	} 
-	//fmt.Printf(" %v\n", rowMap)
-	rbody = append(rbody, rowMap)
+                
+		
+                //if p.id_start < int32(id_start) {
+                //    p.id_start = int32(id_start)
+                //}
+                //fmt.Printf(" %v\n", rowMap)
+		rbody = append(rbody, rowMap)
 	}
-
+        //fmt.Printf("id_start=%d\n", p.id_start)
 	event := beat.Event{Fields: common.MapStr{}}
 	event.PutValue("@dblog", "dblog-dragon")
 	event.PutValue("dblog", rbody)
