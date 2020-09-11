@@ -176,7 +176,7 @@ Agent pid 8296
 [root@node1 filebeat]# cd /root/.ssh
 [root@node1 .ssh]# ls
 authorized_keys  ida_rsa_codragonzuo  ida_rsa_codragonzuo.pub  id_rsa  id_rsa.pub  known_hosts
-[root@node1 .ssh]# ssh-add  ./id_rsa_codragonzuo
+[root@node1 .ssh]# ssh-add  ./id_rsa_dragon
 [root@node1 .ssh]# ssh-keygen -t rsa -b 4096 -C "codragon@163.com"
 ```
 
