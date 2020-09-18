@@ -50,10 +50,11 @@ from kafka import KafkaProducer
 producer = KafkaProducer(bootstrap_servers='192.168.20.45:6667')
 msg = "Hello World".encode('utf-8')  # 发送内容,必须是bytes类型
 producer.send('snmp', msg)  # 发送的topic为test
+
+
+msg = b'{"event":{"plugin_id":10,"plugin_sid":1000,"src_ip":"192.168.1.200","dst_ip":"192.168.100.9","src_port":100,"dst_port":101}}'
+producer.send('snmp', msg)
 ```
-
-
-
 
 ## go环境变量
 
@@ -527,4 +528,29 @@ lrwxrwxrwx 1 root root       19 7月   6 08:28 /usr/local/lib64/libstdc++.so.6 -
 -rwxr-xr-x 1 root root 11169643 7月   6 08:28 /usr/local/lib64/libstdc++.so.6.0.21
 -rw-r--r-- 1 root root 10838586 7月   6 08:28 /usr/local/lib64/libstdc++fs.a
 -rwxr-xr-x 1 root root      905 7月   6 08:28 /usr/local/lib64/libstdc++fs.la
+```
+
+## librdkafka
+```
+[root@node1 correlation]# find  /  -name 'librdkafka*'
+/usr/local/include/librdkafka
+/usr/local/share/doc/librdkafka
+//usr/local/lib/librdkafka++.so
+/usr/local/lib/librdkafka.a
+/usr/local/lib/librdkafka++.so.1
+/usr/local/lib/librdkafka++.a
+/usr/local/lib/librdkafka.so
+/usr/local/lib/librdkafka.so.1
+/root/librdkafka-1.5.0
+
+[root@node1 correlation]# find  /  -name 'rdkafkacpp.h'
+/usr/local/include/librdkafka/rdkafkacpp.h
+
+
+[root@node1 librdkafka]# find  /  -name 'rdkafka*.h'
+/usr/local/include/librdkafka/rdkafkacpp.h
+/usr/local/include/librdkafka/rdkafka_mock.h
+/usr/local/include/librdkafka/rdkafka.h
+
+
 ```
