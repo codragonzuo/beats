@@ -553,4 +553,26 @@ lrwxrwxrwx 1 root root       19 7月   6 08:28 /usr/local/lib64/libstdc++.so.6 -
 /usr/local/include/librdkafka/rdkafka.h
 
 
+共享库找不到解决方案：
+增加  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+source bash_profile
+
+[root@node1 correlation]# cat ../.bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+
+
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 ```
