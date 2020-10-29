@@ -56,6 +56,12 @@ msg = b'{"event":{"plugin_id":10,"plugin_sid":1000,"src_ip":"192.168.1.200","dst
 producer.send('snmp', msg)
 ```
 
+## filebeat编译
+```
+cd beats/filetbeat
+make
+```
+
 ## go环境变量
 
 ```
