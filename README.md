@@ -135,6 +135,18 @@ export http_proxy=
 export https_proxy=
 ```
 
+## 修改kafka版本
+
+```
+
+[root@node1 beats]# vi ./libbeat/common/kafka/version.go
+
+里列出支持的kafka版本
+
+[root@node1 beats]# vi  libbeat/outputs/kafka/config.go
+
+Version:          kafka.Version("1.0.0"),
+```
 
 
 
