@@ -32,7 +32,8 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /root/log/filebeat/*.log.1
+#    - /root/log/filebeat/*.log.1
+    - /var/log/snort/alert.out
     #- c:\programdata\elasticsearch\logs\*
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
@@ -69,13 +70,13 @@ filebeat.inputs:
   # Note: After is the equivalent to previous and before is the equivalent to to next in Logstash
   #multiline.match: after
 
-- type: snmptrap
-  Name: snmptrap1 
-  protocol.udp:
-    host: "localhost:9000"  
+#- type: snmptrap
+#  Name: snmptrap1 
+#  protocol.udp:
+#    host: "localhost:9000"  
 
-- type: monitor
-  Name: monitor11
+#- type: monitor
+#     Name: monitor11
 
 #- type: dblog
 #  Name: dblog12
@@ -89,15 +90,15 @@ filebeat.inputs:
 #  id_start: 8800
 #  query_sql: "select alert_id ,alert_label from alert_history "
 
-- type: netflow
-  max_message_size: 10KiB
-  host: "127.0.0.1:1337"
-  protocols: [ v5, v9, ipfix ]
-  expiration_timeout: 30m
-  queue_size: 8192
-  custom_definitions:
+#- type: netflow
+#  max_message_size: 10KiB
+#  host: "127.0.0.1:1337"
+#  protocols: [ v5, v9, ipfix ]
+#  expiration_timeout: 30m
+#  queue_size: 8192
+#  custom_definitions:
 #  - path/to/fields.yml
-  detect_sequence_reset: true
+#  detect_sequence_reset: true
 
 
 
@@ -218,10 +219,10 @@ setup.kibana:
 
 output.kafka:
   # initial brokers for reading cluster metadata
-  hosts: ["192.168.20.45:6667"]
+  hosts: ["192.168.20.45:6669"]
 
   # message topic selection + partitioning
-  topic: snmp                   #'%{[fields.log_topic]}'
+  topic: event                   #'%{[fields.log_topic]}'
   partition.round_robin:
     reachable_only: false
   required_acks: 1
@@ -263,7 +264,10 @@ processors:
   - add_cloud_metadata: ~
 #  - add_docker_metadata: ~
 #  - add_kubernetes_metadata: ~
-
+  - dissect:
+      tokenizer: '%{eventtime} ,"%{eventname}",%{sig_id|integer},%{proto},%{src},%{srcport},%{dst},%{dstport},%{ethsrc},%{ethdst}'
+      field: "message"
+      target_prefix: ""
 # ================================== Logging ===================================
 
 # Sets log level. The default log level is info.
@@ -307,7 +311,7 @@ logging.files:
 #monitoring.elasticsearch:
 
 monitoring:
-  enabled: true
+  enabled: false
   cluster_uuid: metron 
   elasticsearch:
     hosts: ["https://192.168.20.45:9200"] 

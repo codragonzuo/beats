@@ -26,7 +26,7 @@ import (
 	"github.com/codragonzuo/beats/libbeat/logp"
 	"github.com/codragonzuo/beats/libbeat/monitoring"
 	"github.com/codragonzuo/beats/libbeat/monitoring/report"
-        "github.com/codragonzuo/beats/filebeat/input/monitor"
+        _"github.com/codragonzuo/beats/filebeat/input/monitor"
 )
 
 // List of metrics that are gauges. This is used to identify metrics that should
@@ -214,7 +214,7 @@ func (r *reporter) snapshotLoop() {
                     //fmt.Printf("codragonzuo publish monitoring\n")
                 } else
                 {
-                    monitor.Monitorfowwarder.Send(event)
+                    //monitor.Monitorfowwarder.Send(event)
                 }
 		r.logSnapshot(delta)
 	}
