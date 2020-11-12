@@ -50,10 +50,17 @@ from kafka import KafkaProducer
 producer = KafkaProducer(bootstrap_servers='192.168.20.45:6667')
 msg = "Hello World".encode('utf-8')  # 发送内容,必须是bytes类型
 producer.send('snmp', msg)  # 发送的topic为test
+
+
+msg = b'{"event":{"plugin_id":10,"plugin_sid":1000,"src_ip":"192.168.1.200","dst_ip":"192.168.100.9","src_port":100,"dst_port":101}}'
+producer.send('snmp', msg)
 ```
 
-
-
+## filebeat编译
+```
+cd beats/filetbeat
+make
+```
 
 ## go环境变量
 
@@ -128,6 +135,18 @@ export http_proxy=
 export https_proxy=
 ```
 
+## 修改kafka版本
+
+```
+
+[root@node1 beats]# vi ./libbeat/common/kafka/version.go
+
+里列出支持的kafka版本
+
+[root@node1 beats]# vi  libbeat/outputs/kafka/config.go
+
+Version:          kafka.Version("1.0.0"),
+```
 
 
 
@@ -176,7 +195,7 @@ Agent pid 8296
 [root@node1 filebeat]# cd /root/.ssh
 [root@node1 .ssh]# ls
 authorized_keys  ida_rsa_codragonzuo  ida_rsa_codragonzuo.pub  id_rsa  id_rsa.pub  known_hosts
-[root@node1 .ssh]# ssh-add  ./id_rsa_codragonzuo
+[root@node1 .ssh]# ssh-add  ./id_rsa_dragon
 [root@node1 .ssh]# ssh-keygen -t rsa -b 4096 -C "codragon@163.com"
 ```
 
@@ -527,4 +546,51 @@ lrwxrwxrwx 1 root root       19 7月   6 08:28 /usr/local/lib64/libstdc++.so.6 -
 -rwxr-xr-x 1 root root 11169643 7月   6 08:28 /usr/local/lib64/libstdc++.so.6.0.21
 -rw-r--r-- 1 root root 10838586 7月   6 08:28 /usr/local/lib64/libstdc++fs.a
 -rwxr-xr-x 1 root root      905 7月   6 08:28 /usr/local/lib64/libstdc++fs.la
+```
+
+## librdkafka
+```
+[root@node1 correlation]# find  /  -name 'librdkafka*'
+/usr/local/include/librdkafka
+/usr/local/share/doc/librdkafka
+//usr/local/lib/librdkafka++.so
+/usr/local/lib/librdkafka.a
+/usr/local/lib/librdkafka++.so.1
+/usr/local/lib/librdkafka++.a
+/usr/local/lib/librdkafka.so
+/usr/local/lib/librdkafka.so.1
+/root/librdkafka-1.5.0
+
+[root@node1 correlation]# find  /  -name 'rdkafkacpp.h'
+/usr/local/include/librdkafka/rdkafkacpp.h
+
+
+[root@node1 librdkafka]# find  /  -name 'rdkafka*.h'
+/usr/local/include/librdkafka/rdkafkacpp.h
+/usr/local/include/librdkafka/rdkafka_mock.h
+/usr/local/include/librdkafka/rdkafka.h
+
+
+共享库找不到解决方案：
+增加  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+source bash_profile
+
+[root@node1 correlation]# cat ../.bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+
+
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 ```
