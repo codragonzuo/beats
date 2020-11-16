@@ -265,9 +265,19 @@ processors:
 #  - add_docker_metadata: ~
 #  - add_kubernetes_metadata: ~
   - dissect:
-      tokenizer: '%{eventtime} ,"%{eventname}",%{sig_id|integer},%{proto},%{src},%{srcport},%{dst},%{dstport},%{ethsrc},%{ethdst}'
+      tokenizer: '%{timestamp} ,"%{eventType}",%{sid},%{protocol},%{srcip},%{srcport},%{dstip},%{dstport},%{srcmac},%{dstmac}'
       field: "message"
       target_prefix: ""
+  - add_fields:
+      fields:
+        plugin_id :  "7885"
+  - copy_fields:
+      fields:
+        - from: fields.plugin_id
+          to: pluginid
+      fail_on_error: false
+      ignore_missing: true
+      
 # ================================== Logging ===================================
 
 # Sets log level. The default log level is info.
